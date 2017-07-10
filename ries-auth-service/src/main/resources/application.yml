@@ -1,0 +1,10 @@
+security:
+  oauth2:
+    client:
+      token-name:
+      client-id:
+      client-secret:
+      access-token-uri: https://login.salesforce.com/services/oauth2/token
+      user-authorization-uri: https://login.salesforce.com/services/oauth2/authorize
+      client-authentication-scheme: form
+      pre-established-redirect-uri:
