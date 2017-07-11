@@ -1,5 +1,6 @@
 package com.revature.domain;
 
+import javax.persistence.*;
 import com.revature.util.UrlGenerator;
 
 import javax.persistence.Column;
@@ -37,7 +38,9 @@ public class Requisition {
     }
 
     @Id
-    @Column(name="req_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reqSequence")
+    @SequenceGenerator(name = "reqSequence", sequenceName = "req_sequence", allocationSize = 1)
+    @Column(name = "req_id")
     public Integer getReqId() {
         return reqId;
     }
