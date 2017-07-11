@@ -15,11 +15,17 @@ public class UrlGenerator {
     //Utilizes the guest and recruiter IDs to generate unique hashes for checking purposes
     public static Requisition generateUrls(Requisition r){
         List<String> urls = new ArrayList<String>();
-        String urlbase = "www.insertrealaddresslater.com/session/?id="+r.getReqId().toString()+"&key=";
+        //INSERT REAL DOMAIN ADDRESS HERE
+        //INSERT REAL DOMAIN ADDRESS HERE
+        //INSERT REAL DOMAIN ADDRESS HERE
+        //INSERT REAL DOMAIN ADDRESS HERE
+        //INSERT REAL DOMAIN ADDRESS HERE
+        String urlbase = "www.insertrealaddresslater.com/guestsession/?id="+r.getReqId().toString()+"&key=";
         String guesturl = "guest" + r.getReqGuest().toString() + r.getReqRecruiter().toString();
         guesturl = DigestUtils.sha1Hex(guesturl);
         guesturl = urlbase + guesturl;
         r.setGuestUrl(guesturl);
+        urlbase = "www.insertrealaddresslater.com/session/?id="+r.getReqId().toString()+"&key=";
         String hosturl = "host" + r.getReqGuest().toString() + r.getReqRecruiter().toString();
         hosturl = DigestUtils.sha1Hex(hosturl);
         hosturl = urlbase + hosturl;
