@@ -1,3 +1,8 @@
+spring:
+  application:
+    name: ries-auth-service
+
+
 security:
   oauth2:
     client:
@@ -11,3 +16,12 @@ security:
       grant-type: authentication-code
     resource:
       user-info-uri: https://login.salesforce.com/services/oauth2/userinfo
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: localhost
+#
+#  instance:
+#    lease-renewal-interval-in-seconds: 30
+#    lease-expiration-duration-in-seconds: 90
