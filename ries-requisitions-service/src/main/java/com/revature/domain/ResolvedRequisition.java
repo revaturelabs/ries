@@ -19,7 +19,7 @@ public class ResolvedRequisition {
 
     public ResolvedRequisition() {
     }
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resReqSequence")
     @SequenceGenerator(name = "resReqSequence", sequenceName = "res_req_sequence", allocationSize = 1)
