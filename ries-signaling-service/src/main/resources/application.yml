@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: ries-signaling-service
+server:
+  port: 9092
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    lease: 5
+    healthcheck:
+      enabled: false
