@@ -1,9 +1,6 @@
 package com.revature.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -22,8 +19,10 @@ public class ResolvedRequisition {
 
     public ResolvedRequisition() {
     }
-
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resReqSequence")
+    @SequenceGenerator(name = "resReqSequence", sequenceName = "res_req_sequence", allocationSize = 1)
     @Column(name = "res_req_id")
     public Integer getId() {
         return id;
