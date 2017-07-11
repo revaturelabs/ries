@@ -89,14 +89,14 @@ public class ResolvedRequisition {
 
     @Override
     public String toString() {
-        return "ResolvedRequisition{" +
-                "\n id=" + id +
-                "\n video='" + video + '\'' +
-                "\n createDate=" + createDate +
-                "\n interviewDate=" + interviewDate +
-                "\n guest=" + guest +
-                "\n host=" + host +
-                "\n recruiter=" + recruiter +
+        return "{" +
+                " id=" + id +
+                ", video='" + video + '\'' +
+                ", createDate=" + createDate +
+                ", interviewDate=" + interviewDate +
+                ", guest=" + guest +
+                ", host=" + host +
+                ", recruiter=" + recruiter +
                 '}';
     }
 }
