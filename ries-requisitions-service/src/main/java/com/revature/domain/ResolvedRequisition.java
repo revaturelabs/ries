@@ -19,6 +19,16 @@ public class ResolvedRequisition {
 
     public ResolvedRequisition() {
     }
+<<<<<<< HEAD
+=======
+    public ResolvedRequisition(Requisition r){
+        this.createDate = r.getCreateDate();
+        this.interviewDate = r.getInterviewDate();
+        this.guest = r.getReqGuest();
+        this.host = r.getReqHost();
+        this.recruiter = r.getReqRecruiter();
+    }
+>>>>>>> cf61a1a301f5624b83b62e88fd7d6f386dc7d006
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resReqSequence")
@@ -78,5 +88,18 @@ public class ResolvedRequisition {
 
     public void setRecruiter(Integer recruiter) {
         this.recruiter = recruiter;
+    }
+
+    @Override
+    public String toString() {
+        return "ResolvedRequisition{" +
+                "\n id=" + id +
+                "\n video='" + video + '\'' +
+                "\n createDate=" + createDate +
+                "\n interviewDate=" + interviewDate +
+                "\n guest=" + guest +
+                "\n host=" + host +
+                "\n recruiter=" + recruiter +
+                '}';
     }
 }

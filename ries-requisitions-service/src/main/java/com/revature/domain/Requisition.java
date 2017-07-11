@@ -1,6 +1,12 @@
 package com.revature.domain;
 
 import javax.persistence.*;
+import com.revature.util.UrlGenerator;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -106,4 +112,28 @@ public class Requisition {
     public void setObserverUrl(String observerUrl) {
         this.observerUrl = observerUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Requisition: (" +
+                "\n reqId=" + reqId +
+                "\n createDate=" + createDate +
+                "\n interviewDate=" + interviewDate +
+                "\n reqHost=" + reqHost +
+                "\n reqGuest=" + reqGuest +
+                "\n reqRecruiter=" + reqRecruiter +
+                "\n hostUrl='" + hostUrl + '\'' +
+                "\n guestUrl='" + guestUrl + '\'' +
+                "\n observerUrl='" + observerUrl + '\'' +
+                ')';
+    }
+
+//    public static void main(String[] args) {
+//        Requisition r = new Requisition();
+//        r.setReqId(1);
+//        r.setReqGuest(1);
+//        r.setReqRecruiter(3);
+//        r = UrlGenerator.generateUrls(r);
+//        System.out.println(r.toString());
+//    }
 }
