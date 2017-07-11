@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta content="stuff, to, help, search, engines, not" name="keywords">
+    <meta content="What this page is about." name="description">
+    <meta content="Display Webcam Stream" name="title">
+    <title>Display Webcam Stream</title>
+
+    <style>
+        .videoContainer {
+            margin: 0px auto;
+            width: 500px;
+            height: 375px;
+            border: 10px #333 solid;
+        }
+        #videoElement {
+            width: 500px;
+            height: 375px;
+            background-color: #666;
+        }
+        .sound-clips {
+            box-shadow: inset 0 3px 4px rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.1);
+            height: calc(100% - 240px - 0.7rem);
+            overflow: scroll;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <video autoplay="true" id="videoElement" controls muted>
+        </video>
+        <button onclick="startRecording()">Start</button>
+        <button onclick="mediaRecorder.stop()">Stop</button>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div>
+        <video class="container" autoplay="true" id="videoPlayBack" controls>
+        </video>
+    </div>
+    <script>
+        var chunks = [];
+        var mediaRecorder;
+        var video = document.querySelector("#videoElement");
+        var video2 = document.querySelector("#videoPlayBack");
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+        if (navigator.getUserMedia) {
+            navigator.getUserMedia({ video: true, 
+                                        audio:true }, 
+                                    handleVideo, 
+                                    videoError);
+        }
+
+        function handleVideo(stream) {
+            video.src = window.URL.createObjectURL(stream);
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = function (e) {
+                console.log("data is available");
+                chunks.push(e.data);
+            }
+            mediaRecorder.onstop = function (e) {
+                console.log("recorder stopped");
+                console.log(mediaRecorder.state);
+                var blob = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
+                video2.src = window.URL.createObjectURL(blob);
+                chunks = [];
+               
+            }
+            console.log(mediaRecorder);
+        }
+
+        function videoError(e) {
+            // do something
+        }
+
+
+        var startRecording = function () {
+            mediaRecorder.start();
+            console.log(mediaRecorder.state);
+        }
+
+        var stopRecording = function () {
+            mediaRecorder.stop();
+            console.log(mediaRecorder.state);
+            console.log("recorder stopped");
+            console.log(chunks, mediaRecorder);
+        }
+    </script>
+</body>
+
+</html>
