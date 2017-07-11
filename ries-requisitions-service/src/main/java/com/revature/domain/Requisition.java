@@ -1,9 +1,12 @@
 package com.revature.domain;
 
+import com.revature.util.UrlGenerator;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -13,8 +16,8 @@ import java.time.LocalDateTime;
 @Table(name="Requisition")
 public class Requisition {
     private Integer reqId;
-    private LocalDateTime createDate;
-    private LocalDateTime interviewDate;
+    private Timestamp createDate;
+    private Timestamp interviewDate;
     private Integer reqHost;
     private Integer reqGuest;
     private Integer reqRecruiter;
@@ -36,20 +39,20 @@ public class Requisition {
     }
 
     @Column(name="req_Create_Date")
-    public LocalDateTime getCreateDate() {
+    public Timestamp getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
 
     @Column(name="req_InterviewDate")
-    public LocalDateTime getInterviewDate() {
+    public Timestamp getInterviewDate() {
         return interviewDate;
     }
 
-    public void setInterviewDate(LocalDateTime interviewDate) {
+    public void setInterviewDate(Timestamp interviewDate) {
         this.interviewDate = interviewDate;
     }
 
@@ -106,4 +109,28 @@ public class Requisition {
     public void setObserverUrl(String observerUrl) {
         this.observerUrl = observerUrl;
     }
+
+    @Override
+    public String toString() {
+        return "Requisition: (" +
+                "\n reqId=" + reqId +
+                "\n createDate=" + createDate +
+                "\n interviewDate=" + interviewDate +
+                "\n reqHost=" + reqHost +
+                "\n reqGuest=" + reqGuest +
+                "\n reqRecruiter=" + reqRecruiter +
+                "\n hostUrl='" + hostUrl + '\'' +
+                "\n guestUrl='" + guestUrl + '\'' +
+                "\n observerUrl='" + observerUrl + '\'' +
+                ')';
+    }
+
+//    public static void main(String[] args) {
+//        Requisition r = new Requisition();
+//        r.setReqId(1);
+//        r.setReqGuest(1);
+//        r.setReqRecruiter(3);
+//        r = UrlGenerator.generateUrls(r);
+//        System.out.println(r.toString());
+//    }
 }
