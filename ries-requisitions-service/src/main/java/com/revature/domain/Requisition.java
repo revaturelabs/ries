@@ -27,6 +27,14 @@ public class Requisition {
     private String observerUrl;
 
     public Requisition() {
+        this.createDate = new Timestamp(System.currentTimeMillis());
+    }
+
+    public Requisition(Integer reqHost, Integer reqGuest, Integer reqRecruiter) {
+        this();
+        this.reqHost = reqHost;
+        this.reqGuest = reqGuest;
+        this.reqRecruiter = reqRecruiter;
     }
 
     @Id
@@ -115,25 +123,25 @@ public class Requisition {
 
     @Override
     public String toString() {
-        return "Requisition: (" +
-                "\n reqId=" + reqId +
-                "\n createDate=" + createDate +
-                "\n interviewDate=" + interviewDate +
-                "\n reqHost=" + reqHost +
-                "\n reqGuest=" + reqGuest +
-                "\n reqRecruiter=" + reqRecruiter +
-                "\n hostUrl='" + hostUrl + '\'' +
-                "\n guestUrl='" + guestUrl + '\'' +
-                "\n observerUrl='" + observerUrl + '\'' +
-                ')';
+        return "{" +
+                " reqId=" + reqId +
+                ", createDate=" + createDate +
+                ", interviewDate=" + interviewDate +
+                ", reqHost=" + reqHost +
+                ", reqGuest=" + reqGuest +
+                ", reqRecruiter=" + reqRecruiter +
+                ", hostUrl='" + hostUrl + '\'' +
+                ", guestUrl='" + guestUrl + '\'' +
+                ", observerUrl='" + observerUrl + '\'' +
+                '}';
     }
 
-//    public static void main(String[] args) {
-//        Requisition r = new Requisition();
-//        r.setReqId(1);
-//        r.setReqGuest(1);
-//        r.setReqRecruiter(3);
-//        r = UrlGenerator.generateUrls(r);
-//        System.out.println(r.toString());
-//    }
+    public static void main(String[] args) {
+        Requisition r = new Requisition();
+        r.setReqId(1);
+        r.setReqGuest(1);
+        r.setReqRecruiter(3);
+        r = UrlGenerator.generateUrls(r);
+        System.out.println(r.toString());
+    }
 }
