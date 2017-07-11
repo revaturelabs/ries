@@ -1,5 +1,8 @@
 package com.revature.domain;
 
+import javax.persistence.*;
+import com.revature.util.UrlGenerator;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,10 +26,20 @@ public class Requisition {
     private String observerUrl;
 
     public Requisition() {
+        this.createDate = new Timestamp(System.currentTimeMillis());
+    }
+
+    public Requisition(Integer reqHost, Integer reqGuest, Integer reqRecruiter) {
+        this();
+        this.reqHost = reqHost;
+        this.reqGuest = reqGuest;
+        this.reqRecruiter = reqRecruiter;
     }
 
     @Id
-    @Column(name="req_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reqSequence")
+    @SequenceGenerator(name = "reqSequence", sequenceName = "req_sequence", allocationSize = 1)
+    @Column(name = "req_id")
     public Integer getReqId() {
         return reqId;
     }
@@ -105,5 +118,29 @@ public class Requisition {
 
     public void setObserverUrl(String observerUrl) {
         this.observerUrl = observerUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                " reqId=" + reqId +
+                ", createDate=" + createDate +
+                ", interviewDate=" + interviewDate +
+                ", reqHost=" + reqHost +
+                ", reqGuest=" + reqGuest +
+                ", reqRecruiter=" + reqRecruiter +
+                ", hostUrl='" + hostUrl + '\'' +
+                ", guestUrl='" + guestUrl + '\'' +
+                ", observerUrl='" + observerUrl + '\'' +
+                '}';
+    }
+
+    public static void main(String[] args) {
+        Requisition r = new Requisition();
+        r.setReqId(1);
+        r.setReqGuest(1);
+        r.setReqRecruiter(3);
+        r = UrlGenerator.generateUrls(r);
+        System.out.println(r.toString());
     }
 }

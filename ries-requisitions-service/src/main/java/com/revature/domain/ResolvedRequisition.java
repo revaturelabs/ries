@@ -1,9 +1,6 @@
 package com.revature.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -22,8 +19,17 @@ public class ResolvedRequisition {
 
     public ResolvedRequisition() {
     }
+    public ResolvedRequisition(Requisition r){
+        this.createDate = r.getCreateDate();
+        this.interviewDate = r.getInterviewDate();
+        this.guest = r.getReqGuest();
+        this.host = r.getReqHost();
+        this.recruiter = r.getReqRecruiter();
+    }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resReqSequence")
+    @SequenceGenerator(name = "resReqSequence", sequenceName = "res_req_sequence", allocationSize = 1)
     @Column(name = "res_req_id")
     public Integer getId() {
         return id;
@@ -79,5 +85,18 @@ public class ResolvedRequisition {
 
     public void setRecruiter(Integer recruiter) {
         this.recruiter = recruiter;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                " id=" + id +
+                ", video='" + video + '\'' +
+                ", createDate=" + createDate +
+                ", interviewDate=" + interviewDate +
+                ", guest=" + guest +
+                ", host=" + host +
+                ", recruiter=" + recruiter +
+                '}';
     }
 }
