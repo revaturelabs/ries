@@ -8,10 +8,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		url: "/",
 		views:{
 			nav:{
-				templateUrl = "pages/navbar.html"
+				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl = "pages/home.html"
+				templateUrl : "pages/home.html"
 			}
 		}
 	});
@@ -20,10 +20,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		url: "/",
 		views:{
 			nav:{
-				templateUrl = "pages/navbar.html"
+				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl = "pages/requisitions.html"
+				templateUrl : "pages/requisitions.html"
 			}
 		}
 	});
@@ -32,10 +32,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		url: "/",
 		views:{
 			nav:{
-				templateUrl = "pages/navbar.html"
+				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl = "pages/trainers.html"
+				templateUrl : "pages/trainers.html"
 			}
 		}
 	});
@@ -44,10 +44,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		url: "/",
 		views:{
 			nav:{
-				templateUrl = "pages/navbar.html"
+				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl = "pages/sessionHost.html"
+				templateUrl : "pages/sessionHost.html"
 			}
 		}
 	});
@@ -56,10 +56,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		url: "/",
 		views:{
 			nav:{
-				templateUrl = "pages/navbar.html"
+				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl = "pages/sessionGuest.html"
+				templateUrl : "pages/sessionGuest.html"
 			}
 		}
 	});
@@ -68,10 +68,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		url: "/",
 		views:{
 			nav:{
-				templateUrl = "pages/navbar.html"
+				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl = "pages/sessionObserver.html"
+				templateUrl : "pages/sessionObserver.html"
 			}
 		}
 	});
