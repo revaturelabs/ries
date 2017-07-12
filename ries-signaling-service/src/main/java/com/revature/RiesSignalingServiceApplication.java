@@ -45,7 +45,7 @@ public class RiesSignalingServiceApplication {
 	@RequestMapping(value="/signaling", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> saveRecording(@RequestBody Recording record){
 
-		if(!record.getFile().exists() || record.getName().isEmpty()){
+		if(!record.getFile().exists() || record.getName().isEmpty() || record.getName() == null){
 			return new ResponseEntity<>("Error Saving Recording", HttpStatus.BAD_REQUEST);
 		}
 
