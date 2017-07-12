@@ -2,11 +2,22 @@ spring:
   application:
     name: ries-auth-service
 
+  datasource:
+    url: jdbc:oracle:thin:@riesdb.c7vlm1acvmm0.us-east-1.rds.amazonaws.com:1521:ORCL
+    username: rds_user
+    password: MaxBoost
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle10gDialect
+        hbm2ddl:
+          auto: update
 
 security:
   oauth2:
     client:
-      token-name:
+      token-name: token
       client-id: 3MVG9zlTNB8o8BA23PJ1557KE_0ULmPd2JgLpyeHWHyegO7Z4Hh.QeqGhOEZjZ8xeqJKuaGFWE554NDuXwVoP
       client-secret: 5464748171211685513
       access-token-uri: https://login.salesforce.com/services/oauth2/token
@@ -17,11 +28,11 @@ security:
     resource:
       user-info-uri: https://login.salesforce.com/services/oauth2/userinfo
 
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: localhost
-#
-#  instance:
-#    lease-renewal-interval-in-seconds: 30
-#    lease-expiration-duration-in-seconds: 90
+eureka:
+  client:
+    service-url:
+      defaultZone: localhost
+
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
