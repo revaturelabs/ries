@@ -61,28 +61,6 @@ app.controller("signalingCtrl", function ($scope) {
     //UI selectors block
     //******
 
-    // var localVideo = document.getElementById('localVideo');
-    // console.log("localVideo",localVideo);
-    //
-
-    var readyForVideo = function () {
-
-        var lVideo = document.getElementById('local');
-        console.log("lvideo", lVideo);
-
-        lVideo = document.querySelector('#local');
-        console.log("lvideo", lVideo);
-        var localVideo = document.getElementById('localVideo');
-        console.log("localVideo", localVideo);
-
-
-        localVideo = document.querySelector('#localVideo');
-        console.log("localVideo", localVideo);
-
-    };
-
-
-
     var loginPage = document.querySelector('#loginPage');
     var usernameInput = document.querySelector('#usernameInput');
     var loginBtn = document.querySelector('#loginBtn');

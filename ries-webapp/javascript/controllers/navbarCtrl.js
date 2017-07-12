@@ -10,6 +10,12 @@ app.controller("NavbarCtrl", function($scope, $rootScope, $state){
 		$state.go('requisitions');
 	};
 	
+
+	$scope.goToHost = function(){
+		$state.go('sessionHost');
+	};
+
+
 	$scope.goToTrainers = function(){
 		$state.go('trainers');
 	};
