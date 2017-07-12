@@ -3,9 +3,9 @@ spring:
     name: ries-auth-service
 
   datasource:
-    url: jdbc:oracle:thin:@riesdb.c7vlm1acvmm0.us-east-1.rds.amazonaws.com:1521:ORCL
-    username: rds_user
-    password: MaxBoost
+    url: jdbc:oracle:thin:@ries-data.chueiwozbnfz.us-east-1.rds.amazonaws.com:1521:ORCL
+    username: ries_master
+    password: ries-master-password
 
   jpa:
     properties:
@@ -17,16 +17,15 @@ spring:
 security:
   oauth2:
     client:
-      token-name: token
       client-id: 3MVG9zlTNB8o8BA23PJ1557KE_0ULmPd2JgLpyeHWHyegO7Z4Hh.QeqGhOEZjZ8xeqJKuaGFWE554NDuXwVoP
       client-secret: 5464748171211685513
-      access-token-uri: https://login.salesforce.com/services/oauth2/token
-      user-authorization-uri: https://login.salesforce.com/services/oauth2/authorize
+      access-token-uri: https://revature--int1.cs17.my.salesforce.com/services/oauth2/token
+      user-authorization-uri: https://revature--int1.cs17.my.salesforce.com/services/oauth2/authorize
       client-authentication-scheme: form
       authentication-scheme: header
       grant-type: authentication-code
     resource:
-      user-info-uri: https://login.salesforce.com/services/oauth2/userinfo
+      user-info-uri: https://revature--int1.cs17.my.salesforce.com/services/oauth2/userinfo
 
 eureka:
   client:
