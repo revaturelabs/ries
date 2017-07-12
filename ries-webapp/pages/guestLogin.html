@@ -1,0 +1,22 @@
+<div class="container logo">
+    <img src = "img/revature_logo_250.png" alt="Revature Logo" height="75px"> 
+</div>
+
+<h1 class="gRIES"> Revature Interview Evaluation System</h1>
+<div class="container">
+    <form class="form-revature" role="form" name="loginGuest" ng-submit="guestCtrl.login()">
+        <div class="row">
+            <label class="sr-only"></label>
+            <input id="gName" name="gName" class="" type="text" placeholder="Enter name" ng-model="guestCtrl.gName" required autofocus>
+        </div>
+        <div class="row">
+            <label class="sr-only"></label>
+            <input id="gPin" name="gPin" class="" type="password" placeholder="Enter Pin" ng-model="guestCtrl.gPin" required autofocus>
+        </div>
+        <div class="row">
+            <input class="btn-revature" type="submit" value="Login">
+        </div>
+    </form>
+    <span ng-show="guestCtrl.loginError" class="span-creds">!!! Invalid Guest Name and/or Pin !!!</span>
+</div>
+
