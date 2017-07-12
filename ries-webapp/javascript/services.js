@@ -1,5 +1,7 @@
-angular.module("RIESApp")
-.service("signalingService", function($http){
+var app = angular.module("RIESApp")
+
+
+app.service("signalingService", function($http){
     var reqUrl = "/signaling";
     var self = this;
 
@@ -8,4 +10,16 @@ angular.module("RIESApp")
     };
 
     
-})
+});
+
+app.service("requisitionService", function($http){
+	
+});
+
+app.service("trainerService", function($http){
+	
+});
+
+app.service("guestServuce", function($http){
+	
+});
