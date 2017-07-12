@@ -10,7 +10,7 @@ app.controller("NavbarCtrl", function($scope, $rootScope, $state){
 		$state.go('requisitions');
 	};
 	
-	$scope.goToTrainers = functions(){
+	$scope.goToTrainers = function(){
 		$state.go('trainers');
 	};
 	

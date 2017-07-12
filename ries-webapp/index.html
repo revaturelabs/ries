@@ -40,14 +40,16 @@
 
 		<!-- Custom -->
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<script type="text/javascript" src="javascript/app.js"></script>
-		<script type="text/javascript" src="javascript/controllers.js"></script>
-		<script type="text/javascript" src="javascript/services.js"></script>
+		<script type="text/javascript" src="javascript/app/app.js"></script>
+		<script type="text/javascript" src="javascript/controllers/navbarCtrl.js"></script>
+		<script type="text/javascript" src="javascript/controllers/hostCtrl.js"></script>
 	</head>
 
 	<body>
+		<h4>indexhtml</h4>
+		<!--<navbar-dir></navbar-dir>-->
 		<div class="container" ng-app="RIESApp">
-			<!--<navbar-dir></navbar-dir>-->
+			
 			<div ui-view name="nav"></div>
 			<br>
 			<div ui-view name="content"></div>
