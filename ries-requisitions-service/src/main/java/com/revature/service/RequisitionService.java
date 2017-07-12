@@ -23,6 +23,10 @@ public class RequisitionService {
 
     public Requisition getById(Integer id) { return dao.findOne(id); }
 
+    public List<Requisition> getAllByRecruiter(Integer recruiterId) { return dao.findByReqRecruiter(recruiterId); }
+
+    public List<Requisition> getAllByInterviewer(Integer hostId) { return dao.findByReqHost(hostId); }
+
     public void deleteById(Integer id) { dao.delete(id); }
 
     public void delete(Requisition requisition) { dao.delete(requisition); }
