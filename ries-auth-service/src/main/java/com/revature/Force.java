@@ -1,10 +1,14 @@
 package com.revature;
 
-import com.revature.model.Profile;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.revature.model.Employee;
+import com.revature.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
@@ -35,24 +39,43 @@ public class Force {
         return urls.get(url).replace("{version}", REST_VERSION);
     }
 
-    public String getProfile(OAuth2Authentication auth) {
-        //String url = restUrl(auth) + "query/?q={q}";
+    @SuppressWarnings("unchecked")
+    public Employee getRole(OAuth2Authentication auth) {
+        HashMap<String, String> details = (HashMap<String, String>) auth.getUserAuthentication().getDetails();
         String url = restUrl(auth, "query") + "?q={q}";
-        Map<String, String> params = new HashMap<>();
-        params.put("q", "SELECT Id, Name FROM UserRole");
-        //return restTemplate.getForObject(url, QueryResultAccount.class).records;
-        //return restTemplate.getForEntity(url, ResponseEntity)
-        return restTemplate.getForObject(url, String.class, params);
-    }
 
-    public static class Account {
-        public String Id;
-        public String Name;
+        Gson gson = new Gson();
+        Employee employee = gson.fromJson(gson.toJsonTree(details), Employee.class);
+        employee.setEmployeeId(details.get("user_id"));
+        employee.setFirstName(details.get("given_name"));
+        employee.setLastName(details.get("family_name"));
+        String thumbnail = gson.toJsonTree(details.get("photos")).getAsJsonObject().get("thumbnail").getAsString();
+        employee.setThumbnail(thumbnail);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("q", "SELECT id, name FROM UserRole " +
+                        "WHERE Id IN (SELECT UserRoleId FROM User " +
+                                      "WHERE id = '" +
+                                      employee.getEmployeeId()  +"')");
+        //return restTemplate.getForObject(url, QueryResultAccount.class).records;
+        String roleStr = restTemplate.getForObject(url, String.class, params);
+        System.out.println(roleStr);
+        JsonObject roleData = gson.fromJson(roleStr, JsonElement.class)
+                .getAsJsonObject().get("records")
+                .getAsJsonArray().get(0).getAsJsonObject();
+        System.out.println(roleData);
+        Role role = new Role();
+        role.setRoleId(roleData.get("Id").getAsString());
+        role.setName(roleData.get("Name").getAsString());
+        employee.setRole(role);
+        System.out.println(employee);
+
+        return employee;
     }
 
     private static class QueryResult<T> {
         public List<T> records;
     }
 
-    private static class QueryResultAccount extends QueryResult<Account> {}
+    private static class QueryResultEmployee extends QueryResult<Employee> {}
 }
