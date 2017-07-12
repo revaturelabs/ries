@@ -6,7 +6,6 @@ var doGet = function (req, res) {
     //request for js files
     var jsRe = /javascript\/app\/\w*.js/;
     var jsmatch = jsRe.exec(req.url);
-    console.log("jsmatch",jsmatch);
 
    var jsRe2 = /javascript\/controllers\/\w*.js/;
     var jsmatch2 = jsRe2.exec(req.url);
@@ -33,7 +32,6 @@ var doGet = function (req, res) {
         });
     } else if (jsmatch) {
         jsmatch = jsmatch[0];
-        console.log(jsmatch);
         //requesting .js file
         fs.readFile(jsmatch.toString(), function (err, data) {
             if (err) {
@@ -47,7 +45,7 @@ var doGet = function (req, res) {
         });
     }else if (jsmatch2) {
         jsmatch = jsmatch2[0];
-        console.log(jsmatch);
+        // console.log(jsmatch);
         //requesting .js file
         fs.readFile(jsmatch.toString(), function (err, data) {
             if (err) {
@@ -61,7 +59,7 @@ var doGet = function (req, res) {
         }); 
         }else if(pgmatch){
         pgmatch = pgmatch[0];
-        console.log(pgmatch, req.url);
+        // console.log(pgmatch, req.url);
         fs.readFile(pgmatch.toString(), function (err, data) {
             if (err) {
                 console.error(err);
@@ -74,7 +72,7 @@ var doGet = function (req, res) {
         });
     }else if (cssmatch){
         cssmatch = cssmatch[0];
-        console.log(cssmatch, req.url);
+        // console.log(cssmatch, req.url);
         fs.readFile(cssmatch.toString(), function(err, data){
             if (err) {
                 console.error(err);
