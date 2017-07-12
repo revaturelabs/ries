@@ -59,7 +59,7 @@ public class RiesSignalingServiceApplication {
 		// create a client connection based on credentials
 		AmazonS3 s3client = new AmazonS3Client(credentials);
 
-		//
+		//make bucket if it doesn't exist
 		if(!s3client.doesBucketExist(bucketName)){
 			s3client.createBucket(bucketName);
 		}
