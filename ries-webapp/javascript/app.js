@@ -40,7 +40,42 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		}
 	});
 
-    //put $stateProviders here
+	$stateProvider.state('sessionHost', {
+		url: "/",
+		views:{
+			nav:{
+				templateUrl = "pages/navbar.html"
+			},
+			content:{
+				templateUrl = "pages/sessionHost.html"
+			}
+		}
+	});
+
+	$stateProvider.state('sessionGuest', {
+		url: "/",
+		views:{
+			nav:{
+				templateUrl = "pages/navbar.html"
+			},
+			content:{
+				templateUrl = "pages/sessionGuest.html"
+			}
+		}
+	});
+
+	$stateProvider.state('sessionObserver', {
+		url: "/",
+		views:{
+			nav:{
+				templateUrl = "pages/navbar.html"
+			},
+			content:{
+				templateUrl = "pages/sessionObserver.html"
+			}
+		}
+	});
+    
     
 });
 
