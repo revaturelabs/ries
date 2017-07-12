@@ -26,3 +26,11 @@ security:
       grant-type: authentication-code
     resource:
       user-info-uri: https://revature--int1.cs17.my.salesforce.com/services/oauth2/userinfo
+
+
+server:
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: password
+    keyStoreType: PKCS12
+    keyAlias: tomcat
