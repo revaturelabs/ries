@@ -1,4 +1,4 @@
-<div>
+<div ng-controller="requisitionCtrl">
     <table>
         <thead>
             <tr>
@@ -14,7 +14,18 @@
             </tr>
         </thead>
         <!-- Will put the requisite data here -->
-        <tbody>
+        <tbody ng-repeat="re in requisitions">
+            <tr>
+                <td> {{ re.reqId }} </td>
+                <td> {{ re.createDate }} </td>
+                <td> {{ re.interviewDate }} </td>
+                <td> {{ re.reqHost }} </td>
+                <td> {{ re.reqGuest }} </td>
+                <td> {{ re.requisitions }} </td>
+                <td> {{ re.hostUrl }} </td>
+                <td> {{ re.guestUrl }} </td>
+                <td> {{ re.observerUrl }} </td>
+            </tr>
         </tbody>
     </table>
 </div>
