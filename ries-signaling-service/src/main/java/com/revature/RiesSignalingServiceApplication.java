@@ -4,6 +4,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,27 +38,32 @@ public class RiesSignalingServiceApplication {
 	/**
 	 * signaling service takes a string entered by the host, and the recording file and stores it to amazon s3
 	 * that is set up to store the recodings
-	 * @param recordingName - string that  host enters in for the name of the recording
-	 * @param recordingFile - mp4 file that is the recording made during transcording
+	 * @param record - Recording object that holds string name as the input from host and file that is the recording blob
+	 *
 	 * @return String that tells user that the file has been saved
 	 */
 	@RequestMapping(value="/signaling", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> checkoutBook(@RequestBody String recordingName, @RequestBody File recordingFile){
+	public ResponseEntity<String> saveRecording(@RequestBody Recording record){
 
-		if(!recordingFile.exists() || recordingName.isEmpty()){
+		if(!record.getFile().exists() || record.getName().isEmpty()){
 			return new ResponseEntity<>("Error Saving Recording", HttpStatus.BAD_REQUEST);
 		}
 
 		//bucket that stores recordings; service makes a new bucket if it doesn't exist
 		String bucketName = "ries-recordings";
+		//propertiy key and values that defaultclient needs to make s3clinet
+		String accesskeyID = "aws.accessKeyId";
+		String secretkey = "aws.secretKey";
+		//values of the keys
+		String accessIdValue = "AKIAJXZ564AKLLLEW4LQ";
+		String secretValue = "Y9QVIPeAroLHms0usAfQ0XpvMbYZNcKQeZBaUuRS";
 
-		//still need s3 access information
-		AWSCredentials credentials = new BasicAWSCredentials(
-				"YourAccessKeyID",
-				"YourSecretAccessKey");
+		System.setProperty(accesskeyID,accessIdValue);
+		System.setProperty(secretkey,secretValue);
 
 		// create a client connection based on credentials
-		AmazonS3 s3client = new AmazonS3Client(credentials);
+//		AmazonS3 s3client = new AmazonS3Client(credentials);
+		AmazonS3 s3client = AmazonS3ClientBuilder.defaultClient();
 
 		//make bucket if it doesn't exist
 		if(!s3client.doesBucketExist(bucketName)){
@@ -65,9 +71,9 @@ public class RiesSignalingServiceApplication {
 		}
 
 		//stores recording to bucket
-		s3client.putObject(bucketName,recordingName,recordingFile);
+		s3client.putObject(bucketName,record.getName(),record.getFile());
 
 		//return message
-		return new ResponseEntity<>(recordingName + " has been saved", HttpStatus.OK);
+		return new ResponseEntity<>(record.getName() + " has been saved", HttpStatus.OK);
 	}
 }
