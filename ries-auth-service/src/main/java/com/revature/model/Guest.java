@@ -22,6 +22,7 @@ public class Guest {
         this.guestId = guestId;
     }
 
+    @Column
     public String getName() {
         return name;
     }
@@ -30,6 +31,7 @@ public class Guest {
         this.name = name;
     }
 
+    @Column
     public Integer getPin() {
         return pin;
     }
@@ -45,13 +47,15 @@ public class Guest {
 
         Guest guest = (Guest) object;
 
+        if (guestId != null ? !guestId.equals(guest.guestId) : guest.guestId != null) return false;
         if (name != null ? !name.equals(guest.name) : guest.name != null) return false;
         return pin != null ? pin.equals(guest.pin) : guest.pin == null;
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
+        int result = guestId != null ? guestId.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (pin != null ? pin.hashCode() : 0);
         return result;
     }
@@ -59,7 +63,8 @@ public class Guest {
     @Override
     public String toString() {
         return "Guest{" +
-                "name='" + name + '\'' +
+                "guestId=" + guestId +
+                ", name='" + name + '\'' +
                 ", pin=" + pin +
                 '}';
     }

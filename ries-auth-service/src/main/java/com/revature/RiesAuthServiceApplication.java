@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -20,7 +19,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableAutoConfiguration(exclude = { JacksonAutoConfiguration.class })
 @EnableResourceServer
 @EnableOAuth2Sso
-@EnableDiscoveryClient
 public class RiesAuthServiceApplication {
 
 	public static void main(String[] args) {

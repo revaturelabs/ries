@@ -8,17 +8,17 @@ spring:
     password: ries-master-password
 
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.Oracle10gDialect
-        hbm2ddl:
-          auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.Oracle10gDialect
+          hbm2ddl:
+            auto: update
 
 security:
   oauth2:
     client:
-      client-id: 3MVG9zlTNB8o8BA23PJ1557KE_0ULmPd2JgLpyeHWHyegO7Z4Hh.QeqGhOEZjZ8xeqJKuaGFWE554NDuXwVoP
-      client-secret: 5464748171211685513
+      client-id: 3MVG9ahGHqp.k2_wb8eUMtoR38_WbYxUPAgheLOPEgoU4jCdw5EKilrUbtX4cxh0X0Kk2GEexJCqbOsMsD0Sm
+      client-secret: 9101950503076607108
       access-token-uri: https://revature--int1.cs17.my.salesforce.com/services/oauth2/token
       user-authorization-uri: https://revature--int1.cs17.my.salesforce.com/services/oauth2/authorize
       client-authentication-scheme: form
@@ -26,12 +26,3 @@ security:
       grant-type: authentication-code
     resource:
       user-info-uri: https://revature--int1.cs17.my.salesforce.com/services/oauth2/userinfo
-
-eureka:
-  client:
-    service-url:
-      defaultZone: localhost
-
-  instance:
-    lease-renewal-interval-in-seconds: 30
-    lease-expiration-duration-in-seconds: 90
