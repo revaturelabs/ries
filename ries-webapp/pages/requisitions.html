@@ -1,4 +1,6 @@
 <div ng-controller="requisitionCtrl">
+    <label ng-model="interviewer">Interviewer</label>
+    <input type="text" ng-model="host">
     <table>
         <thead>
             <tr>
@@ -14,7 +16,7 @@
             </tr>
         </thead>
         <!-- Will put the requisite data here -->
-        <tbody ng-repeat="re in requisitions">
+        <tbody ng-repeat="re in requisitions | reqByHost:host">
             <tr>
                 <td> {{ re.reqId }} </td>
                 <td> {{ re.createDate }} </td>
