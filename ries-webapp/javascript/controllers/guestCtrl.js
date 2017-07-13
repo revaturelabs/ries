@@ -6,7 +6,7 @@ app.controller("guestCtrl", function($scope, $state){
     var connectedUser;
 
     //connecting to our signaling server
-    var conn = new WebSocket('ws://localhost:7000');
+    var conn = new WebSocket('ws://192.168.61.75:7000');
     // var conn = new WebSocket('ws://localhost:9090');
 
     conn.onopen = function () {
