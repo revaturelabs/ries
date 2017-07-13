@@ -29,10 +29,18 @@ public class AuthController {
         return guestService.getById(pin);
     }
 
-    @RequestMapping(value="/generate", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Integer generatePin(){
+    @RequestMapping(value="/createGuest", method = RequestMethod.GET)
+    public void createGuest(@RequestParam(value = "name") String name){
+
         //Generate a random number using currentTimeMillis as a seed for a bit more security.
         Random r = new Random(System.currentTimeMillis());
-        return new Integer(100000 + r.nextInt(900000));
+
+        //Create the new guest object
+        Guest g = new Guest();
+        g.setName(name);
+        g.setPin(100000 + r.nextInt(900000));
+
+        //Send it to the database
+        guestService.save(g);
     }
 }
