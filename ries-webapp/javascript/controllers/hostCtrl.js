@@ -84,7 +84,7 @@ app.controller("hostCtrl", function ($scope) {
     var dataChannel;
     callPage.style.display = "none";
 
-var recordedVideo = document.querySelector('#recordedVideo');
+    var recordedVideo = document.querySelector('#recordedVideo');
 
     ////Check ending session code and DOM handling--------------------------------------
     var modalEndSess = document.getElementById('myModal');
@@ -165,6 +165,7 @@ var recordedVideo = document.querySelector('#recordedVideo');
                     // setUpMediaRecorder(stream);
 
                     myStream = stream;
+                    setUpMediaRecorderHost(stream);
                     var lVideo = document.querySelector("#local");
                     // console.log("lvideo", lVideo);
                     var rVideo = document.querySelector("#remote");
@@ -200,6 +201,7 @@ var recordedVideo = document.querySelector('#recordedVideo');
                     yourConn.addEventListener("addstream", function (e) {
                         rVideo.src = window.URL.createObjectURL(e.stream);
                         setUpMediaRecorder(e.stream);
+                        // setUpMediaRecorder(e.stream.addStream(myStream));
                     });
 
 
@@ -242,7 +244,7 @@ var recordedVideo = document.querySelector('#recordedVideo');
 
     var chunks = [];
     var mediaRecorder;
-
+    var blobGuest;
     function setUpMediaRecorder(stream) {
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = function (e) {
@@ -252,8 +254,8 @@ var recordedVideo = document.querySelector('#recordedVideo');
         mediaRecorder.onstop = function (e) {
             console.log("recorder stopped");
             console.log(mediaRecorder.state);
-            var blob = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
-            recordedVideo.src = window.URL.createObjectURL(blob);
+            blobGuest = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
+            recordedVideo.src = window.URL.createObjectURL(blobGuest);
             chunks = [];
 
         }
@@ -261,16 +263,41 @@ var recordedVideo = document.querySelector('#recordedVideo');
     }
 
 
+
+    var chunkHost = [];
+    var mediaRecorderHost;
+    var blobHost;
+
+
+    function setUpMediaRecorderHost(stream) {
+        mediaRecorderHost = new MediaRecorder(stream);
+        mediaRecorderHost.ondataavailable = function (e) {
+            console.log("data is available");
+            chunkHost.push(e.data);
+            chunks.push(e.data);
+        }
+        mediaRecorderHost.onstop = function (e) {
+            blobHost = new Blob(chunkHost, { 'type': 'video/ogg; codecs=opus' });
+            // recordedVideo.src = window.URL.createObjectURL(blob);
+            chunkHost = [];
+
+        }
+    }
+
     var startRecording = function () {
         mediaRecorder.start();
+        mediaRecorderHost.start();
         console.log(mediaRecorder.state);
     }
     var stopRecording = function () {
-        mediaRecorder.stop();
-        console.log(mediaRecorder.state);
-        console.log("recorder stopped");
-        console.log(chunks, mediaRecorder);
-        $scope.message = "Video Recorded. Press save button to store recording."
+        mediaRecorderHost.stop();
+
+        setTimeout(function (){
+            mediaRecorder.stop();
+            $scope.message = "Video Recorded. Press save button to store recording."
+
+        },5000);
+
     }
 
 
