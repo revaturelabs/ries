@@ -301,8 +301,6 @@ app.controller("hostCtrl", function ($scope) {
     }
 
 
-
-
     //initiating a call
     callBtn.addEventListener("click", function () {
         var callToUsername = callToUsernameInput.value;
