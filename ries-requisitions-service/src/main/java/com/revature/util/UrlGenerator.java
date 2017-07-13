@@ -21,12 +21,12 @@ public class UrlGenerator {
         //INSERT REAL DOMAIN ADDRESS HERE
         //INSERT REAL DOMAIN ADDRESS HERE
 
-        String urlbase = "www.insertrealaddresslater.com/guestsession/?id="+r.getReqId().toString()+"&key=";
+        String urlbase = "www.insertrealaddresslater.com/guestsession/?gid="+r.getReqGuest().toString()+"&rid="+r.getReqRecruiter()+"&key=";
         String guesturl = "guest" + r.getReqGuest().toString() + r.getReqRecruiter().toString();
         guesturl = DigestUtils.sha1Hex(guesturl);
         guesturl = urlbase + guesturl;
         r.setGuestUrl(guesturl);
-        urlbase = "www.insertrealaddresslater.com/session/?id="+r.getReqId().toString()+"&key=";
+        urlbase = "www.insertrealaddresslater.com/session/?gid="+r.getReqGuest().toString()+"&rid="+r.getReqRecruiter()+"&key=";
         String hosturl = "host" + r.getReqGuest().toString() + r.getReqRecruiter().toString();
         hosturl = DigestUtils.sha1Hex(hosturl);
         hosturl = urlbase + hosturl;

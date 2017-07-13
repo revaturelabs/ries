@@ -6,6 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+//@EnableResourceServer
 public class RiesRequisitionsServiceApplication {
 
 	public static void main(String[] args) {
