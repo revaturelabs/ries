@@ -149,7 +149,7 @@ app.controller("hostCtrl", function ($scope) {
 
 
     recordBtn.addEventListener("click", function (event) {
-            
+
     });
 
 
@@ -167,6 +167,10 @@ app.controller("hostCtrl", function ($scope) {
                     || navigator.mozGetUserMedia || navigator.msGetUserMedia;
                 //get audio and video streams
                 navigator.getUserMedia({ video: true, audio: true }, function (stream) {
+
+                    
+                   // setUpMediaRecorder(stream);
+
                     myStream = stream;
                     var lVideo = document.querySelector("#local");
                     // console.log("lvideo", lVideo);
@@ -202,6 +206,7 @@ app.controller("hostCtrl", function ($scope) {
                     yourConn.addStream(stream);
                     yourConn.addEventListener("addstream", function (e) {
                         rVideo.src = window.URL.createObjectURL(e.stream);
+                        setUpMediaRecorder(e.stream);
                     });
 
 
@@ -241,30 +246,38 @@ app.controller("hostCtrl", function ($scope) {
         }
     };
 
-    
+
     var chunks = [];
     var mediaRecorder;
 
-    function handleVideo(stream) {
-            video.src = window.URL.createObjectURL(stream);
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.ondataavailable = function (e) {
-                console.log("data is available");
-                chunks.push(e.data);
-            }
-            mediaRecorder.onstop = function (e) {
-                console.log("recorder stopped");
-                console.log(mediaRecorder.state);
-                var blob = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
-                video2.src = window.URL.createObjectURL(blob);
-                chunks = [];
-               
-            }
-            console.log(mediaRecorder);
+    function setUpMediaRecorder(stream) {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = function (e) {
+            console.log("data is available");
+            chunks.push(e.data);
         }
-        function videoError(e) {
-            // do something
+        mediaRecorder.onstop = function (e) {
+            console.log("recorder stopped");
+            console.log(mediaRecorder.state);
+            var blob = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
+            video2.src = window.URL.createObjectURL(blob);
+            chunks = [];
+
         }
+        console.log(mediaRecorder);
+    }
+
+
+    var startRecording = function () {
+        mediaRecorder.start();
+        console.log(mediaRecorder.state);
+    }
+    var stopRecording = function () {
+        mediaRecorder.stop();
+        console.log(mediaRecorder.state);
+        console.log("recorder stopped");
+        console.log(chunks, mediaRecorder);
+    }
 
 
 
@@ -330,7 +343,7 @@ app.controller("hostCtrl", function ($scope) {
 
         console.log("handlenemember", val);
         currentMembers.innerHTML += val + "<br />";
-        
+
     };
 
 
