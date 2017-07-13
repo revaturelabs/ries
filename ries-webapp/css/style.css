@@ -13,14 +13,14 @@ body{
   padding: 10px;
 }
 
-@media (min-width: 576px){
+@media screen and (max-width: 600px){
   .riesContent{
     padding: 30px;
   }
 }
 
 /* CSS for the guest login screen*/
-.form-revature-gLogin{
+.form-revature-login{
     max-width:360px;
     padding: 30px;
     margin: auto;
@@ -30,15 +30,15 @@ body{
     border-radius: 10px;
 }
 
-.form-revature-gLogin div{
+.form-revature-login div{
   margin: 10px;
 }
 
-.form-revature-gLogin{
+.form-revature-login{
     margin: 10px;
 }
 
-.form-revature-gLogin input{
+.form-revature-login input{
     border-radius: 10px;
     border-color: orangered;
 }
@@ -55,14 +55,12 @@ body{
 	float: right;
 }
 
-.gRIES {
+.RIES {
 	color: #474C55;
 }
-
-/* CSS for the navBar*/
-
 
 /* Revature logo css*/
 .logo{
   margin: 30px;
 }
+

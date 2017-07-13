@@ -2,10 +2,21 @@ var app = angular.module("RIESApp", ['ui.router', 'ui.bootstrap'])
 
 
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
+	
+	$stateProvider.state('login',{
+		url: "/login",
+		views:{
+			nav:{
+				templateUrl: null
+			},
+			content:{
+				templateUrl: "pages/login.html"
+			}
+		}
+	});
 	
 	$stateProvider.state('home', {
-		url: "/",
+		url: "/home",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -17,7 +28,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 	
 	$stateProvider.state('requisitions', {
-		url: "/",
+		url: "/requisitions",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -29,7 +40,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 	
 	$stateProvider.state('trainers', {
-		url: "/",
+		url: "/trainers",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -41,7 +52,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('sessionHost', {
-		url: "/",
+		url: "/session/host",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -53,7 +64,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('sessionGuest', {
-		url: "/sessionGuest",
+		url: "/session/guest",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -65,7 +76,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('sessionObserver', {
-		url: "/",
+		url: "/session/observer",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -77,7 +88,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('guestLogin',{
-		url: "/guestLogin",
+		url: "/guest/login",
 		views:{
 			nav:{
 				templateUrl : null
@@ -87,7 +98,8 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 			}
 		}
 	});
-    
-    
+
+	$locationProvider.html5Mode(true);
+	$urlRouterProvider.otherwise('/home'); 
 });
 
