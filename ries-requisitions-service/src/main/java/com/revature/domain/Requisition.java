@@ -141,6 +141,7 @@ public class Requisition {
         r.setReqId(1);
         r.setReqGuest(1);
         r.setReqRecruiter(3);
+        r.setInterviewDate(new Timestamp(System.currentTimeMillis()));
         r = UrlGenerator.generateUrls(r);
         System.out.println(r.toString());
     }

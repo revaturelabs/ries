@@ -20,6 +20,7 @@ public class UrlGenerator {
         //INSERT REAL DOMAIN ADDRESS HERE
         //INSERT REAL DOMAIN ADDRESS HERE
         //INSERT REAL DOMAIN ADDRESS HERE
+
         String urlbase = "www.insertrealaddresslater.com/guestsession/?id="+r.getReqId().toString()+"&key=";
         String guesturl = "guest" + r.getReqGuest().toString() + r.getReqRecruiter().toString();
         guesturl = DigestUtils.sha1Hex(guesturl);
@@ -34,6 +35,8 @@ public class UrlGenerator {
         observeurl = DigestUtils.sha1Hex(observeurl);
         observeurl = urlbase + observeurl;
         r.setObserverUrl(observeurl);
+
+        KinesisEmailProducer.writeURLEmails(r);
         return r;
     }
 }
