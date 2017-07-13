@@ -4,13 +4,14 @@ app.controller("signalingCtrl", function($scope, signalingService) {
 
     $scope.saveRecording = function(){
         //get name from host input
-        $scope.recording.name = prompt("Please enter a name for the recording.");
+        $scope.Recording.name = prompt("Please enter a name for the recording.");
         //make file using blob object made during recording; add name and date fields to make it a file
-        $scope.recording.file = $scope.blob;
-        $scope.recording.file.name = $scope.recording.name;
-        $scope.recording.file.lastModifiedDate = new Date();
+        //need to add fields for amazonS3 keys
+        $scope.Recording.file = $scope.blob;
+        $scope.Recording.file.name = $scope.recording.name;
+        $scope.Recording.file.lastModifiedDate = new Date();
 
-        signalingService.saveRecording($scope.recording)
+        signalingService.saveRecording($scope.Recording)
         .then(function(response) {
             $scope.message = response.data;
         }, function(error) {

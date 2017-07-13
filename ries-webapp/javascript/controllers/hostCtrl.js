@@ -1,6 +1,6 @@
 app.controller("hostCtrl", function ($scope) {
 
-
+    $scope.message = "";
 
     console.log("welcome to the signalingCtrl");
     var name;
@@ -270,6 +270,7 @@ var recordedVideo = document.querySelector('#recordedVideo');
         console.log(mediaRecorder.state);
         console.log("recorder stopped");
         console.log(chunks, mediaRecorder);
+        $scope.message = "Video Recorded. Press save button to store recording."
     }
 
 
