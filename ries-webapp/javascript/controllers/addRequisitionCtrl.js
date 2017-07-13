@@ -2,15 +2,16 @@ app.controller("addRequisitionCtrl", function($http, $scope) {
     $http.defaults.headers.post["Content-Type"] = "text/plain";
     
     $scope.addRequisition = function() {
-        var interviewDate = $scope.month + $scope.day + $scope.year;
+        var interviewDate = $scope.month + "/" + $scope.day + "/" + $scope.year;
+
         // converts date to milliseconds
-        interviewDate = new Date(interviewDate).getTime();
-        
+        var interviewDateMil = new Date(interviewDate).getTime();
+        console.log(interviewDateMil);
         var requisitionObj = {
             'reqRecruiter': $scope.recruiter,
             'reqHost': $scope.reqHost,
             'reqGuest': $scope.reqGuest,
-            'interviewDate': interviewDate
+            'interviewDate': interviewDateMil
         };
 
         var requisJson = angular.toJson(requisitionObj);
@@ -20,11 +21,10 @@ app.controller("addRequisitionCtrl", function($http, $scope) {
             data: requisJson,
             headers: {'Content-Type': 'application/JSON'}
         })
-        .success(function() {
+        .then(function(res) {
             console.log("data successfully sent");
-        })
-        .error(function() {
-            console.log("unable to send data");
+        }, function(err) {
+            console.log("shit");
         });
     };
 
