@@ -60,13 +60,13 @@
 	</head>
 
 	<body>
-		<h4>indexhtml</h4>
 		<!--<navbar-dir></navbar-dir>-->
-		<div class="container" ng-app="RIESApp">
-			
-			<div ui-view name="nav"></div>
-			<br>
-			<div ui-view name="content"></div>
+		<div ng-app="RIESApp">
+			<div class="riesContainer">
+				<div ui-view name="nav"></div>
+				<br>
+				<div ui-view name="content"></div>
+			</div>
 		</div>
 	</body>
 

@@ -1,4 +1,4 @@
-<!--<div ng-controller="NavbarCtrl as nCtrl">
+<div ng-controller="NavbarCtrl as nCtrl">
 	<md-content class="md-padding">
 		<img src="img/revature_logo_250.png" class="md-card-image">
 		<md-nav-bar md-selected-nav-item="nCtrl.currentPage" aria-label="menu">
@@ -10,9 +10,9 @@
 		</md-nav-bar>
 		
 	</md-content>
-</div>-->
+</div>
 
-<div ng-controller="NavCtrl">
+<div ng-controller="NavbarCtrl">
     <nav class="">
         <div class="" id="">
             <a class="" ng-click="">Revature RIES</a>
@@ -25,6 +25,9 @@
                 </li>
 				<li class="">
                     <a class="" active="" ng-click="goToRequisition()">Requisitions</a>
+                </li>
+                <li class="">
+                    <a class="" active="" ng-click="goToGuest()">GuestLogin</a>
                 </li>
             
             </ul>
