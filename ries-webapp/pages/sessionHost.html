@@ -198,11 +198,12 @@
         <div class="row">
             <div class="col-md-12 asdf">
                 <input id="callToUsernameInput" type="text" placeholder="username to call" />
-                <button id="callBtn" class="btn-success btn">Call</button>
+                <button id="callBtn" class="btn-primary btn">Call</button>
                 <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
+                <button id="recordBtn" class="btn-success btn">Record</button>
                 <div class="row asdf is-flex">
                     <div class="col-md-2 asdf blue">
-                        <div>
+                        <div id = "currentlyInChat">
                             Currently in chat
                         </div>
                         <div class="bottom blue">
@@ -210,7 +211,6 @@
                         </div>
                     </div>
                     <div class="col-md-8 asdf">
-                        Fluid 6
                         <video id="local" class="bigVideo" autoplay></video>
                     </div>
                     <div class="col-md-2">
@@ -232,15 +232,15 @@
         </div>
     </div>
 
-    <!--<button id="modalBtn">End Session?</button>
+    <button id="modalBtn">End Session?</button>
     <div id="myModal" class="modal">
         <div class="modal-content">
             <p>End session</p>
             <span class="close">&times;</span>
-            <button id = "endSessionBtn btn-danger btn">End Session</button>
+            <button id = "endSessionBtn" class = "btn-danger btn">End Session</button>
             <button id = "endSessionCancelBtn" class = "btn btn-primary">Cancel</button>
         </div>
-    </div>-->
+    </div>
 
 
 

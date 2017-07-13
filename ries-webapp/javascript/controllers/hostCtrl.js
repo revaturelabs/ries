@@ -37,6 +37,9 @@ app.controller("hostCtrl", function ($scope) {
             case "leave":
                 handleLeave();
                 break;
+            case "newMember":
+                handleNewMember(data.name);
+                break;
             default:
                 break;
         }
@@ -72,58 +75,61 @@ app.controller("hostCtrl", function ($scope) {
     var hangUpBtn = document.querySelector('#hangUpBtn');
     var msgInput = document.querySelector('#msgInput');
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
+    var recordBtn = document.querySelector('#recordBtn');
 
     var chatArea = document.querySelector('#chatarea');
+    var currentMembers = document.querySelector('#currentlyInChat');
     var yourConn;
     var dataChannel;
     callPage.style.display = "none";
 
 
 
-    //Check ending session code and DOM handling--------------------------------------
-    // var modalEndSess = document.getElementById('myModal');
-    // var modalBtn = document.getElementById("modalBtn");
-    // var outsideModal = document.getElementsByClassName("close")[0];
-    
+    ////Check ending session code and DOM handling--------------------------------------
+    var modalEndSess = document.getElementById('myModal');
+    var modalBtn = document.getElementById("modalBtn");
+    var outsideModal = document.getElementsByClassName("close")[0];
 
-    // modalBtn.onclick = function () {
-    //     modalEndSess.style.display = "block";
-    // }
-    // outsideModal.onclick = function () {
-    //     modalEndSess.style.display = "none";
-    // }
-    // window.onclick = function (event) {
-    //     if (event.target == modalEndSess) {
-    //         modalEndSess.style.display = "none";
-    //     }
-    // }
+
+    modalBtn.onclick = function () {
+        modalEndSess.style.display = "block";
+    }
+    outsideModal.onclick = function () {
+        modalEndSess.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modalEndSess) {
+            modalEndSess.style.display = "none";
+        }
+    }
 
     //hang up
-    // hangUpBtn.onclick = function () {
-    //     modalEndSess.style.display = "block";
-    // }
+    hangUpBtn.onclick = function () {
+        modalEndSess.style.display = "block";
+    }
 
-
-hangUpBtn.addEventListener("click", function () {
+    var endSessionBtn = document.getElementById("endSessionBtn");
+    endSessionBtn.addEventListener("click", function () {
         console.log("trying to end session...");
         send({
             type: "leave"
         });
 
         handleLeave();
+        modalEndSess.style.display = "none";
     });
 
-    // var endSessionBtn = document.getElementById("endSessionBtn");
-    // endSessionBtn.addEventListener("click", function () {
-    //     console.log("trying to end session...");
-    //     send({
-    //         type: "leave"
-    //     });
-
-    //     handleLeave();
-    // });
-
     //-----------------------------------------------------
+
+
+    // hangUpBtn.addEventListener("click", function () {
+    //         console.log("trying to end session...");
+    //         send({
+    //             type: "leave"
+    //         });
+
+    //         handleLeave();
+    //     });
 
 
 
@@ -140,6 +146,14 @@ hangUpBtn.addEventListener("click", function () {
         }
 
     });
+
+
+    recordBtn.addEventListener("click", function (event) {
+            
+    });
+
+
+
 
     function handleLogin(success) {
 
@@ -227,6 +241,34 @@ hangUpBtn.addEventListener("click", function () {
         }
     };
 
+    
+    var chunks = [];
+    var mediaRecorder;
+
+    function handleVideo(stream) {
+            video.src = window.URL.createObjectURL(stream);
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = function (e) {
+                console.log("data is available");
+                chunks.push(e.data);
+            }
+            mediaRecorder.onstop = function (e) {
+                console.log("recorder stopped");
+                console.log(mediaRecorder.state);
+                var blob = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
+                video2.src = window.URL.createObjectURL(blob);
+                chunks = [];
+               
+            }
+            console.log(mediaRecorder);
+        }
+        function videoError(e) {
+            // do something
+        }
+
+
+
+
     //initiating a call
     callBtn.addEventListener("click", function () {
         var callToUsername = callToUsernameInput.value;
@@ -283,6 +325,15 @@ hangUpBtn.addEventListener("click", function () {
         yourConn.onicecandidate = null;
     };
 
+
+    function handleNewMember(val) {
+
+        console.log("handlenemember", val);
+        currentMembers.innerHTML += val + "<br />";
+        
+    };
+
+
     //when user clicks the "send message" button
     sendMsgBtn.addEventListener("click", function (event) {
         // var val = msgInput.value;
@@ -299,6 +350,11 @@ hangUpBtn.addEventListener("click", function () {
         console.log("sent message", val);
         msgInput.value = "";
     });
+
+
+
+
+
 
     //___________________________________________________________________________________
     //video handling
