@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ries-requisitions-service
+server:
+  port:
+eureka:
+  client:
+    service-url:
+      defaultZone:
+    lease: 5
+    healthcheck:
+      enabled: false
+  instance:
+    lease-expiration-duration-in-seconds: 60
+    lease-renewal-interval-in-seconds: 60
