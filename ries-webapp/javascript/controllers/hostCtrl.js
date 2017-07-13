@@ -1,4 +1,4 @@
-app.controller("signalingCtrl", function ($scope) {
+app.controller("hostCtrl", function ($scope) {
 
 
 
@@ -7,7 +7,7 @@ app.controller("signalingCtrl", function ($scope) {
     var connectedUser;
 
     //connecting to our signaling server
-    var conn = new WebSocket('ws://192.168.61.75:9090');
+    var conn = new WebSocket('ws://localhost:7000');
     // var conn = new WebSocket('ws://localhost:9090');
 
     conn.onopen = function () {
@@ -37,6 +37,9 @@ app.controller("signalingCtrl", function ($scope) {
             case "leave":
                 handleLeave();
                 break;
+            case "newMember":
+                handleNewMember(data.name);
+                break;
             default:
                 break;
         }
@@ -61,28 +64,6 @@ app.controller("signalingCtrl", function ($scope) {
     //UI selectors block
     //******
 
-    // var localVideo = document.getElementById('localVideo');
-    // console.log("localVideo",localVideo);
-    //
-
-    var readyForVideo = function () {
-
-        var lVideo = document.getElementById('local');
-        console.log("lvideo", lVideo);
-
-        lVideo = document.querySelector('#local');
-        console.log("lvideo", lVideo);
-        var localVideo = document.getElementById('localVideo');
-        console.log("localVideo", localVideo);
-
-
-        localVideo = document.querySelector('#localVideo');
-        console.log("localVideo", localVideo);
-
-    };
-
-
-
     var loginPage = document.querySelector('#loginPage');
     var usernameInput = document.querySelector('#usernameInput');
     var loginBtn = document.querySelector('#loginBtn');
@@ -94,16 +75,67 @@ app.controller("signalingCtrl", function ($scope) {
     var hangUpBtn = document.querySelector('#hangUpBtn');
     var msgInput = document.querySelector('#msgInput');
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
+    var recordBtn = document.querySelector('#recordBtn');
 
     var chatArea = document.querySelector('#chatarea');
+    var currentMembers = document.querySelector('#currentlyInChat');
     var yourConn;
     var dataChannel;
     callPage.style.display = "none";
 
 
 
+    ////Check ending session code and DOM handling--------------------------------------
+    var modalEndSess = document.getElementById('myModal');
+    var modalBtn = document.getElementById("modalBtn");
+    var outsideModal = document.getElementsByClassName("close")[0];
+
+
+    modalBtn.onclick = function () {
+        modalEndSess.style.display = "block";
+    }
+    outsideModal.onclick = function () {
+        modalEndSess.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modalEndSess) {
+            modalEndSess.style.display = "none";
+        }
+    }
+
+    //hang up
+    hangUpBtn.onclick = function () {
+        modalEndSess.style.display = "block";
+    }
+
+    var endSessionBtn = document.getElementById("endSessionBtn");
+    endSessionBtn.addEventListener("click", function () {
+        console.log("trying to end session...");
+        send({
+            type: "leave"
+        });
+
+        handleLeave();
+        modalEndSess.style.display = "none";
+    });
+
+    //-----------------------------------------------------
+
+
+    // hangUpBtn.addEventListener("click", function () {
+    //         console.log("trying to end session...");
+    //         send({
+    //             type: "leave"
+    //         });
+
+    //         handleLeave();
+    //     });
+
+
+
     // Login when the user clicks the button
     loginBtn.addEventListener("click", function (event) {
+        console.log("trying login");
         name = usernameInput.value;
 
         if (name.length > 0) {
@@ -114,6 +146,14 @@ app.controller("signalingCtrl", function ($scope) {
         }
 
     });
+
+
+    recordBtn.addEventListener("click", function (event) {
+
+    });
+
+
+
 
     function handleLogin(success) {
 
@@ -127,6 +167,10 @@ app.controller("signalingCtrl", function ($scope) {
                     || navigator.mozGetUserMedia || navigator.msGetUserMedia;
                 //get audio and video streams
                 navigator.getUserMedia({ video: true, audio: true }, function (stream) {
+
+                    
+                   // setUpMediaRecorder(stream);
+
                     myStream = stream;
                     var lVideo = document.querySelector("#local");
                     // console.log("lvideo", lVideo);
@@ -162,6 +206,7 @@ app.controller("signalingCtrl", function ($scope) {
                     yourConn.addStream(stream);
                     yourConn.addEventListener("addstream", function (e) {
                         rVideo.src = window.URL.createObjectURL(e.stream);
+                        setUpMediaRecorder(e.stream);
                     });
 
 
@@ -200,6 +245,42 @@ app.controller("signalingCtrl", function ($scope) {
 
         }
     };
+
+
+    var chunks = [];
+    var mediaRecorder;
+
+    function setUpMediaRecorder(stream) {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = function (e) {
+            console.log("data is available");
+            chunks.push(e.data);
+        }
+        mediaRecorder.onstop = function (e) {
+            console.log("recorder stopped");
+            console.log(mediaRecorder.state);
+            var blob = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
+            video2.src = window.URL.createObjectURL(blob);
+            chunks = [];
+
+        }
+        console.log(mediaRecorder);
+    }
+
+
+    var startRecording = function () {
+        mediaRecorder.start();
+        console.log(mediaRecorder.state);
+    }
+    var stopRecording = function () {
+        mediaRecorder.stop();
+        console.log(mediaRecorder.state);
+        console.log("recorder stopped");
+        console.log(chunks, mediaRecorder);
+    }
+
+
+
 
     //initiating a call
     callBtn.addEventListener("click", function () {
@@ -249,20 +330,22 @@ app.controller("signalingCtrl", function ($scope) {
         yourConn.addIceCandidate(new RTCIceCandidate(candidate));
     };
 
-    //hang up
-    hangUpBtn.addEventListener("click", function () {
-        send({
-            type: "leave"
-        });
 
-        handleLeave();
-    });
 
     function handleLeave() {
         connectedUser = null;
         yourConn.close();
         yourConn.onicecandidate = null;
     };
+
+
+    function handleNewMember(val) {
+
+        console.log("handlenemember", val);
+        currentMembers.innerHTML += val + "<br />";
+
+    };
+
 
     //when user clicks the "send message" button
     sendMsgBtn.addEventListener("click", function (event) {
@@ -280,6 +363,9 @@ app.controller("signalingCtrl", function ($scope) {
         console.log("sent message", val);
         msgInput.value = "";
     });
+
+
+
 
 
 
