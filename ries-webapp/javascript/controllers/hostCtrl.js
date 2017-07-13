@@ -7,7 +7,7 @@ app.controller("hostCtrl", function ($scope) {
     var connectedUser;
 
     //connecting to our signaling server
-    var conn = new WebSocket('ws://localhost:7000');
+    var conn = new WebSocket('ws://192.168.61.75:7000');
     // var conn = new WebSocket('ws://localhost:9090');
 
     conn.onopen = function () {
@@ -76,6 +76,7 @@ app.controller("hostCtrl", function ($scope) {
     var msgInput = document.querySelector('#msgInput');
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
     var recordBtn = document.querySelector('#recordBtn');
+    var endRecordBtn = document.querySelector('#endRecordBtn');
 
     var chatArea = document.querySelector('#chatarea');
     var currentMembers = document.querySelector('#currentlyInChat');
@@ -83,7 +84,7 @@ app.controller("hostCtrl", function ($scope) {
     var dataChannel;
     callPage.style.display = "none";
 
-
+var recordedVideo = document.querySelector('#recordedVideo');
 
     ////Check ending session code and DOM handling--------------------------------------
     var modalEndSess = document.getElementById('myModal');
@@ -122,16 +123,6 @@ app.controller("hostCtrl", function ($scope) {
     //-----------------------------------------------------
 
 
-    // hangUpBtn.addEventListener("click", function () {
-    //         console.log("trying to end session...");
-    //         send({
-    //             type: "leave"
-    //         });
-
-    //         handleLeave();
-    //     });
-
-
 
     // Login when the user clicks the button
     loginBtn.addEventListener("click", function (event) {
@@ -149,10 +140,12 @@ app.controller("hostCtrl", function ($scope) {
 
 
     recordBtn.addEventListener("click", function (event) {
-
+        startRecording();
     });
 
-
+    endRecordBtn.addEventListener("click", function (event) {
+        stopRecording();
+    });
 
 
     function handleLogin(success) {
@@ -168,8 +161,8 @@ app.controller("hostCtrl", function ($scope) {
                 //get audio and video streams
                 navigator.getUserMedia({ video: true, audio: true }, function (stream) {
 
-                    
-                   // setUpMediaRecorder(stream);
+
+                    // setUpMediaRecorder(stream);
 
                     myStream = stream;
                     var lVideo = document.querySelector("#local");
@@ -260,7 +253,7 @@ app.controller("hostCtrl", function ($scope) {
             console.log("recorder stopped");
             console.log(mediaRecorder.state);
             var blob = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
-            video2.src = window.URL.createObjectURL(blob);
+            recordedVideo.src = window.URL.createObjectURL(blob);
             chunks = [];
 
         }
