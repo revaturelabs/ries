@@ -55,8 +55,8 @@ public class RiesSignalingServiceApplication {
 		String accesskeyID = "aws.accessKeyId";
 		String secretkey = "aws.secretKey";
 		//values of the keys
-		String accessIdValue = "AKIAJXZ564AKLLLEW4LQ";
-		String secretValue = "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";
+		String accessIdValue = record.getAccessKeyId();
+		String secretValue = record.getSecretKey();
 
 		System.setProperty(accesskeyID,accessIdValue);
 		System.setProperty(secretkey,secretValue);
