@@ -20,8 +20,11 @@ public class UrlGenerator {
         //INSERT REAL DOMAIN ADDRESS HERE
         //INSERT REAL DOMAIN ADDRESS HERE
         //INSERT REAL DOMAIN ADDRESS HERE
+        System.out.println("in the stupid url generator");
+        System.out.println(r.toString());
 
         String urlbase = "www.insertrealaddresslater.com/guestsession/?id="+r.getReqId().toString()+"&key=";
+        System.out.println(r.getReqId());
         String guesturl = "guest" + r.getReqGuest().toString() + r.getReqRecruiter().toString();
         guesturl = DigestUtils.sha1Hex(guesturl);
         guesturl = urlbase + guesturl;
@@ -36,7 +39,7 @@ public class UrlGenerator {
         observeurl = urlbase + observeurl;
         r.setObserverUrl(observeurl);
 
-        KinesisEmailProducer.writeURLEmails(r);
+        //KinesisEmailProducer.writeURLEmails(r);
         return r;
     }
 }

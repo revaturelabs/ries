@@ -50,7 +50,9 @@ public class RequisitionController {
 
     @RequestMapping(value="/requisition/create", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createRequisition(@RequestBody Requisition requisition) {
-        Requisition requisition1 = UrlGenerator.generateUrls(requisition); // Add urls to the requisition
+        //Requisition requisition1 = UrlGenerator.generateUrls(requisition); // Add urls to the requisition
+        System.out.println(requisition);
+        Requisition requisition1 = UrlGenerator.generateUrls(requisition);
         service.save(requisition1);
         return new ResponseEntity<>(HttpStatus.OK);
     }
