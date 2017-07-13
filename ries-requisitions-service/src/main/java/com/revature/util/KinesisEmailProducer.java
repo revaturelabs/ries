@@ -37,7 +37,7 @@ public class KinesisEmailProducer {
                 "  Please be aware that these interviews are recorded for quality control purposes.  Only click the following"+
                 " link if you consent to be recorded.\n\n"+r.getGuestUrl();
         String topic = "Interview with Revature";
-        String email = "epsilon220@gmail.com";
+        String email = "lederhou@grinnell.edu";
 
         buildAndSendEmail(msg, topic, email, r);
     }
@@ -47,7 +47,7 @@ public class KinesisEmailProducer {
                 +"\n\nAt that time, have the interviewer use the following link to start the interview session.\n"+ r.getHostUrl() +
                 " \n\nIf you or any other Revature employees would like to observe this interview, please use the following link.\n"+r.getObserverUrl();
         String topic = "New Scheduled Interview";
-        String email = "lederhou@grinnell.edu";
+        String email = "epsilon220@gmail.com";
 
         buildAndSendEmail(msg, topic, email, r);
     }

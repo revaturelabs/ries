@@ -135,14 +135,14 @@ public class Requisition {
                 '}';
     }
 
-    /*
+
     public static void main(String[] args) {
         Requisition r = new Requisition();
         r.setReqId(1);
         r.setReqGuest(1);
-        r.setReqRecruiter(3);
+        r.setReqRecruiter("13g");
         r.setInterviewDate(new Timestamp(System.currentTimeMillis()));
         r = UrlGenerator.generateUrls(r);
         System.out.println(r.toString());
-    }*/
+    }
 }
