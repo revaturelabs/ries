@@ -4,6 +4,7 @@ app.controller("requisitionCtrl",['$scope', '$http', 'requisitionService', funct
     });
 }]);
 
+/* Need to fix filter
 app.filter('reqByHost', function() {
     return function(requisitions, host) {
         if (host == "none" || host == "None" || host == "All" || host || "all") {
@@ -20,3 +21,4 @@ app.filter('reqByHost', function() {
         return filtered;
     };
 });
+*/
