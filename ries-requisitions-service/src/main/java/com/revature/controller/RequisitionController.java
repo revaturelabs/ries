@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -34,6 +35,18 @@ public class RequisitionController {
         return new ResponseEntity<>(requisition, HttpStatus.OK);
     }
 
+    @RequestMapping(value="/requisition/by/recruiter/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Requisition>> getAllRequisitionsByRecruiter(@PathVariable String recruiterId) {
+        List<Requisition> reqList = service.getAllByRecruiter(recruiterId);
+        return new ResponseEntity<>(reqList, HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/requisition/by/interviewer/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Requisition>> getAllRequisitionsByInterviewer(@PathVariable String interviewer) {
+        List<Requisition> reqList = service.getAllByInterviewer(interviewer);
+        return new ResponseEntity<>(reqList, HttpStatus.OK);
+    }
+
     @RequestMapping(value="/requisition/create", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createRequisition(@RequestBody Requisition requisition) {
         service.save(requisition);
@@ -50,5 +63,17 @@ public class RequisitionController {
     public ResponseEntity<Void> removeRequisition(@RequestBody Requisition requisition) {
         service.delete(requisition);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    //Update interview date of an requisition
+    @RequestMapping(value="/requisition/update/{id}", method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateRequisition(@PathVariable Integer id, @RequestParam String newDate) {
+        Timestamp ts = Timestamp.valueOf(newDate);
+        Requisition requisition = service.getById(id);
+
+        requisition.setInterviewDate(ts);
+        service.save(requisition);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }
