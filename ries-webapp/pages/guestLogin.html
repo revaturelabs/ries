@@ -1,0 +1,23 @@
+<center>
+    <div class="gLoginContainer logo">
+        <img src= "/img/revature_logo_250.png" alt="Revature" height="75px"> 
+    </div>
+
+    <h1 class="gRIES">RIES</h1>
+    <div class="gLoginContainer">
+        <form class="form-revature-gLogin" role="form" name="loginGuest" ng-submit="guestCtrl.login()">
+            <div class="row">
+                <label class="sr-only"></label>
+                <input id="gName" name="gName" class="col-xs-12 col-md-12" type="text" placeholder="Username" ng-model="guestCtrl.gName" required autofocus>
+            </div>
+            <div class="row">
+                <label class="sr-only"></label>
+                <input id="gPin" name="gPin" class="col-xs-12 col-md-12" type="password" placeholder="Pin" ng-model="guestCtrl.gPin" required >
+            </div>
+            <div class="row">
+                <input class="btn-revature-login" type="submit" value="Login">
+            </div>
+        </form>
+        <span ng-show="guestCtrl.loginError" class="span-creds">!!! Invalid Guest Name and/or Pin !!!</span>
+    </div>
+</center>

@@ -39,8 +39,16 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.js" type="text/javascript"></script>
 
 		<!-- Custom -->
+
+
+		<!-- Style sheets added-->
 		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/guestLogin.css">
+		
+		<!-- Javascript App -->
 		<script type="text/javascript" src="javascript/app/app.js"></script>
+
+		<!-- Javascript Controllers -->
 		<script type="text/javascript" src="javascript/controllers/navbarCtrl.js"></script>
 		<script type="text/javascript" src="javascript/controllers/hostCtrl.js"></script>
 		<script type="text/javascript" src="javascript/services/requisitionService.js"></script>
@@ -49,13 +57,13 @@
 	</head>
 
 	<body>
-		<h4>indexhtml</h4>
 		<!--<navbar-dir></navbar-dir>-->
-		<div class="container" ng-app="RIESApp">
-			
-			<div ui-view name="nav"></div>
-			<br>
-			<div ui-view name="content"></div>
+		<div ng-app="RIESApp">
+			<div class="riesContainer">
+				<div ui-view name="nav"></div>
+				<br>
+				<div ui-view name="content"></div>
+			</div>
 		</div>
 	</body>
 

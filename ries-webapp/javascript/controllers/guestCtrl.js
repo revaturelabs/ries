@@ -1,7 +1,6 @@
-app.controller("hostCtrl", function ($scope) {
+var app = angular.module("RIESApp");
 
-    $scope.message = "";
-
+app.controller("guestCtrl", function($scope, $state){
     console.log("welcome to the signalingCtrl");
     var name;
     var connectedUser;
@@ -63,20 +62,15 @@ app.controller("hostCtrl", function ($scope) {
     //******
     //UI selectors block
     //******
-
+//login var should be removed when login div in guesthtml is removed
     var loginPage = document.querySelector('#loginPage');
     var usernameInput = document.querySelector('#usernameInput');
     var loginBtn = document.querySelector('#loginBtn');
 
-    var callPage = document.querySelector('#callPage');
-    var callToUsernameInput = document.querySelector('#callToUsernameInput');
-    var callBtn = document.querySelector('#callBtn');
 
-    var hangUpBtn = document.querySelector('#hangUpBtn');
     var msgInput = document.querySelector('#msgInput');
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
-    var recordBtn = document.querySelector('#recordBtn');
-    var endRecordBtn = document.querySelector('#endRecordBtn');
+    
 
     var chatArea = document.querySelector('#chatarea');
     var currentMembers = document.querySelector('#currentlyInChat');
@@ -84,7 +78,7 @@ app.controller("hostCtrl", function ($scope) {
     var dataChannel;
     callPage.style.display = "none";
 
-    var recordedVideo = document.querySelector('#recordedVideo');
+
 
     ////Check ending session code and DOM handling--------------------------------------
     var modalEndSess = document.getElementById('myModal');
@@ -105,9 +99,9 @@ app.controller("hostCtrl", function ($scope) {
     }
 
     //hang up
-    hangUpBtn.onclick = function () {
-        modalEndSess.style.display = "block";
-    }
+    // hangUpBtn.onclick = function () {
+    //     modalEndSess.style.display = "block";
+    // }
 
     var endSessionBtn = document.getElementById("endSessionBtn");
     endSessionBtn.addEventListener("click", function () {
@@ -124,7 +118,7 @@ app.controller("hostCtrl", function ($scope) {
 
 
 
-    // Login when the user clicks the button
+    // Login when the user clicks the button; remove with login div in guesthtml
     loginBtn.addEventListener("click", function (event) {
         console.log("trying login");
         name = usernameInput.value;
@@ -138,16 +132,9 @@ app.controller("hostCtrl", function ($scope) {
 
     });
 
-
-    recordBtn.addEventListener("click", function (event) {
-        startRecording();
-    });
-
-    endRecordBtn.addEventListener("click", function (event) {
-        stopRecording();
-    });
-
-
+//to phaseout login ; setTimeout(function(){
+//     send({type: "login", name: "steverson"})
+// },0)
     function handleLogin(success) {
 
         if (success === false) {
@@ -161,11 +148,10 @@ app.controller("hostCtrl", function ($scope) {
                 //get audio and video streams
                 navigator.getUserMedia({ video: true, audio: true }, function (stream) {
 
-
-                    // setUpMediaRecorder(stream);
+                    
+                   // setUpMediaRecorder(stream);
 
                     myStream = stream;
-                    setUpMediaRecorderHost(stream);
                     var lVideo = document.querySelector("#local");
                     // console.log("lvideo", lVideo);
                     var rVideo = document.querySelector("#remote");
@@ -201,7 +187,6 @@ app.controller("hostCtrl", function ($scope) {
                     yourConn.addEventListener("addstream", function (e) {
                         rVideo.src = window.URL.createObjectURL(e.stream);
                         setUpMediaRecorder(e.stream);
-                        // setUpMediaRecorder(e.stream.addStream(myStream));
                     });
 
 
@@ -241,87 +226,6 @@ app.controller("hostCtrl", function ($scope) {
         }
     };
 
-
-    var chunks = [];
-    var mediaRecorder;
-    var blobGuest;
-    function setUpMediaRecorder(stream) {
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.ondataavailable = function (e) {
-            console.log("data is available");
-            chunks.push(e.data);
-        }
-        mediaRecorder.onstop = function (e) {
-            console.log("recorder stopped");
-            console.log(mediaRecorder.state);
-            blobGuest = new Blob(chunks, { 'type': 'video/ogg; codecs=opus' });
-            recordedVideo.src = window.URL.createObjectURL(blobGuest);
-            chunks = [];
-
-        }
-        console.log(mediaRecorder);
-    }
-
-
-
-    var chunkHost = [];
-    var mediaRecorderHost;
-    var blobHost;
-
-
-    function setUpMediaRecorderHost(stream) {
-        mediaRecorderHost = new MediaRecorder(stream);
-        mediaRecorderHost.ondataavailable = function (e) {
-            console.log("data is available");
-            chunkHost.push(e.data);
-            chunks.push(e.data);
-        }
-        mediaRecorderHost.onstop = function (e) {
-            blobHost = new Blob(chunkHost, { 'type': 'video/ogg; codecs=opus' });
-            // recordedVideo.src = window.URL.createObjectURL(blob);
-            chunkHost = [];
-
-        }
-    }
-
-    var startRecording = function () {
-        mediaRecorder.start();
-        mediaRecorderHost.start();
-        console.log(mediaRecorder.state);
-    }
-    var stopRecording = function () {
-        mediaRecorderHost.stop();
-
-        setTimeout(function (){
-            mediaRecorder.stop();
-            $scope.message = "Video Recorded. Press save button to store recording."
-
-        },5000);
-
-    }
-
-
-
-
-    //initiating a call
-    callBtn.addEventListener("click", function () {
-        var callToUsername = callToUsernameInput.value;
-
-        if (callToUsername.length > 0) {
-            connectedUser = callToUsername;
-            // create an offer
-            yourConn.createOffer(function (offer) {
-                send({
-                    type: "offer",
-                    offer: offer
-                });
-                yourConn.setLocalDescription(offer);
-            }, function (error) {
-                alert("Error when creating an offer");
-            });
-        }
-
-    });
 
     //when somebody sends us an offer
     function handleOffer(offer, name) {
@@ -385,25 +289,11 @@ app.controller("hostCtrl", function ($scope) {
         msgInput.value = "";
     });
 
-
-
-
-
-
-    //___________________________________________________________________________________
-    //video handling
-    var videoTrack;
-    var mediaStream;
     var hasUserMedia = function () {
         //check for WebRTC support
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia
             || navigator.mozGetUserMedia || navigator.msGetUserMedia;
         return !!navigator.getUserMedia;
-    }
-
-
-
-
-
-
+    }    
+    
 });

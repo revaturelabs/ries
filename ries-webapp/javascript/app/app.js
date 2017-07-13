@@ -67,7 +67,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('sessionGuest', {
-		url: "/",
+		url: "/sessionGuest",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -86,6 +86,18 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 			},
 			content:{
 				templateUrl : "pages/sessionObserver.html"
+			}
+		}
+	});
+
+	$stateProvider.state('guestLogin',{
+		url: "/guestLogin",
+		views:{
+			nav:{
+				templateUrl : null
+			},
+			content:{
+				templateUrl : "pages/guestLogin.html"
 			}
 		}
 	});
