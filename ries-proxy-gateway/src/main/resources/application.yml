@@ -2,6 +2,7 @@ spring:
   application:
     name: ries-edge-server
 
+
 zuul:
   prefix: /ries
   routes:
@@ -15,6 +16,7 @@ zuul:
       path: /signaling/**
       serviceId: ries-signaling-service
   ignored-services: "*"
+
 
 #server:
 #  port: 9000

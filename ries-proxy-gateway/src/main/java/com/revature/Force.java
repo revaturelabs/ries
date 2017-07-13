@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.revature.model.Employee;
 import com.revature.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -23,13 +24,8 @@ import java.util.Map;
 public class Force {
     private static final String REST_VERSION = "40.0";
 
-    @Bean
-    private OAuth2RestTemplate oAuth2RestTemplate(OAuth2ProtectedResourceDetails resource, OAuth2ClientContext context) {
-        return new OAuth2RestTemplate(resource, context);
-    }
-
     @Autowired
-    OAuth2RestTemplate restTemplate;
+    private OAuth2RestTemplate restTemplate;
 
     @SuppressWarnings("unchecked")
     public String restUrl(OAuth2Authentication auth, String url) {
