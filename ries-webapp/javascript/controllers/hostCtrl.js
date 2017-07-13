@@ -1,4 +1,4 @@
-app.controller("signalingCtrl", function ($scope) {
+app.controller("hostCtrl", function ($scope) {
 
 
 
@@ -7,7 +7,7 @@ app.controller("signalingCtrl", function ($scope) {
     var connectedUser;
 
     //connecting to our signaling server
-    var conn = new WebSocket('ws://192.168.61.75:9090');
+    var conn = new WebSocket('ws://localhost:7000');
     // var conn = new WebSocket('ws://localhost:9090');
 
     conn.onopen = function () {
@@ -80,8 +80,56 @@ app.controller("signalingCtrl", function ($scope) {
 
 
 
+    //Check ending session code and DOM handling--------------------------------------
+    // var modalEndSess = document.getElementById('myModal');
+    // var modalBtn = document.getElementById("modalBtn");
+    // var outsideModal = document.getElementsByClassName("close")[0];
+    
+
+    // modalBtn.onclick = function () {
+    //     modalEndSess.style.display = "block";
+    // }
+    // outsideModal.onclick = function () {
+    //     modalEndSess.style.display = "none";
+    // }
+    // window.onclick = function (event) {
+    //     if (event.target == modalEndSess) {
+    //         modalEndSess.style.display = "none";
+    //     }
+    // }
+
+    //hang up
+    // hangUpBtn.onclick = function () {
+    //     modalEndSess.style.display = "block";
+    // }
+
+
+hangUpBtn.addEventListener("click", function () {
+        console.log("trying to end session...");
+        send({
+            type: "leave"
+        });
+
+        handleLeave();
+    });
+
+    // var endSessionBtn = document.getElementById("endSessionBtn");
+    // endSessionBtn.addEventListener("click", function () {
+    //     console.log("trying to end session...");
+    //     send({
+    //         type: "leave"
+    //     });
+
+    //     handleLeave();
+    // });
+
+    //-----------------------------------------------------
+
+
+
     // Login when the user clicks the button
     loginBtn.addEventListener("click", function (event) {
+        console.log("trying login");
         name = usernameInput.value;
 
         if (name.length > 0) {
@@ -227,14 +275,7 @@ app.controller("signalingCtrl", function ($scope) {
         yourConn.addIceCandidate(new RTCIceCandidate(candidate));
     };
 
-    //hang up
-    hangUpBtn.addEventListener("click", function () {
-        send({
-            type: "leave"
-        });
 
-        handleLeave();
-    });
 
     function handleLeave() {
         connectedUser = null;
@@ -258,8 +299,6 @@ app.controller("signalingCtrl", function ($scope) {
         console.log("sent message", val);
         msgInput.value = "";
     });
-
-
 
     //___________________________________________________________________________________
     //video handling

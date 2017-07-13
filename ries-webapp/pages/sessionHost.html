@@ -3,17 +3,142 @@
 
 <style>
     .bigVideo {
-        /*position: relative;
-        width: 33%;
-        height: 60%;
-        left: 33%;
-        top: 20%;*/
+        /*position: relative;*/
+        /*width: 33%;*/
+        /*height: 60%;*/
+        /*left: 33%;*/
+        /*top: 20%;*/
     }
 
-    .lilVideo {
-        /*position: absolute;
-        width: 20%;
-        height: 20%;*/
+    video {
+        width: 100% !important;
+        height: auto !important;
+    }
+    /*.lilVideo {
+        position: absolute;
+        width: 50%;
+        height: 50%;
+    }*/
+
+    .asdf {
+        border: thin solid black;
+    }
+
+    .row.is-flex {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .row.is-flex>[class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .row.is-flex {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    .row.is-flex>[class*='col-'] {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+
+    .bottom {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .he {
+        height: 150px;
+    }
+
+    .ninety-height {
+
+        position: relative;
+        height: 90%;
+    }
+
+
+    .red {
+        background-color: red;
+    }
+
+    .blue {
+        /*background-color: blue;*/
+    }
+
+    .green {
+        background-color: green;
+    }
+
+    .almost-fullspace {
+        width: 90%;
+        height: 90%;
+    }
+
+
+
+
+
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        padding-top: 100px;
+        /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+    /* The Close Button */
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
     }
 </style>
 
@@ -22,7 +147,7 @@
 
 <h4>SESSION HOST</h4>
 
-<div ng-controller="signalingCtrl">
+<div ng-controller="hostCtrl">
 
     <div id="loginPage" class="container text-center">
 
@@ -69,32 +194,55 @@
         </div>
     </div>-->
 
+    <div id="callPage" class="call-page container-fluid">
+        <div class="row">
+            <div class="col-md-12 asdf">
+                <input id="callToUsernameInput" type="text" placeholder="username to call" />
+                <button id="callBtn" class="btn-success btn">Call</button>
+                <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
+                <div class="row asdf is-flex">
+                    <div class="col-md-2 asdf blue">
+                        <div>
+                            Currently in chat
+                        </div>
+                        <div class="bottom blue">
+                            <video id="remote" class="bigVideo lilVideo" autoplay></video>
+                        </div>
+                    </div>
+                    <div class="col-md-8 asdf">
+                        Fluid 6
+                        <video id="local" class="bigVideo" autoplay></video>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="col-md-12 asdf ninety-height panel panel-primary">
 
+                            <div class="panel-heading">Text chat</div>
+                            <div id="chatarea" class="panel-body text-left"></div>
 
-
-
-
-    <div id="callPage" class="row-fluid call-page container">
-        <div class="span12 asdf text-center form-group">
-
-            <div class="row-fluid ">
-                <div class="span6 asdf offset3">
-
-                    <video id="local" class="bigVideo" autoplay></video>
-
-                </div>
-                <div class="span2 panel panel-primary">
-                    <div class="panel-heading">Text chat</div>
-                    <div id="chatarea" class="panel-body text-left"></div>
-                    
-                    <div class="row-fluid asdf">
-                        <div class="span6 asdf">Fluid 6</div>
-                        <div class="span6 asdf">Fluid 6</div>
+                        </div>
+                        <div>
+                            <input class="col-md-12 asdf" id="msgInput" type="text" placeholder="message" />
+                        </div>
+                        <div class="col-md-12 asdf">
+                            <button id="sendMsgBtn" class="btn-primary almost-fullspace btn">Send</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!--<button id="modalBtn">End Session?</button>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <p>End session</p>
+            <span class="close">&times;</span>
+            <button id = "endSessionBtn btn-danger btn">End Session</button>
+            <button id = "endSessionCancelBtn" class = "btn btn-primary">Cancel</button>
+        </div>
+    </div>-->
+
+
 
 
 </div>

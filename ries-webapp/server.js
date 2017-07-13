@@ -10,6 +10,11 @@ var doGet = function (req, res) {
    var jsRe2 = /javascript\/controllers\/\w*.js/;
     var jsmatch2 = jsRe2.exec(req.url);
 
+   var jsRe3 = /javascript\/services\/\w*.js/;
+    var jsmatch3 = jsRe3.exec(req.url);
+
+
+
 
     //request for /pages/*.html
     var pgRe = /pages\/\w*.html/;
@@ -45,6 +50,20 @@ var doGet = function (req, res) {
         });
     }else if (jsmatch2) {
         jsmatch = jsmatch2[0];
+        // console.log(jsmatch);
+        //requesting .js file
+        fs.readFile(jsmatch.toString(), function (err, data) {
+            if (err) {
+                console.error(err);
+                res.writeHead(400, { "Content-Type": 'text/html' });
+                res.end("<h1>An error has occured during your request</h1>");
+            }
+            res.writeHead(200, { "Content-Type": "text/javascript" });
+            res.write(data);
+            res.end();
+        }); 
+        }else if (jsmatch3) {
+        jsmatch = jsmatch3[0];
         // console.log(jsmatch);
         //requesting .js file
         fs.readFile(jsmatch.toString(), function (err, data) {
@@ -115,8 +134,8 @@ http.createServer((req, res) => {
 //require our websocket library 
 var WebSocketServer = require('ws').Server;
  
-//creating a websocket server at port 9090 
-var wss = new WebSocketServer({port: 9090}); 
+//creating a websocket server at port 7000
+var wss = new WebSocketServer({port: 7000}); 
 
 //all connected to the server users 
 var users = {};
@@ -128,10 +147,6 @@ wss.on('connection', function(connection) {
 	 
    //when server gets a message from a connected user 
    connection.on('message', function(message) {
-	 //console.log('message',message);
-     //console.log('message',JSON.parse(message));
-
-   // connection.send(JSON.stringify(message)); 
 
       var data; 
       //accepting only JSON messages 
