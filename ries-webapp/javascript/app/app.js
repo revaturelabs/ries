@@ -53,7 +53,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('sessionGuest', {
-		url: "/",
+		url: "/sessionGuest",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
