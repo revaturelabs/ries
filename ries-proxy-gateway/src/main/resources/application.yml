@@ -6,9 +6,9 @@ spring:
 zuul:
   prefix: /ries
   routes:
-    users:
-      path: /user/**
-      serviceId: ries-user-service
+    auth:
+      path: /auth/**
+      serviceId: ries-auth-service
     requisitions:
       path: /requisition/**
       serviceId: ries-requisition-service
@@ -16,7 +16,6 @@ zuul:
       path: /signaling/**
       serviceId: ries-signaling-service
   ignored-services: "*"
-
 
 #server:
 #  port: 9000

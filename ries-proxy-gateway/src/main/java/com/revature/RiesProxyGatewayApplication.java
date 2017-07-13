@@ -21,7 +21,6 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { JacksonAutoConfiguration.class })
-@EnableOAuth2Sso
 @EnableZuulProxy
 @EnableDiscoveryClient
 public class RiesProxyGatewayApplication {
