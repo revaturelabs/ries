@@ -1,11 +1,35 @@
-<div>
-    <form action="">
+<div ng-controller="addRequisitionCtrl">
+    <form>
         <div>
-
+            <label>Recruiter ID</label>
+            <input type="text" ng-model="recruiter">
         </div>
         <div>
-            <label>Interview Date</label>
-            <input type="text">
+            <label>Interviewer ID</label>
+            <input type="text" ng-model="reqHost">
+        </div>
+        <div>
+            <label>Guest ID</label>
+            <input type="text" ng-model="reqGuest">
+        </div>
+        <h3>Interview Date</h3>
+        <div>
+            <label>Month</label>
+            <input type="text" ng-model="month"> 
+        </div>
+
+        <div>
+            <label>Day</label>
+            <input type="text" ng-model="day">
+        </div>
+
+        <div>
+            <label>Year</label>
+            <input type="text" ng-model="year">
+        </div>
+
+        <div>
+            <button ng-click="addRequisition()">Submit</button>
         </div>
     </form>
 </div>

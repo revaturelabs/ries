@@ -2,6 +2,7 @@ package com.revature.controller;
 
 import com.revature.domain.Requisition;
 import com.revature.service.RequisitionService;
+import com.revature.util.UrlGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,7 +50,8 @@ public class RequisitionController {
 
     @RequestMapping(value="/requisition/create", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createRequisition(@RequestBody Requisition requisition) {
-        service.save(requisition);
+        Requisition requisition1 = UrlGenerator.generateUrls(requisition); // Add urls to the requisition
+        service.save(requisition1);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

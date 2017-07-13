@@ -23,7 +23,21 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl : "pages/requisitions.html"
+				templateUrl : "pages/requisitions.html",
+				controller : "requisitionCtrl"
+			}
+		}
+	});
+
+	$stateProvider.state('addRequisition', {
+		url: "/",
+		views:{
+			nav:{
+				templateUrl : "pages/navbar.html"
+			},
+			content:{
+				templateUrl : "pages/addRequisitions.html",
+				controller : "addRequisitionCtrl"
 			}
 		}
 	});
