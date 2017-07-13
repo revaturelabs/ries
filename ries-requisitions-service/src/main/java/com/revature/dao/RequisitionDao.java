@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Repository
 public interface RequisitionDao extends JpaRepository<Requisition, Integer> {
-    List<Requisition> findByReqRecruiter(Integer reqRecruiter);
+    List<Requisition> findByReqRecruiter(String reqRecruiter);
 
-    List<Requisition> findByReqHost(Integer reqHost);
+    List<Requisition> findByReqHost(String reqHost);
 }

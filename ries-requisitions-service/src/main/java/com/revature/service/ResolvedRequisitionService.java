@@ -19,7 +19,7 @@ public class ResolvedRequisitionService {
 
     public List<ResolvedRequisition> getAll() {return dao.findAll();}
 
-    public List<ResolvedRequisition> getByRecruiterId(Integer recruiter) {return dao.findAllByRecruiter(recruiter);}
+    public List<ResolvedRequisition> getByRecruiterId(String recruiter) {return dao.findAllByRecruiter(recruiter);}
 
     public void save (ResolvedRequisition resolvedRequisition) { dao.save(resolvedRequisition);}
 }

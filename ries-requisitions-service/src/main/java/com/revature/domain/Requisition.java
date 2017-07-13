@@ -18,9 +18,9 @@ public class Requisition {
     private Integer reqId;
     private Timestamp createDate;
     private Timestamp interviewDate;
-    private Integer reqHost;
+    private String reqHost;
     private Integer reqGuest;
-    private Integer reqRecruiter;
+    private String reqRecruiter;
     private String hostUrl;
     private String guestUrl;
     private String observerUrl;
@@ -29,7 +29,7 @@ public class Requisition {
         this.createDate = new Timestamp(System.currentTimeMillis());
     }
 
-    public Requisition(Integer reqHost, Integer reqGuest, Integer reqRecruiter) {
+    public Requisition(String reqHost, Integer reqGuest, String reqRecruiter) {
         this();
         this.reqHost = reqHost;
         this.reqGuest = reqGuest;
@@ -67,11 +67,11 @@ public class Requisition {
     }
 
     @Column(name="req_host")
-    public Integer getReqHost() {
+    public String getReqHost() {
         return reqHost;
     }
 
-    public void setReqHost(Integer reqHost) {
+    public void setReqHost(String reqHost) {
         this.reqHost = reqHost;
     }
 
@@ -85,11 +85,11 @@ public class Requisition {
     }
 
     @Column(name="req_recruiter")
-    public Integer getReqRecruiter() {
+    public String getReqRecruiter() {
         return reqRecruiter;
     }
 
-    public void setReqRecruiter(Integer reqRecruiter) {
+    public void setReqRecruiter(String reqRecruiter) {
         this.reqRecruiter = reqRecruiter;
     }
 
@@ -135,6 +135,7 @@ public class Requisition {
                 '}';
     }
 
+    /*
     public static void main(String[] args) {
         Requisition r = new Requisition();
         r.setReqId(1);
@@ -142,5 +143,5 @@ public class Requisition {
         r.setReqRecruiter(3);
         r = UrlGenerator.generateUrls(r);
         System.out.println(r.toString());
-    }
+    }*/
 }

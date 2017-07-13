@@ -12,5 +12,5 @@ import java.util.List;
  */
 @Repository
 public interface ResolvedRequisitionDao extends JpaRepository<ResolvedRequisition, Integer> {
-    List<ResolvedRequisition> findAllByRecruiter (Integer recruiter);
+    List<ResolvedRequisition> findAllByRecruiter (String recruiter);
 }
