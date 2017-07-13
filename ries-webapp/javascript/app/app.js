@@ -75,6 +75,18 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 			}
 		}
 	});
+
+	$stateProvider.state('guestLogin',{
+		url: "/guestLogin",
+		views:{
+			nav:{
+				templateUrl : null
+			},
+			content:{
+				templateUrl : "pages/guestLogin.html"
+			}
+		}
+	});
     
     
 });
