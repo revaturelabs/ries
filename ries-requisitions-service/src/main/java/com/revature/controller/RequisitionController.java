@@ -36,13 +36,13 @@ public class RequisitionController {
     }
 
     @RequestMapping(value="/requisition/by/recruiter/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Requisition>> getAllRequisitionsByRecruiter(@PathVariable Integer recruiterId) {
+    public ResponseEntity<List<Requisition>> getAllRequisitionsByRecruiter(@PathVariable String recruiterId) {
         List<Requisition> reqList = service.getAllByRecruiter(recruiterId);
         return new ResponseEntity<>(reqList, HttpStatus.OK);
     }
 
     @RequestMapping(value="/requisition/by/interviewer/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Requisition>> getAllRequisitionsByInterviewer(@PathVariable Integer interviewer) {
+    public ResponseEntity<List<Requisition>> getAllRequisitionsByInterviewer(@PathVariable String interviewer) {
         List<Requisition> reqList = service.getAllByInterviewer(interviewer);
         return new ResponseEntity<>(reqList, HttpStatus.OK);
     }

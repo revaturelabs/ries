@@ -31,7 +31,7 @@ public class ResolvedRequisitionController {
     }
 
     @RequestMapping(value = "/resolvedRequisition/recruiter/{recruiter}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ResolvedRequisition>> getResolvedRequisitionByRecruiter(@PathVariable Integer recruiter){
+    public ResponseEntity<List<ResolvedRequisition>> getResolvedRequisitionByRecruiter(@PathVariable String recruiter){
         List<ResolvedRequisition> res_req = service.getByRecruiterId(recruiter);
         return new ResponseEntity<List<ResolvedRequisition>>(res_req, HttpStatus.OK);
     }

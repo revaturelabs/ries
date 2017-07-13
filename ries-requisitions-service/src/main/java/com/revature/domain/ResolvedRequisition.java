@@ -14,8 +14,8 @@ public class ResolvedRequisition {
     private Timestamp createDate;
     private Timestamp interviewDate;
     private Integer guest;
-    private Integer host;
-    private Integer recruiter;
+    private String host;
+    private String recruiter;
 
     public ResolvedRequisition() {
     }
@@ -71,19 +71,19 @@ public class ResolvedRequisition {
         this.guest = guest;
     }
     @Column(name = "res_req_host_id")
-    public Integer getHost() {
+    public String getHost() {
         return host;
     }
 
-    public void setHost(Integer host) {
+    public void setHost(String host) {
         this.host = host;
     }
     @Column(name = "res_req_recruiter_id")
-    public Integer getRecruiter() {
+    public String getRecruiter() {
         return recruiter;
     }
 
-    public void setRecruiter(Integer recruiter) {
+    public void setRecruiter(String recruiter) {
         this.recruiter = recruiter;
     }
 
