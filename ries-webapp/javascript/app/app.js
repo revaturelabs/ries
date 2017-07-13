@@ -17,7 +17,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 	
 	$stateProvider.state('requisitions', {
-		url: "/",
+		url: "/requisitions",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -30,13 +30,13 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('addRequisition', {
-		url: "/",
+		url: "/addRequisition",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl : "pages/addRequisitions.html",
+				templateUrl : "pages/addRequisition.html",
 				controller : "addRequisitionCtrl"
 			}
 		}
