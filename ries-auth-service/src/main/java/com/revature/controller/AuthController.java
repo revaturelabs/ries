@@ -29,6 +29,7 @@ public class AuthController {
         return guestService.getById(pin);
     }
 
+    //If login fails to return a guest when it should, createGuest may create duplicate PIN's
     @RequestMapping(value="/createGuest", method = RequestMethod.GET)
     public void createGuest(@RequestParam(value = "name") String name){
 
@@ -38,7 +39,15 @@ public class AuthController {
         //Create the new guest object
         Guest g = new Guest();
         g.setName(name);
-        g.setPin(100000 + r.nextInt(900000));
+
+        //Create a new PIN and make sure it is unique before setting
+        Guest guest;
+        int pin;
+        do {
+            pin = 100000 + r.nextInt(900000);
+            guest = login(pin);
+        } while (guest != null);
+        g.setPin(pin);
 
         //Send it to the database
         guestService.save(g);
