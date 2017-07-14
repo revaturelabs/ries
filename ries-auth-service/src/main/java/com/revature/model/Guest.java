@@ -31,7 +31,7 @@ public class Guest {
         this.name = name;
     }
 
-    @Column
+    @Column(unique = true)
     public Integer getPin() {
         return pin;
     }

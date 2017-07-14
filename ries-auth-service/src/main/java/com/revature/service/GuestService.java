@@ -19,4 +19,6 @@ public class GuestService {
     public Guest getById(Integer id) {
         return dao.findOne(id);
     }
+
+    public void save(Guest g){ dao.save(g); }
 }
