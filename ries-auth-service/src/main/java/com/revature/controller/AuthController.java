@@ -3,6 +3,7 @@ package com.revature.controller;
 import com.revature.dao.GuestDao;
 import com.revature.model.Guest;
 import com.revature.service.GuestService;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -29,7 +30,6 @@ public class AuthController {
         return guestService.getById(pin);
     }
 
-    //If login fails to return a guest when it should, createGuest may create duplicate PIN's
     @RequestMapping(value="/createGuest", method = RequestMethod.GET)
     public void createGuest(@RequestParam(value = "name") String name){
 
@@ -40,16 +40,17 @@ public class AuthController {
         Guest g = new Guest();
         g.setName(name);
 
-        //Create a new PIN and make sure it is unique before setting
-        Guest guest;
-        int pin;
-        do {
-            pin = 100000 + r.nextInt(900000);
-            guest = login(pin);
-        } while (guest != null);
-        g.setPin(pin);
-
-        //Send it to the database
-        guestService.save(g);
+        int pin = 100000 + r.nextInt(900000);
+        while (pin != 0) {
+            try {
+                g.setPin(pin);
+                //Send it to the database
+                guestService.save(g);
+                pin = 0;
+            } catch (ConstraintViolationException e) {
+                pin = 100000 + r.nextInt(900000);
+                continue;
+            }
+        }
     }
 }
