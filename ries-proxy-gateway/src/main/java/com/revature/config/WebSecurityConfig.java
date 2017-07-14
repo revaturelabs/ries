@@ -11,7 +11,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableOAuth2Sso
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    SalesForceLogoutHandler logoutHandler;
+    private SalesForceLogoutHandler logoutHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

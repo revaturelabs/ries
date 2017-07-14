@@ -2,7 +2,6 @@ spring:
   application:
     name: ries-edge-server
 
-
 zuul:
   prefix: /ries
   routes:
@@ -11,17 +10,24 @@ zuul:
       serviceId: ries-auth-service
     requisitions:
       path: /requisition/**
-      serviceId: ries-requisition-service
+      serviceId: ries-requisitions-service
     signaling:
       path: /signaling/**
       serviceId: ries-signaling-service
   ignored-services: "*"
+  ignored-headers: Cookie,Set-Cookie
 
-#server:
-#  port: 9000
 management:
   security:
     enabled: false
+
+#server:
+#  port: 8443
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: password
+#    keyStoreType: PKCS12
+#    keyAlias: tomcat
 
 eureka:
   client:
@@ -30,8 +36,8 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
   instance:
-    leaseExpirationDurationInSeconds: 2
-    leaseRenewalIntervalInSeconds: 1
+    leaseRenewalIntervalInSeconds: 30
+    lease-expiration-duration-in-seconds: 90
 
 salesforce:
   oath2-url: https://test.salesforce.com/services/oauth2
