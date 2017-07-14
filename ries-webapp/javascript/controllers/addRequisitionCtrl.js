@@ -15,6 +15,7 @@ app.controller("addRequisitionCtrl", function($http, $scope) {
         };
 
         var requisJson = angular.toJson(requisitionObj);
+        console.log(requisJson);
         $http({
             method: 'POST',
             url: 'http://localhost:8085/requisition/create',
@@ -24,7 +25,8 @@ app.controller("addRequisitionCtrl", function($http, $scope) {
         .then(function(res) {
             console.log("data successfully sent");
         }, function(err) {
-            console.log("shit");
+            console.log("not working");
+            console.log(err);
         });
     };
 
