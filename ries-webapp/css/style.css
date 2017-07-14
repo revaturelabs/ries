@@ -1,0 +1,66 @@
+body{
+  /*padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: orangered;*/
+}
+
+.riesContainer{
+  /*background-color: #ddd;
+  padding: 0px;*/
+}
+
+.riesContent{
+  padding: 10px;
+}
+
+@media screen and (max-width: 600px){
+  .riesContent{
+    padding: 30px;
+  }
+}
+
+/* CSS for the guest login screen*/
+.form-revature-login{
+    max-width:360px;
+    padding: 30px;
+    margin: auto;
+    background: #B9B9BA;
+    color: #474C55;
+    border: none;
+    border-radius: 10px;
+}
+
+.form-revature-login div{
+  margin: 10px;
+}
+
+.form-revature-login{
+    margin: 10px;
+}
+
+.form-revature-login input{
+    border-radius: 10px;
+    border-color: orangered;
+}
+
+.btn-revature-login {
+	background: orangered;
+	border: none;
+	color: white;
+	border-radius: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	float: right;
+}
+
+.RIES {
+	color: #474C55;
+}
+
+/* Revature logo css*/
+.logo{
+  margin: 30px;
+}
+
