@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: ries-edge-server
+
+zuul:
+  prefix: /ries
+  routes:
+    auth:
+      path: /auth/**
+      serviceId: ries-auth-service
+    requisitions:
+      path: /requisition/**
+      serviceId: ries-requisitions-service
+    signaling:
+      path: /signaling/**
+      serviceId: ries-signaling-service
+  ignored-services: "*"
+  ignored-headers: Cookie,Set-Cookie
+
+management:
+  security:
+    enabled: false
+
+#server:
+#  port: 8443
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: password
+#    keyStoreType: PKCS12
+#    keyAlias: tomcat
+
+eureka:
+  client:
+    healthCheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 30
+    lease-expiration-duration-in-seconds: 90
+
+salesforce:
+  oath2-url: https://test.salesforce.com/services/oauth2
+  revoke: ${salesforce.oath2-url}/revoke
+
+security:
+  oauth2:
+    client:
+      client-id: 3MVG9ahGHqp.k2_wb8eUMtoR38_WbYxUPAgheLOPEgoU4jCdw5EKilrUbtX4cxh0X0Kk2GEexJCqbOsMsD0Sm
+      client-secret: 9101950503076607108
+      access-token-uri: ${salesforce.oath2-url}/token
+      user-authorization-uri: ${salesforce.oath2-url}/authorize
+      client-authentication-scheme: form
+      authentication-scheme: header
+      grant-type: authentication-code
+    resource:
+      user-info-uri: ${salesforce.oath2-url}/userinfo

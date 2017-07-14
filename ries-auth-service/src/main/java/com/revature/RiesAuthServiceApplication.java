@@ -13,12 +13,11 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { JacksonAutoConfiguration.class })
-@EnableResourceServer
-@EnableOAuth2Sso
 public class RiesAuthServiceApplication {
 
 	public static void main(String[] args) {

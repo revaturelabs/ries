@@ -14,15 +14,10 @@ spring:
           hbm2ddl:
             auto: update
 
-security:
-  oauth2:
-    client:
-      client-id: 3MVG9ahGHqp.k2_wb8eUMtoR38_WbYxUPAgheLOPEgoU4jCdw5EKilrUbtX4cxh0X0Kk2GEexJCqbOsMsD0Sm
-      client-secret: 9101950503076607108
-      access-token-uri: https://test.salesforce.com/services/oauth2/token
-      user-authorization-uri: https://test.salesforce.com/services/oauth2/authorize
-      client-authentication-scheme: form
-      authentication-scheme: header
-      grant-type: authentication-code
-    resource:
-      user-info-uri: https://revature--int1.cs17.my.salesforce.com/services/oauth2/userinfo
+#server:
+#  port: 8443
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: password
+#    keyStoreType: PKCS12
+#    keyAlias: tomcat
