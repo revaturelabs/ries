@@ -19,10 +19,11 @@
         <tbody ng-repeat="re in requisitions">
             <tr>
                 <td> {{ re.reqId }} </td>
-                <td> {{ re.createDate }} </td>
-                <td> {{ re.interviewDate }} </td>
+                <td> {{ re.createDate | date : 'short' }} </td>
+                <td> {{ re.interviewDate | date : 'short' }} </td>
                 <td> {{ re.reqHost }} </td>
                 <td> {{ re.reqGuest }} </td>
+                <td> {{ re.reqRecruiter }} </td>
                 <td> {{ re.requisitions }} </td>
                 <td> {{ re.hostUrl }} </td>
                 <td> {{ re.guestUrl }} </td>

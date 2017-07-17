@@ -1,24 +1,23 @@
 app.controller("requisitionCtrl",['$scope', '$http', 'requisitionService', function($scope, $http, requisitionService) {
     requisitionService.getAllRequisitions().then(function(res) {
         $scope.requisitions = res;
+        console.log($scope.requisitions[0].interviewDate); // date and time are in milliseconds
     });
+    
 }]);
 
-/* Need to fix filter
-app.filter('reqByHost', function() {
-    return function(requisitions, host) {
-        if (host == "none" || host == "None" || host == "All" || host || "all") {
-            return requisitions;
-        }
+/*
+Filter by date or Interviewer
+*/
+app.filter("interviewByDate", function() {
+    return function(date, requisitions) {
         var filtered = [];
-        for (var i = 0; i < requisitions; i++) {
-            var requisition = requisitions[i];
-            if (requisition == host) {
-                filtered.push(requisition);
+
+        for (var i = 0; i < requisitions.length; i++) {
+            if (requisitions[i].interviewDate == date) {
+                filtered.push(requisitions[i]);
             }
         }
-
         return filtered;
-    };
+    }
 });
-*/

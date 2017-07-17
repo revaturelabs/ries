@@ -29,6 +29,39 @@
         </div>
 
         <div>
+            <h4>Time</h4>
+            <label>Hour</label>
+            <select ng-model="hour">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <label>Minute</label>
+            <select ng-model="minute">
+                <option value="00">00</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+            </select>
+
+            <label>AM/PM</label>
+            <select ng-model="ampm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+        </div>
+
+        <div>
             <button ng-click="addRequisition()">Submit</button>
         </div>
     </form>
