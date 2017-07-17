@@ -1,8 +1,11 @@
 package com.revature;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonWriter;
 import com.revature.model.Employee;
 import com.revature.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 @Component
 public class Force {
@@ -33,7 +37,7 @@ public class Force {
     }
 
     @SuppressWarnings("unchecked")
-    public Employee getSalesForceEmployee(OAuth2Authentication auth) {
+    public Employee getCurrentEmployee(OAuth2Authentication auth) {
         HashMap<String, String> details = (HashMap<String, String>) auth.getUserAuthentication().getDetails();
         String url = restUrl(auth, "query") + "?q={q}";
 
@@ -59,8 +63,6 @@ public class Force {
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, params);
         //String roleStr = restTemplate.getForObject(url, String.class, params);
         String roleStr = responseEntity.getBody();
-        System.out.println(url);
-        System.out.println(roleStr);
         JsonObject roleData = gson.fromJson(roleStr, JsonElement.class)
                 .getAsJsonObject().get("records")
                 .getAsJsonArray().get(0).getAsJsonObject();
@@ -74,9 +76,65 @@ public class Force {
         return employee;
     }
 
-    private static class QueryResult<T> {
-        public List<T> records;
+    public List<Employee> getTrainers(OAuth2Authentication auth) {
+        String query = "SELECT Id, Name, CommunityNickname, FirstName, LastName, Email, FullPhotoUrl, SmallPhotoUrl, " +
+                "UserRole.Id, UserRole.Name " +
+                "FROM User WHERE UserRoleId = '" + Role.ROLE_TRAINER + "'";
+
+        String response = executeSalesForceQuery(auth, query);
+
+        return parseSalesForceQueryResponse(response);
     }
 
-    private static class QueryResultEmployee extends QueryResult<Employee> {}
+    public List<Employee> getRecruiters(OAuth2Authentication auth) {
+        String query = "SELECT Id, Name, CommunityNickname, FirstName, LastName, Email, FullPhotoUrl, SmallPhotoUrl, " +
+                "UserRole.Id, UserRole.Name " +
+                "FROM User WHERE UserRoleId = '" + Role.ROLE_RECURITER + "'";
+
+        String response = executeSalesForceQuery(auth, query);
+
+        return parseSalesForceQueryResponse(response);
+    }
+
+    private String executeSalesForceQuery(OAuth2Authentication auth, String query) {
+        String url = restUrl(auth, "query") + "?q={q}";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("q", query);
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class, params);
+        return responseEntity.getBody();
+    }
+
+    private List<Employee> parseSalesForceQueryResponse(String response) {
+        List<Employee> employees = new ArrayList<>();
+        JsonObject object = new Gson().fromJson(response, JsonElement.class).getAsJsonObject();
+        JsonArray arr = object.getAsJsonArray("records");
+
+        arr.forEach(jsonElement -> {
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+                    Employee employee = new Employee();
+                    employee.setEmployeeId(jsonObject.get("Id").getAsString());
+                    employee.setName(jsonObject.get("Name").getAsString());
+                    employee.setNickname(jsonObject.get("CommunityNickname").getAsString());
+                    employee.setFirstName(jsonObject.get("FirstName").getAsString());
+                    employee.setLastName(jsonObject.get("LastName").getAsString());
+                    employee.setEmail(jsonObject.get("Email").getAsString());
+                    employee.setPicture(jsonObject.get("FullPhotoUrl").getAsString());
+                    employee.setThumbnail(jsonObject.get("SmallPhotoUrl").getAsString());
+                    JsonObject jsonRole = jsonObject.get("UserRole").getAsJsonObject();
+                    Role role = new Role();
+                    role.setRoleId(jsonRole.get("Id").getAsString());
+                    role.setName(jsonRole.get("Name").getAsString());
+                    employee.setRole(role);
+                    employees.add(employee);
+                }
+        );
+        return employees;
+    }
 }

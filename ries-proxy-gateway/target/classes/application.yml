@@ -15,7 +15,7 @@ zuul:
       path: /signaling/**
       serviceId: ries-signaling-service
   ignored-services: "*"
-  ignored-headers: Cookie,Set-Cookie
+  sensitive-headers:
 
 management:
   security:
@@ -38,6 +38,14 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 30
     lease-expiration-duration-in-seconds: 90
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
 
 salesforce:
   oath2-url: https://test.salesforce.com/services/oauth2

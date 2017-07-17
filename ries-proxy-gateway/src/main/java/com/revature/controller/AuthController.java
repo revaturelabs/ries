@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -29,7 +28,17 @@ public class AuthController {
 
     @RequestMapping(value = "/userinfo", produces = MediaType.APPLICATION_JSON_VALUE)
     public Employee getInfo(OAuth2Authentication auth) {
-        return force.getSalesForceEmployee(auth);
+        return force.getCurrentEmployee(auth);
+    }
+
+    @RequestMapping(value = "/trainers", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Employee>> getTrainers(OAuth2Authentication auth) {
+        return ResponseEntity.ok(force.getTrainers(auth));
+    }
+
+    @RequestMapping(value = "/recruiters", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Employee>> getRecruiters(OAuth2Authentication auth) {
+        return ResponseEntity.ok(force.getRecruiters(auth));
     }
 
     @RequestMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)

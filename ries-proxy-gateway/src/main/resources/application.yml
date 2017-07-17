@@ -52,7 +52,6 @@ salesforce:
   revoke: ${salesforce.oath2-url}/revoke
 
 security:
-  sessions: ALWAYS
   oauth2:
     client:
       client-id: 3MVG9ahGHqp.k2_wb8eUMtoR38_WbYxUPAgheLOPEgoU4jCdw5EKilrUbtX4cxh0X0Kk2GEexJCqbOsMsD0Sm

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class SalesForceLogoutHandler implements LogoutHandler {
     @Value(value = "${salesforce.revoke}")
-    private String revokeUrl;
+    String revokeUrl;
     @Autowired
     private OAuth2RestTemplate restTemplate;
 

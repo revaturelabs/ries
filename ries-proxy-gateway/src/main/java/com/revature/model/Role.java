@@ -1,6 +1,8 @@
 package com.revature.model;
 
 public class Role {
+    public static final String ROLE_TRAINER = "00Ei0000000ccV0EAI";
+    public static final String ROLE_RECURITER = "00Ei0000000Gcu3EAC";
     private String roleId;
     private String name;
 
