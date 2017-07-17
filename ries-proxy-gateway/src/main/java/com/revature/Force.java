@@ -33,7 +33,7 @@ public class Force {
     }
 
     @SuppressWarnings("unchecked")
-    public Employee getRole(OAuth2Authentication auth) {
+    public Employee getSalesForceEmployee(OAuth2Authentication auth) {
         HashMap<String, String> details = (HashMap<String, String>) auth.getUserAuthentication().getDetails();
         String url = restUrl(auth, "query") + "?q={q}";
 

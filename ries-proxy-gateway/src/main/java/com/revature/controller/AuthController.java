@@ -2,11 +2,9 @@ package com.revature.controller;
 
 import com.revature.Force;
 import com.revature.model.Employee;
-import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,9 +27,9 @@ public class AuthController {
     @Autowired
     private Force force;
 
-    @RequestMapping(value = "/userinfo1", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/userinfo", produces = MediaType.APPLICATION_JSON_VALUE)
     public Employee getInfo(OAuth2Authentication auth) {
-        return force.getRole(auth);
+        return force.getSalesForceEmployee(auth);
     }
 
     @RequestMapping(value = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,10 +51,5 @@ public class AuthController {
             names.add(e.nextElement().toString());
         }
         return ResponseEntity.ok().body(names);
-    }
-
-    @RequestMapping(value = "/userinfo", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Principal> principal(Principal principal) {
-        return ResponseEntity.ok().body(principal);
     }
 }
