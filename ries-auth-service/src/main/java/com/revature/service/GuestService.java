@@ -20,5 +20,9 @@ public class GuestService {
         return dao.findOne(id);
     }
 
+    public Guest getByPin(Integer pin) {
+        return dao.findByPin(pin);
+    }
+
     public void save(Guest g){ dao.save(g); }
 }

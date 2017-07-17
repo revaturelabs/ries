@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GuestDao extends CrudRepository<Guest, Integer> {
+    Guest findByPin(Integer pin);
 }
