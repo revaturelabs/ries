@@ -21,13 +21,13 @@ management:
   security:
     enabled: false
 
-server:
-  port: 443
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-password: password
-    keyStoreType: PKCS12
-    keyAlias: tomcat
+#server:
+#  port: 443
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: password
+#    keyStoreType: PKCS12
+#    keyAlias: tomcat
 
 eureka:
   client:
