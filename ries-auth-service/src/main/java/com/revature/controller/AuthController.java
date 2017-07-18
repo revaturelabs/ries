@@ -18,7 +18,6 @@ public class AuthController {
 
     @RequestMapping(value="/guest/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Guest> login(@RequestBody int pin) {
-        System.out.println("Login Endpoint");
         Guest guest = service.getByPin(pin);
         if(guest != null)
             return ResponseEntity.ok(guest);
@@ -26,7 +25,7 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
     }
 
-    @RequestMapping(value="/guest", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/guest", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createGuest(@RequestBody Guest guest) {
 
         //Generate a random number using currentTimeMillis as a seed for a bit more security.
@@ -47,5 +46,16 @@ public class AuthController {
             }
         }
         return ResponseEntity.badRequest().body("Could not generate random pin. Try again.");
+    }
+
+    @RequestMapping(value = "/guest", method = RequestMethod.DELETE)
+    public ResponseEntity deleteGuest(@RequestBody int pin) {
+        Guest guest = service.getByPin(pin);
+        if(guest != null) {
+            service.delete(guest);
+            return ResponseEntity.ok(guest);
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 }

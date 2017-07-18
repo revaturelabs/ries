@@ -6,7 +6,9 @@ import javax.persistence.*;
 @Table(name = "AUTH_GUEST")
 public class Guest {
     private Integer guestId;
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String email;
     private Integer pin;
 
     public Guest() {
@@ -23,12 +25,21 @@ public class Guest {
     }
 
     @Column
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Column(unique = true)
@@ -40,32 +51,13 @@ public class Guest {
         this.pin = pin;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (!(object instanceof Guest)) return false;
-
-        Guest guest = (Guest) object;
-
-        if (guestId != null ? !guestId.equals(guest.guestId) : guest.guestId != null) return false;
-        if (name != null ? !name.equals(guest.name) : guest.name != null) return false;
-        return pin != null ? pin.equals(guest.pin) : guest.pin == null;
+    @Column(unique = true)
+    public String getEmail() {
+        return email;
     }
 
-    @Override
-    public int hashCode() {
-        int result = guestId != null ? guestId.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (pin != null ? pin.hashCode() : 0);
-        return result;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "Guest{" +
-                "guestId=" + guestId +
-                ", name='" + name + '\'' +
-                ", pin=" + pin +
-                '}';
-    }
 }

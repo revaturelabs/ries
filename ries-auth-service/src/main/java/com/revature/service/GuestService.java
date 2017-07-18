@@ -24,5 +24,11 @@ public class GuestService {
         return dao.findByPin(pin);
     }
 
-    public void save(Guest g){ dao.save(g); }
+    public void save(Guest g){
+        dao.save(g);
+    }
+
+    public void delete(Guest g) {
+        dao.delete(g);
+    }
 }
