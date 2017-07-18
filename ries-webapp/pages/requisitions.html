@@ -1,6 +1,14 @@
 <div ng-controller="requisitionCtrl">
     <!--<label ng-model="interviewer">Interviewer</label>
     <input type="text" ng-model="host">-->
+    <!-- <div>
+        <label>Interview Date</label>
+        <input type="date" ng-model="inputDate"> 
+    </div> -->
+    <div>
+        <label>Host</label>
+        <input type="text" ng-model="inputHost">
+    </div>
     <table>
         <thead>
             <tr>
@@ -16,7 +24,8 @@
             </tr>
         </thead>
         
-        <tbody ng-repeat="re in requisitions">
+        <!--<tbody ng-repeat="re in requisitions | orderBy: 'interviewDate'">-->
+        <tbody ng-repeat="re in requisitions | filter:{reqHost:inputHost}">
             <tr>
                 <td> {{ re.reqId }} </td>
                 <td> {{ re.createDate | date : 'short' }} </td>
