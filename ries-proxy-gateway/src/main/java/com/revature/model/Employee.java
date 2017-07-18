@@ -87,6 +87,14 @@ public class Employee {
         this.role = role;
     }
 
+    public boolean isTrainer() {
+        return role.isTrainer();
+    }
+
+    public boolean isRecruiter() {
+        return role.isRecruiter();
+    }
+
     @Override
     public int hashCode() {
         int result = employeeId != null ? employeeId.hashCode() : 0;

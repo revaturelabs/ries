@@ -14,10 +14,20 @@ spring:
           hbm2ddl:
             auto: update
 
-#server:
-#  port: 8443
+server:
+  port: 8081
 #  ssl:
 #    key-store: classpath:keystore.p12
 #    key-store-password: password
 #    keyStoreType: PKCS12
 #    keyAlias: tomcat
+
+eureka:
+  client:
+    healthCheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://ec2-13-58-151-115.us-east-2.compute.amazonaws.com:8761/eureka
+  instance:
+    leaseRenewalIntervalInSeconds: 30
+    lease-expiration-duration-in-seconds: 90

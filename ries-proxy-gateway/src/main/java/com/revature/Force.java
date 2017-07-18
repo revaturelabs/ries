@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.revature.model.Employee;
 import com.revature.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -62,7 +61,7 @@ public class Force {
     public List<Employee> getRecruiters(OAuth2Authentication auth) {
         String query = "SELECT Id, Name, CommunityNickname, FirstName, LastName, Email, FullPhotoUrl, SmallPhotoUrl, " +
                 "UserRole.Id, UserRole.Name " +
-                "FROM User WHERE UserRoleId = '" + Role.ROLE_RECURITER + "'";
+                "FROM User WHERE UserRoleId = '" + Role.ROLE_RECRUITER + "'";
 
         String response = executeSalesForceQuery(auth, query);
 

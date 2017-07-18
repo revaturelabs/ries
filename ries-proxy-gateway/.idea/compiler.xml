@@ -10,6 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ries-auth-service" target="1.8" />
       <module name="ries-proxy-gateway" target="1.8" />
     </bytecodeTargetLevel>
   </component>
