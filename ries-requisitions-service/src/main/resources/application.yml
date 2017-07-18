@@ -2,11 +2,11 @@ spring:
   application:
     name: ries-requisitions-service
 server:
-  port: 9089
+  port: 8081
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://ec2-13-58-151-115.us-east-2.compute.amazonaws.com:8761/eureka
     lease: 5
     healthcheck:
       enabled: false

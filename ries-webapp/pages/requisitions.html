@@ -25,7 +25,7 @@
         </thead>
         
         <!--<tbody ng-repeat="re in requisitions | orderBy: 'interviewDate'">-->
-        <tbody ng-repeat="re in requisitions | filter:{reqHost:inputHost}">
+        <tbody ng-repeat="re in requisitions | orderBy: 'interviewDate' | filter:{reqHost:inputHost}">
             <tr>
                 <td> {{ re.reqId }} </td>
                 <td> {{ re.createDate | date : 'short' }} </td>
