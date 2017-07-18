@@ -49,19 +49,19 @@ hystrix:
             timeoutInMilliseconds: 5000
 
 salesforce:
-  oath2-url: https://test.salesforce.com/services/oauth2
-  revoke: ${salesforce.oath2-url}/revoke
+  oauth2-url: https://test.salesforce.com/services/oauth2
+  revoke: ${salesforce.oauth2-url}/revoke
 
 security:
   oauth2:
     client:
       client-id: 3MVG9ahGHqp.k2_wb8eUMtoR38_WbYxUPAgheLOPEgoU4jCdw5EKilrUbtX4cxh0X0Kk2GEexJCqbOsMsD0Sm
       client-secret: 9101950503076607108
-      access-token-uri: ${salesforce.oath2-url}/token
-      user-authorization-uri: ${salesforce.oath2-url}/authorize
+      access-token-uri: ${salesforce.oauth2-url}/token
+      user-authorization-uri: ${salesforce.oauth2-url}/authorize
       client-authentication-scheme: form
       authentication-scheme: header
       grant-type: authentication-code
     resource:
-      user-info-uri: ${salesforce.oath2-url}/userinfo
-
+      user-info-uri: ${salesforce.oauth2-url}/userinfo
+  login-default-redirect-url: http://ec2-13-58-97-184.us-east-2.compute.amazonaws.com:3001/home
