@@ -1,5 +1,7 @@
 package com.revature.controller;
 
+import com.revature.Force;
+import com.revature.domain.Employee;
 import com.revature.domain.Requisition;
 import com.revature.service.RequisitionService;
 import com.revature.util.UrlGenerator;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -21,32 +24,48 @@ public class RequisitionController {
     @Autowired
     RequisitionService service;
 
+    @Autowired
+    Force force;
+
     @RequestMapping(value="/requisition/all", method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Requisition>> getRequisitions() {
-        List<Requisition> list = service.getAll();
-        return new ResponseEntity<>(list, HttpStatus.OK);
+    public ResponseEntity<List<Requisition>> getRequisitions(OAuth2Authentication auth) {
+        if (isEmployeeAuth(auth)) {
+            List<Requisition> list = service.getAll();
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value="/requisition/by/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Requisition> getRequisitionById(@PathVariable Integer id) {
-        Requisition requisition = service.getById(id);
+    public ResponseEntity<Requisition> getRequisitionById(@PathVariable Integer id, OAuth2Authentication auth) {
+        if(isEmployeeAuth(auth)) {
+            Requisition requisition = service.getById(id);
 
-        if (requisition == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (requisition == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(requisition, HttpStatus.OK);
         }
-        return new ResponseEntity<>(requisition, HttpStatus.OK);
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value="/requisition/by/recruiter/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Requisition>> getAllRequisitionsByRecruiter(@PathVariable String recruiterId) {
-        List<Requisition> reqList = service.getAllByRecruiter(recruiterId);
-        return new ResponseEntity<>(reqList, HttpStatus.OK);
+    public ResponseEntity<List<Requisition>> getAllRequisitionsByRecruiter(@PathVariable String recruiterId, OAuth2Authentication auth) {
+        if(isEmployeeAuth(auth)) {
+            List<Requisition> reqList = service.getAllByRecruiter(recruiterId);
+            return new ResponseEntity<>(reqList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value="/requisition/by/interviewer/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Requisition>> getAllRequisitionsByInterviewer(@PathVariable String interviewer) {
-        List<Requisition> reqList = service.getAllByInterviewer(interviewer);
-        return new ResponseEntity<>(reqList, HttpStatus.OK);
+    public ResponseEntity<List<Requisition>> getAllRequisitionsByInterviewer(@PathVariable String interviewer, OAuth2Authentication auth) {
+        if (isEmployeeAuth(auth)) {
+            List<Requisition> reqList = service.getAllByInterviewer(interviewer);
+            return new ResponseEntity<>(reqList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value="/requisition/create", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -59,26 +78,43 @@ public class RequisitionController {
     }
 
     @RequestMapping(value="/requisition/delete/by/{id}", method=RequestMethod.POST)
-    public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id) {
-        service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id, OAuth2Authentication auth) {
+        if(isEmployeeAuth(auth)) {
+            service.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value="/requisition/delete", method=RequestMethod.POST)
-    public ResponseEntity<Void> removeRequisition(@RequestBody Requisition requisition) {
-        service.delete(requisition);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> removeRequisition(@RequestBody Requisition requisition, OAuth2Authentication auth) {
+        if(isEmployeeAuth(auth)) {
+            service.delete(requisition);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     //Update interview date of an requisition
     @RequestMapping(value="/requisition/update/{id}", method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateRequisition(@PathVariable Integer id, @RequestParam String newDate) {
-        Timestamp ts = Timestamp.valueOf(newDate);
-        Requisition requisition = service.getById(id);
+    public ResponseEntity<Void> updateRequisition(@PathVariable Integer id, @RequestParam String newDate, OAuth2Authentication auth) {
+        if(isEmployeeAuth(auth)) {
+            Timestamp ts = Timestamp.valueOf(newDate);
+            Requisition requisition = service.getById(id);
 
-        requisition.setInterviewDate(ts);
-        service.save(requisition);
-        return new ResponseEntity<>(HttpStatus.OK);
+            requisition.setInterviewDate(ts);
+            service.save(requisition);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 
+    private boolean isEmployeeAuth(OAuth2Authentication auth) {
+        Employee employee = force.getCurrentEmployee(auth);
+        if (employee == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

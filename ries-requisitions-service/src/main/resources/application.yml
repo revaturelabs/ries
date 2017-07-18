@@ -13,3 +13,20 @@ eureka:
   instance:
     lease-expiration-duration-in-seconds: 60
     lease-renewal-interval-in-seconds: 60
+
+  salesforce:
+    oath2-url: https://test.salesforce.com/services/oauth2
+    revoke: ${salesforce.oath2-url}/revoke
+
+  security:
+    oauth2:
+      client:
+        client-id: 3MVG9ahGHqp.k2_wb8eUMtoR38_WbYxUPAgheLOPEgoU4jCdw5EKilrUbtX4cxh0X0Kk2GEexJCqbOsMsD0Sm
+        client-secret: 9101950503076607108
+        access-token-uri: ${salesforce.oath2-url}/token
+        user-authorization-uri: ${salesforce.oath2-url}/authorize
+        client-authentication-scheme: form
+        authentication-scheme: header
+        grant-type: authentication-code
+      resource:
+        user-info-uri: ${salesforce.oath2-url}/userinfo
