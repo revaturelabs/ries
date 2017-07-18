@@ -45,7 +45,7 @@ public class AuthController {
     public ResponseEntity<List<String>> testSession(HttpSession session) {
         List<String> names = new ArrayList<>();
         Enumeration e = session.getAttributeNames();
-        for(; e.hasMoreElements();) {
+        for (; e.hasMoreElements(); ) {
             names.add(e.nextElement().toString());
         }
 
@@ -56,7 +56,7 @@ public class AuthController {
     public ResponseEntity<List<String>> test(HttpSession session) {
         List<String> names = new ArrayList<>();
         Enumeration e = session.getAttributeNames();
-        for(; e.hasMoreElements();) {
+        for (; e.hasMoreElements(); ) {
             names.add(e.nextElement().toString());
         }
         return ResponseEntity.ok().body(names);
