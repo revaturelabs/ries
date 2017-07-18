@@ -17,8 +17,6 @@ zuul:
   ignored-services: "*"
   sensitive-headers:
 
-/ries/auth/guest/login POST pin
-/ries/auth/guest POST name
 management:
   security:
     enabled: false
