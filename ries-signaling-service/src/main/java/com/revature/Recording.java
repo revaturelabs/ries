@@ -45,4 +45,14 @@ public class Recording {
     public void setFile(File file) {
         this.file = file;
     }
+
+    @Override
+    public String toString() {
+        return "Recording{" +
+                "name='" + name + '\'' +
+                ", file=" + file +
+                ", accessKeyId='" + accessKeyId + '\'' +
+                ", secretKey='" + secretKey + '\'' +
+                '}';
+    }
 }
