@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.4.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 
 	<properties>
@@ -47,7 +47,8 @@
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc7</artifactId>
-			<systemPath>${project.baseUri}/lib/ojdbc7.jar</systemPath>
+			<!--<systemPath>${project.baseUri}/lib/ojdbc7.jar</systemPath>-->
+			<version>12.1.0</version>
 		</dependency>
 
 		<dependency>
