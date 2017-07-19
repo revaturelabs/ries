@@ -9,7 +9,7 @@ public class Guest {
     private String firstName;
     private String lastName;
     private String email;
-    private Integer pin;
+    private transient Integer pin;
 
     public Guest() {
     }
@@ -60,4 +60,16 @@ public class Guest {
         this.email = email;
     }
 
+
+
+    @Override
+    public String toString() {
+        return "Guest{" +
+                "guestId=" + guestId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", pin=" + pin +
+                '}';
+    }
 }

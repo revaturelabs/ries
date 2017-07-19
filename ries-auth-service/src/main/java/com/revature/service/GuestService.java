@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class GuestService {
@@ -14,6 +16,10 @@ public class GuestService {
     @Autowired
     public GuestService(GuestDao dao) {
         this.dao = dao;
+    }
+
+    public List<Guest> getAll() {
+        return (List<Guest>) dao.findAll();
     }
 
     public Guest getById(Integer id) {
