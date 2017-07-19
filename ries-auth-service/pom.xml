@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc7</artifactId>
-			<systemPath>home/ec2-user/ojdbc7.jar</systemPath>
+			<!--<systemPath>${project.baseUri}/lib/ojdbc7.jar</systemPath>-->
 			<version>12.1.0</version>
 		</dependency>
 
