@@ -60,8 +60,6 @@ public class Guest {
         this.email = email;
     }
 
-
-
     @Override
     public String toString() {
         return "Guest{" +
