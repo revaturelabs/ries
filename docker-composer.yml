@@ -1,0 +1,38 @@
+version: "3"
+services:
+    ries-auth-service:
+        image: riesdockerhub/ries-auth-service:
+        deploy:
+            replicas: 3
+            resources:
+                limits:
+                    cpus: "0.1" 
+                    memory: 100M
+            restart_policy:
+            condition: on-failure
+        ports:
+         - "9001:9001"
+    ries-discover-server:
+        image: riesdockerhub/ries-discover-server:
+        deploy:
+            replicas: 3
+            resources:
+                limits:
+                    cpus: "0.1" 
+                    memory: 100M
+            restart_policy:
+            condition: on-failure
+        ports:
+         - "9002:9002"
+    ries-signaling-service:
+        image: riesdockerhub/ries-signaling-service:
+        deploy:
+            replicas: 3
+            resources:
+                limits:
+                    cpus: "0.1" 
+                    memory: 100M
+            restart_policy:
+            condition: on-failure
+        ports:
+         - "9003:9003"
