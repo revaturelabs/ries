@@ -28,6 +28,7 @@ public class AuthController {
 
     @RequestMapping(value="/guest/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Guest> login(@RequestBody Guest guestDTO) {
+
         Guest guest = service.getByPin(guestDTO.getPin());
         if(guest != null)
             return ResponseEntity.ok(guest);

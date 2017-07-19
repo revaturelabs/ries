@@ -9,7 +9,7 @@ public class Guest {
     private String firstName;
     private String lastName;
     private String email;
-    private transient Integer pin;
+    private Integer pin;
 
     public Guest() {
     }
