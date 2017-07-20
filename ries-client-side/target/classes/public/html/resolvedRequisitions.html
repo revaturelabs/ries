@@ -1,0 +1,48 @@
+<div ng-controller="resolvedReqCtrl">
+    <h2>{{title}}</h2>
+
+    <div class="row">
+        <button type="button" class="btn btn-primary" ng-click="viewRequisitions()">Upcoming Requisitions</button>
+        <button type="button" class="btn btn-primary" ng-csv="formatRequisition()" filename="ResolvedReq.csv"><span class="glyphicon glyphicon-download-alt" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-condensed">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Date Created</th>
+                    <th>Interview Date</th>
+                    <th>Guest ID</th>
+                    <th>Host ID</th>
+                    <th>Recruiter ID</th>
+                    <th>Video Link</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>101</td>
+                    <td>07/17/2017</td>
+                    <td>10/25/2017</td>
+                    <td>Jhoan Osorno</td>
+                    <td>August Duet</td>
+                    <td>Rachna Tyagi</td>
+                    <td>Click me to watch interview</td>
+                </tr>
+                <tr ng-repeat="resReq in resolvedReqs">
+                    <td>{{$index + 1}}</td>
+                    <td>{{resReq.id}}</td>
+                    <td>{{resReq.createDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
+                    <td>{{resReq.interviewDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
+                    <td>{{resReq.guest}}</td>
+                    <td>{{resReq.host}}</td>
+                    <td>{{resReq.recruiter}}</td>
+                    <td><a>{{resReq.video}}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

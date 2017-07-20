@@ -1,0 +1,24 @@
+<div ng-controller="authCtrl">
+    <center>
+        <div class="LoginContainer logo">
+            <img src= "/img/revature_logo_250.png" alt="Revature" height="75px">
+        </div>
+
+        <h1 class="RIES">Interview Evaluation System</h1>
+        <div class="LoginContainer">
+            <form class="form-revature-login" role="form" name="login">
+                <div class="row">
+                    <label for="guestPin" class="sr-only"></label>
+                    <input id="guestPin" name="guestPin" class="col-xs-12 col-md-12" type="text" placeholder="Enter Pin" data-ng-model="guestPin" required autofocus>
+                </div>
+                <!--<div class="row">-->
+                    <!--<label class="sr-only"></label>-->
+                    <!--<input id="password" name="password" class="col-xs-12 col-md-12" type="password" placeholder="Password" data-ng-model="password" required >-->
+                <!--</div>-->
+                <div class="row">
+                    <input class="btn-revature" type="submit" name="action" value="Login" ng-click="guestLogin()">
+                </div>
+            </form>
+        </div>
+    </center>
+</div>
