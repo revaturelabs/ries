@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.revature.domain.Employee;
 import com.revature.domain.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -24,10 +23,7 @@ public class Force {
     private final OAuth2RestTemplate restTemplate;
 
     @Autowired
-    public Force(OAuth2ProtectedResourceDetails resourceDetails, @Qualifier("oauth2ClientContext") OAuth2ClientContext clientContext) {
-        /*
-         Without this qualifier annotation there this error comes up: there are multiple beans of oauth2ClientContext type
-        */
+    public Force(OAuth2ProtectedResourceDetails resourceDetails, OAuth2ClientContext clientContext) {
         this.restTemplate = new OAuth2RestTemplate(resourceDetails, clientContext);
     }
 
@@ -42,30 +38,30 @@ public class Force {
     @SuppressWarnings("unchecked")
     public Employee getCurrentEmployee(OAuth2Authentication auth) {
         HashMap<String, String> details = (HashMap<String, String>) auth.getUserAuthentication().getDetails();
-        String query = "SELECT Id, Name, CommunityNickname, FirstName, LastName, Email, FullPhotoUrl, SmallPhotoUrl, " +
-                "UserRole.Id, UserRole.Name " +
-                "FROM User WHERE Id = '" + details.get("user_id") + "'";
-
-        String response = executeSalesForceQuery(auth, query);
-
-        List<Employee> employees = parseSalesForceQueryResponse(response);
-        return employees.get(0);
+        return getEmployeeById(auth, details.get("user_id"));
     }
 
     public List<Employee> getTrainers(OAuth2Authentication auth) {
-        String query = "SELECT Id, Name, CommunityNickname, FirstName, LastName, Email, FullPhotoUrl, SmallPhotoUrl, " +
-                "UserRole.Id, UserRole.Name " +
-                "FROM User WHERE UserRoleId = '" + Role.ROLE_TRAINER + "'";
-
-        String response = executeSalesForceQuery(auth, query);
-
-        return parseSalesForceQueryResponse(response);
+        return getEmployeeByRole(auth, Role.ROLE_TRAINER);
     }
 
     public List<Employee> getRecruiters(OAuth2Authentication auth) {
+        return getEmployeeByRole(auth, Role.ROLE_RECRUITER);
+    }
+
+    public Employee getEmployeeById(OAuth2Authentication auth, String employeeId) {
         String query = "SELECT Id, Name, CommunityNickname, FirstName, LastName, Email, FullPhotoUrl, SmallPhotoUrl, " +
                 "UserRole.Id, UserRole.Name " +
-                "FROM User WHERE UserRoleId = '" + Role.ROLE_RECRUITER + "'";
+                "FROM User WHERE Id = '" + employeeId + "'";
+
+        String response = executeSalesForceQuery(auth, query);
+        return parseSalesForceQueryResponse(response).get(0);
+    }
+
+    public List<Employee> getEmployeeByRole(OAuth2Authentication auth, String roleId) {
+        String query = "SELECT Id, Name, CommunityNickname, FirstName, LastName, Email, FullPhotoUrl, SmallPhotoUrl, " +
+                "UserRole.Id, UserRole.Name " +
+                "FROM User WHERE UserRoleId = '" + roleId + "'";
 
         String response = executeSalesForceQuery(auth, query);
 
@@ -77,7 +73,6 @@ public class Force {
 
         Map<String, String> params = new HashMap<>();
         params.put("q", query);
-
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
