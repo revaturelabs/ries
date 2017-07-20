@@ -5,6 +5,19 @@ app.controller("guestCtrl", function($scope, $state){
     var name;
     var connectedUser;
 
+    $scope.hideVideoArea = true;
+
+    var videoAccess = document.querySelector('videoAccess');
+    $scope.accepted = function(){
+        $scope.hideVideoArea = !$scope.hideVideoArea;
+    }
+
+    $scope.backToLogin = function(){
+        $state.go('home');
+    }
+
+
+
     //connecting to our signaling server
     var conn = new WebSocket('ws://192.168.61.75:7000');
     // var conn = new WebSocket('ws://localhost:9090');

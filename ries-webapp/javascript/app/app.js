@@ -2,10 +2,21 @@ var app = angular.module("RIESApp", ['ui.router', 'ui.bootstrap'])
 
 
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
+	
+	$stateProvider.state('login',{
+		url: "/login",
+		views:{
+			nav:{
+				templateUrl: null
+			},
+			content:{
+				templateUrl: "pages/login.html"
+			}
+		}
+	});
 	
 	$stateProvider.state('home', {
-		url: "/",
+		url: "/home",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -23,19 +34,6 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl : "pages/requisitions.html",
-				controller : "requisitionCtrl"
-			}
-		}
-	});
-
-	$stateProvider.state('addRequisition', {
-		url: "/addRequisition",
-		views:{
-			nav:{
-				templateUrl : "pages/navbar.html"
-			},
-			content:{
 				templateUrl : "pages/addRequisition.html",
 				controller : "addRequisitionCtrl"
 			}
@@ -43,7 +41,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 	
 	$stateProvider.state('trainers', {
-		url: "/",
+		url: "/trainers",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -55,7 +53,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('sessionHost', {
-		url: "/",
+		url: "/session/host",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -67,7 +65,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('sessionGuest', {
-		url: "/sessionGuest",
+		url: "/session/guest",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -79,7 +77,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('sessionObserver', {
-		url: "/",
+		url: "/session/observer",
 		views:{
 			nav:{
 				templateUrl : "pages/navbar.html"
@@ -91,7 +89,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 	});
 
 	$stateProvider.state('guestLogin',{
-		url: "/guestLogin",
+		url: "/guest/login",
 		views:{
 			nav:{
 				templateUrl : null
@@ -101,7 +99,8 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 			}
 		}
 	});
-    
-    
+
+	$locationProvider.html5Mode(true);
+	$urlRouterProvider.otherwise('/home'); 
 });
 
