@@ -11,5 +11,7 @@
         <module>ries-signaling-service</module>
         <module>ries-discovery-server</module>
         <module>ries-auth-service</module>
+        <module>ries-client-side</module>
+        <module>ries-proxy-gateway</module>
     </modules>
 </project>
