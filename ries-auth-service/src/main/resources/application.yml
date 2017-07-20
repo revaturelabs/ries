@@ -49,3 +49,5 @@ security:
       grant-type: authentication-code
     resource:
       user-info-uri: ${salesforce.oath2-url}/userinfo
+  basic:
+    enabled: false

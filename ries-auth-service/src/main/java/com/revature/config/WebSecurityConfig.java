@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/**")
+        http
         .authorizeRequests()
         .antMatchers("/guest/login", "ries/auth/guest/login")
         .permitAll()
