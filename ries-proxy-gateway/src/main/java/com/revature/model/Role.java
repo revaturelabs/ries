@@ -1,6 +1,8 @@
 package com.revature.model;
 
 public class Role {
+    public static final String ROLE_TRAINER = "00Ei0000000ccV0EAI";
+    public static final String ROLE_RECRUITER = "00Ei0000000Gcu3EAC";
     private String roleId;
     private String name;
 
@@ -21,6 +23,14 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isTrainer() {
+        return roleId.equals(ROLE_TRAINER);
+    }
+
+    public boolean isRecruiter() {
+        return roleId.equals(ROLE_RECRUITER);
     }
 
     @Override

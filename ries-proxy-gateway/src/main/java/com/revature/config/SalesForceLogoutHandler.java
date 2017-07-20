@@ -2,6 +2,7 @@ package com.revature.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -16,8 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 public class SalesForceLogoutHandler implements LogoutHandler {
     @Value(value = "${salesforce.revoke}")
     private String revokeUrl;
+    private final OAuth2RestTemplate restTemplate;
+
     @Autowired
-    private OAuth2RestTemplate restTemplate;
+    public SalesForceLogoutHandler(OAuth2RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) {

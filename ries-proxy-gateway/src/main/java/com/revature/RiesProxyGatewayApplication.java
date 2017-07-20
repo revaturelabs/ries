@@ -1,6 +1,8 @@
 package com.revature;
 
 import com.google.gson.Gson;
+import com.revature.config.SalesForceAuthSuccessHandler;
+import com.revature.config.SalesForceLogoutHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +19,7 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { JacksonAutoConfiguration.class })
@@ -44,7 +47,9 @@ public class RiesProxyGatewayApplication {
 	}
 
 	@Bean
-	public OAuth2RestTemplate oAuth2RestTemplate(OAuth2ProtectedResourceDetails resource, OAuth2ClientContext context) {
-		return new OAuth2RestTemplate(resource, context);
+	public OAuth2RestTemplate oAuth2RestTemplate(
+			OAuth2ProtectedResourceDetails resourceDetails, OAuth2ClientContext clientContext) {
+		return new OAuth2RestTemplate(resourceDetails, clientContext);
 	}
+
 }
