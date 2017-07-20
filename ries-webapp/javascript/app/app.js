@@ -34,8 +34,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 				templateUrl : "pages/navbar.html"
 			},
 			content:{
-				templateUrl : "pages/addRequisition.html",
-				controller : "addRequisitionCtrl"
+				templateUrl : "pages/requisitions.html"
 			}
 		}
 	});
