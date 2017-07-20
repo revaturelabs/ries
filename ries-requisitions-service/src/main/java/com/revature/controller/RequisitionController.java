@@ -91,27 +91,30 @@ public class RequisitionController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value="/requisition/delete/by/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id) {
+    @RequestMapping(value="/requisition/delete/by/{id}", method=RequestMethod.DELETE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id, @RequestParam String link) {
         Requisition requisition = service.getById(id);
         if (requisition == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         ResolvedRequisition resolvedRequisition = new ResolvedRequisition(requisition);
+        if (link != null && !link.equals(""))
+            resolvedRequisition.setVideo(link);
+
         resolvedRequisitionService.save(resolvedRequisition);
         service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/requisition/delete", method=RequestMethod.DELETE)
-    public ResponseEntity<Void> removeRequisition(@RequestBody Requisition requisition) {
-        ResolvedRequisition resolvedRequisition = new ResolvedRequisition(requisition);
-        // set the video link here before saving to database
-        resolvedRequisitionService.save(resolvedRequisition);
-        service.delete(requisition);
-        return new ResponseEntity<>(HttpStatus.OK);
-
-    }
+//    @RequestMapping(value="/requisition/delete", method=RequestMethod.DELETE)
+//    public ResponseEntity<Void> removeRequisition(@RequestBody Requisition requisition) {
+//        ResolvedRequisition resolvedRequisition = new ResolvedRequisition(requisition);
+//        // set the video link here before saving to database
+//        resolvedRequisitionService.save(resolvedRequisition);
+//        service.delete(requisition);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//
+//    }
 
     //Update interview date of an requisition
     @RequestMapping(value="/requisition/update/{id}", method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
