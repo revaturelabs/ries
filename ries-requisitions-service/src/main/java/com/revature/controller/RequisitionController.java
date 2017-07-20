@@ -92,7 +92,7 @@ public class RequisitionController {
     }
 
     @RequestMapping(value="/requisition/delete/by/{id}", method=RequestMethod.DELETE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id, @RequestParam String link) {
+    public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id, @RequestBody String link) {
         Requisition requisition = service.getById(id);
         if (requisition == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
