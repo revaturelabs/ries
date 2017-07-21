@@ -17,11 +17,16 @@ app.controller("addReqCtrl", function($scope, $state, $http, moment){
         var interviewDateMil = new Date($scope.interviewDate).getTime();
         console.log(interviewDateMil);
         var requisitionObj = {
+            'guest' : {
+                'firstName' : $scope.guestFname,
+                'lastName' : $scope.guestLname,
+                'email' : $scope.guestEmail
+            },
+            'requisition' : {
             'reqRecruiter': $scope.recruiter,
             'reqHost': $scope.reqHost,
-            'reqGuest': $scope.reqGuest,
             'interviewDate': interviewDateMil
-        };
+        }};
 
         var requisJson = angular.toJson(requisitionObj);
         $http({
