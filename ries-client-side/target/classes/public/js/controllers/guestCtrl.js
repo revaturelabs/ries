@@ -26,6 +26,9 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
     $scope.isTesting = true;
     $scope.isRecording = true;
     var myStream;
+    $scope.myRoom = guestHostService.getSessionInfo().room;
+
+
 
     var guestInfo = guestHostService.getGuestInfo();
 
@@ -89,7 +92,8 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
         document.querySelector('#equipmentTest').style.display = 'none';
         send({
             type: "login",
-            name: guestInfo.firstName+guestInfo.lastName
+            name: guestInfo.firstName+guestInfo.lastName,
+            room: $scope.myRoom
         });
 
     };
@@ -184,7 +188,8 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
             if (event.candidate) {
                 send({
                     type: "candidate",
-                    candidate: JSON.stringify(event.candidate)
+                    candidate: JSON.stringify(event.candidate),
+                    room: $scope.myRoom
                 });
             }
         };
@@ -215,7 +220,8 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
             yourConn.setLocalDescription(answer);
             send({
                 type: "answer",
-                answer: JSON.stringify(answer)
+                answer: JSON.stringify(answer),
+                room: $scope.myRoom
             });
         }, function (error) {
             alert("Error when creating an answer");
@@ -258,7 +264,8 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
         var val = {
             type: "chatMessage",
             message: msgInput.value,
-            name: guestInfo.firstName+guestInfo.lastName
+            name: guestInfo.firstName+guestInfo.lastName,
+            room: $scope.myRoom
         };
         chatArea.innerHTML += val.name + ": " + val.message + "<br />";
         console.log("dataChannel: ", dataChannel);

@@ -8,8 +8,8 @@ app.service("requisitionService", function($http){
 
     self.getAllRequisitions = function(res) {
         var promise = $http({
-            url: "http://localhost:8085/requisition/all",
-            // url: "https://ec2-13-58-151-115.us-east-2.compute.amazonaws.com/ries/requisition/requisition/all",
+            // url: "http://localhost:8085/requisition/all",
+            url: "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/requisition/requisition/all",
             method: "GET"
         });
         promise = promise.then(function(res) {

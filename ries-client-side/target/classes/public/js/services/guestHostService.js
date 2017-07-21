@@ -28,6 +28,18 @@ app.service("guestHostService", function($http){
         }
     };
 
+    this.getSessionInfo = function(){
+        return {
+            trainer: this.getHostInfo(),
+            guest: this.getGuestInfo(),
+            room: this.getGuestInfo().firstName + this.getGuestInfo().lastName +
+            this.getHostInfo().firstName + this.getHostInfo().lastName
+        }
+    };
+
+
+
+
 
     this.setUpWebsocket = function(handleLogin,handleOffer,handleAnswer,handleCandidate,handleLeave,handleNewMember){
         var conn = new WebSocket(this.getWebsocketEndPoint());

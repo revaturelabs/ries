@@ -26,6 +26,9 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
     $scope.isTesting = true;
     $scope.isRecording = true;
     var myStream;
+    $scope.myRoom = guestHostService.getSessionInfo().room;
+
+
 
     var guestInfo = guestHostService.getGuestInfo();
 

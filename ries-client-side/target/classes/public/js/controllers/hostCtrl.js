@@ -27,7 +27,7 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     $scope.isTesting = true;
     $scope.myRoom = "";
     $scope.doneRecording = false;
-
+    $scope.myRoom = guestHostService.getSessionInfo().room;
     var hostInfo = guestHostService.getHostInfo();
 
     //connecting to our signaling server
@@ -139,7 +139,8 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     endSessionBtn.addEventListener("click", function () {
         console.log("trying to end session...");
         send({
-            type: "leave"
+            type: "leave",
+            room: $scope.myRoom
         });
 
         handleLeave();
@@ -218,7 +219,8 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
             if (event.candidate) {
                 send({
                     type: "candidate",
-                    candidate: JSON.stringify(event.candidate)
+                    candidate: JSON.stringify(event.candidate),
+                    room: $scope.myRoom
                 });
             }
         };
@@ -311,7 +313,8 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
         yourConn.createOffer(function (offer) {
             send({
                 type: "offer",
-                offer: JSON.stringify(offer)
+                offer: JSON.stringify(offer),
+                room: $scope.myRoom
             });
             console.log("offer", offer);
             yourConn.setLocalDescription(offer);
@@ -332,7 +335,8 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
             yourConn.setLocalDescription(answer);
             send({
                 type: "answer",
-                answer: JSON.stringify(answer)
+                answer: JSON.stringify(answer),
+                room: $scope.myRoom
             });
         }, function (error) {
             alert("Error when creating an answer");
@@ -375,7 +379,8 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
         var val = {
             type: "chatMessage",
             message: msgInput.value,
-            name: hostInfo.firstName+hostInfo.lastName
+            name: hostInfo.firstName+hostInfo.lastName,
+            room: $scope.myRoom
         };
         chatArea.innerHTML += val.name + ": " + val.message + "<br />";
         console.log("dataChannel: ", dataChannel);

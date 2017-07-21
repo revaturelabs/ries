@@ -105,7 +105,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     clients.add(u.getSession());
                 }
             }
-
+            System.out.println(clients.toString());
             String jsonLogin = gson.toJson(msg);
             if (!toAll) {
                 for (WebSocketSession client : clients) {
