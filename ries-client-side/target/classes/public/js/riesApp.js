@@ -1,7 +1,7 @@
 /**
  * Created by Jhoan Osorno on 7/14/2017.
  */
-var app = angular.module("RIESApp", ['ui.router','ngSanitize', 'ngCsv','mwl.calendar', 'ui.bootstrap']);
+var app = angular.module("RIESApp", ['ui.router','ngSanitize', 'ngCsv','mwl.calendar', 'ui.bootstrap', 'ngCookies']);
 
 // app.constant("employees",[{
 //         employeeId:"005g0000004JNzlAAG",
@@ -174,6 +174,18 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider){
             },
             content:{
                 templateUrl : "html/sessionObserver.html"
+            }
+        }
+    });
+
+    $stateProvider.state('main', {
+       url: "/",
+        views:{
+           nav:{
+               templateUrl: null
+           },
+            content:{
+               templateUrl: "html/main.html"
             }
         }
     });
