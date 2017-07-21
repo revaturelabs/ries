@@ -7,7 +7,7 @@ app.service("loginService", function($http){
 
     this.guestLogin = function(pin, done, err){
         $http({
-            url:"https://ec2-13-58-151-115.us-east-2.compute.amazonaws.com/ries/auth/guest/login",
+            url:"https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/auth/guest/login",
             method:"POST",
             data:{
                 'pin': pin
