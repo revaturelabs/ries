@@ -6,7 +6,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://ec2-13-58-151-115.us-east-2.compute.amazonaws.com:8761/eureka
+      defaultZone: ec2-13-59-237-239.us-east-2.compute.amazonaws.com:8761/eureka
     lease: 5
     healthcheck:
       enabled: false

@@ -91,12 +91,13 @@ public class RequisitionController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value="/requisition/delete/by/{id}", method=RequestMethod.DELETE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id, @RequestBody String link) {
+    @RequestMapping(value="/requisition/delete/by/{id}/{link}", method=RequestMethod.POST)
+    public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id, @PathVariable String link) {
         Requisition requisition = service.getById(id);
         if (requisition == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        System.out.println(link);
         ResolvedRequisition resolvedRequisition = new ResolvedRequisition(requisition);
         if (link != null && !link.equals(""))
             resolvedRequisition.setVideo(link);
