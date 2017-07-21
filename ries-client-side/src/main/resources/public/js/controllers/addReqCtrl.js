@@ -23,9 +23,10 @@ app.controller("addReqCtrl", function($scope, $state, $http, moment){
                 'email' : $scope.guestEmail
             },
             'requisition' : {
-            'reqRecruiter': $scope.recruiter,
-            'reqHost': $scope.reqHost,
-            'interviewDate': interviewDateMil
+                'interviewDate': interviewDateMil,
+                'reqHost': $scope.reqHost,
+                'reqRecruiter': $scope.recruiter
+
         }};
 
         var requisJson = angular.toJson(requisitionObj);
