@@ -23,6 +23,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private static ArrayList<String> names = new ArrayList<String>();
 
+    private static List<User> clientArray =
+            Collections.synchronizedList(new ArrayList<User>());
+
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -51,6 +54,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         switch (msg.getType()) {
             case "login":
+
+                User user = new User(msg.getRoom(), session, msg.getName());
+                clientArray.add(user);
+
+
                 msg.setSuccess(true);
                 String jsonLogin = gson.toJson(msg);
 
@@ -59,22 +67,22 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
                 msg.setType("newMember");
                 msg.setMembers(names);
-                sendMessage(session,msg,gson,true);
+                sendMessage(session, msg, gson, true);
                 break;
             case "offer":
-                sendMessage(session,msg,gson,false);
+                sendMessage(session, msg, gson, false);
                 break;
             case "answer":
-                sendMessage(session,msg,gson,false);
+                sendMessage(session, msg, gson, false);
                 break;
             case "candidate":
-                sendMessage(session,msg,gson,false);
+                sendMessage(session, msg, gson, false);
                 break;
             case "leave":
                 session.close();
                 break;
             case "chatMessage":
-                sendMessage(session,msg,gson,false);
+                sendMessage(session, msg, gson, false);
                 break;
             default:
                 Message errorMessage = new Message("error", "Message type not found");
@@ -84,25 +92,34 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     public void sendMessage(WebSocketSession session, Message msg, Gson gson, boolean toAll) throws IOException {
-        synchronized (clients) {
+        synchronized (clientArray) {
             // Iterate over the connected sessions
             // and broadcast the received message
+            System.out.println(msg.toString());
+            System.out.println("____________________________________________________________________");
+            System.out.println();
+
+            List<WebSocketSession> clients = new ArrayList<>();
+            for (User u : clientArray) {
+                if (u.getRoom().equals(msg.getRoom())) {
+                    clients.add(u.getSession());
+                }
+            }
+
             String jsonLogin = gson.toJson(msg);
-            if(!toAll){
+            if (!toAll) {
                 for (WebSocketSession client : clients) {
                     if (!client.equals(session)) {
                         client.sendMessage(new TextMessage(jsonLogin));
                     }
                 }
-            }else{
+            } else {
                 for (WebSocketSession client : clients) {
                     client.sendMessage(new TextMessage(jsonLogin));
                 }
             }
         }
     }
-
-
 
 
 }

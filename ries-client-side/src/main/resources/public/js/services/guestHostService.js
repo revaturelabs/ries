@@ -9,7 +9,7 @@ app.service("guestHostService", function($http){
         return ["turn:numb.viagenie.ca:3478","craighatch90@gmail.com","pr0gs4d4yz"];
     };
     this.getWebsocketEndPoint = function(){
-        // return "ws://ec2-13-58-97-184.us-east-2.compute.amazonaws.com:3001/socket"
+        // return "ws://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:3001/socket"
         return 'ws://localhost:3001/socket';
     };
     this.getHostInfo = function(){
