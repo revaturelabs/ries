@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { JacksonAutoConfiguration.class })
 @EnableDiscoveryClient
+@EnableResourceServer
 public class RiesAuthServiceApplication {
 
 	public static void main(String[] args) {
