@@ -4,9 +4,29 @@
 var app = angular.module("RIESApp");
 
 app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostService) {
+
+
+    $scope.myRequisistions = guestHostService.getAllRequisitions();
+
+    $scope.isSelecting = true;
+    $scope.guestName = "";
+    $scope.selectSession = function(host,guest){
+        $scope.myRoom = host + guest;
+        $scope.guestName = guest;
+        $scope.isSelecting = false;
+    };
+    $scope.backtoSelection = function(){
+        $scope.isSelecting = true;
+    };
+
+
+
+
+    //____________________________________________________________________________________________________
+    //____________________________________________________________________________________________________
+    // ___________________________________________________________________________________________________
     var usernameInput = document.querySelector('#usernameInput');
     var callPage = document.querySelector('#callPage');
-    var callBtn = document.querySelector('#callBtn');
     var hangUpBtn = document.querySelector('#hangUpBtn');
     var msgInput = document.querySelector('#msgInput');
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
@@ -14,8 +34,10 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     var endRecordBtn = document.querySelector('#endRecordBtn');
     var chatArea = document.querySelector('#chatarea');
     var currentMembers = document.querySelector('#currentlyInChat');
-    var yourConn;
-    var dataChannel;
+    var guestConn;
+    var obsConn;
+    var guestChannel;
+    var obsChannel;
     callPage.style.display = "none";
     var recordedVideo = document.querySelector('#recordedVideo');
     var modalEndSess = document.getElementById('myModal');
@@ -23,22 +45,17 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     var outsideModal = document.getElementsByClassName("close")[0];
     $scope.myIpV4 = "no response yet...";
     $scope.feedback = "";
-    var connectedUser;
     $scope.isTesting = true;
-    $scope.myRoom = "";
     $scope.doneRecording = false;
-    $scope.myRoom = guestHostService.getSessionInfo().room;
+
     var hostInfo = guestHostService.getHostInfo();
 
     //connecting to our signaling server
-    var conn = guestHostService.setUpWebsocket(handleLogin,handleOffer,handleAnswer,handleCandidate,handleLeave,handleNewMember);
+    var conn = guestHostService.setUpWebsocket(handleLogin, handleOffer, handleAnswer, handleCandidate, handleLeave, handleNewMember);
 
 
     window.addEventListener("beforeunload", function (event) {
-        if (yourConn) {
-            handleLeave();
-        }
-
+        handleLeave();
     });
 
     var testEquipmentStream = {};
@@ -77,40 +94,24 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
             console.log(err);
         });
     };
-
-
     $scope.endTest = function () {
         var testBlob = testEquipmentStream.stop();
         $scope.isTesting = false;
         document.querySelector('#startTestEquipment').innerHTML = "Test Again?";
     };
-
-
     $scope.startSession = function () {
-        console.log("starting session");
         document.querySelector('#callPage').style.display = 'block';
         document.querySelector('#equipmentTest').style.display = 'none';
-        $scope.myRoom = roomService();
-        console.log("$scope.myRoom", $scope.myRoom);
         send({
             type: "login",
-            name: hostInfo.firstName+hostInfo.lastName,
+            name: hostInfo.firstName + hostInfo.lastName,
             room: $scope.myRoom
         });
-
     };
-
-    var roomService = function(){
-        var hostFirst = "hostFirst";
-        var hostLast = "hostLast";
-        var guestLast = "guestLast";
-        var guestFirst = "guestFirst";
-        return hostFirst + hostLast + guestFirst + guestLast;
-    }
-
 
     //alias for sending JSON encoded messages
     function send(message) {
+        message.role = "host";
         conn.send(JSON.stringify(message));
     };
 
@@ -123,18 +124,13 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
             $scope.turnOffModal();
         }
     };
-    $scope.turnOffModal = function(){
+    $scope.turnOffModal = function () {
         modalEndSess.style.display = "none";
     }
-
-
-
-
     //hang up
     hangUpBtn.onclick = function () {
         modalEndSess.style.display = "block";
     };
-
     var endSessionBtn = document.getElementById("endSessionBtn");
     endSessionBtn.addEventListener("click", function () {
         console.log("trying to end session...");
@@ -146,23 +142,32 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
         handleLeave();
         modalEndSess.style.display = "none";
     });
-
-    //-----------------------------------------------------
-
-
     $scope.isRecording = true;
     recordBtn.addEventListener("click", function (event) {
         startRecording();
         $scope.isRecording = !$scope.isRecording;
         recordBtn.innerHTML = "Recording...";
     });
-
     endRecordBtn.addEventListener("click", function (event) {
         stopRecording();
         $scope.isRecording = !$scope.isRecording;
         recordBtn.innerHTML = "<i class='fa fa-microphone' aria-hidden='true'></i> Record";
         $scope.doneRecording = true;
     });
+
+    var configuration = {
+        "iceServers": [
+            {
+                'urls': ['stun:stun.services.mozilla.com', 'stun:stun2.1.google.com:19302']
+            },
+            {
+                urls: guestHostService.numbCredentials()[0],
+                username: guestHostService.numbCredentials()[1],
+                credential: guestHostService.numbCredentials()[2]
+            }
+        ]
+    };
+
 
     var myStream;
 
@@ -174,73 +179,244 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
             var rVideo = document.querySelector("#remote");
             lVideo.src = window.URL.createObjectURL(stream);
 
-            setUpConnection(stream, lVideo, rVideo);
-            setUpDataChannel();
+            var rtcPeerConnection = RTCPeerConnection || webkitRTCPeerConnection || mozRTCPeerConnection || msRTCPeerConnection;
+            guestConn = new rtcPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
+            guestConn.ondatachannel = connectionOnDataChannel;
+            guestConn.addStream(stream);
+            guestConn.addEventListener("addstream", function (e) {
+                console.log("adding streams", e);
+                rVideo.src = window.URL.createObjectURL(stream);
+                rVideo.muted = true;
+                lVideo.src = window.URL.createObjectURL(e.stream);
+                lVideo.muted = false;
+                setUpMediaRecorder(e.stream, myStream);
+            });
+            // Setup ice handling
+            guestConn.onicecandidate = guestOnIceCandidate;
+
+            guestChannel = guestConn.createDataChannel("channel1", {reliable: true});
+            guestChannel.onopen = dataChannelOpen;
+            guestChannel.onerror = printError;
+            guestChannel.onmessage = dataChannelMessage;
+            guestChannel.onclose = dataChannelClose;
+
+
+            obsConn = new rtcPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
+            obsConn.ondatachannel = connectionOnDataChannel;
+            obsConn.addStream(stream);
+            obsConn.addEventListener("addstream", function (e) {
+                console.log("adding streams, this one shouldnt happen", e);
+            });
+            // Setup ice handling
+            obsConn.onicecandidate = obsOnIceCandidate;
+
+            obsChannel = obsConn.createDataChannel("channel2", {reliable: true});
+            obsChannel.onerror = printError;
+            obsChannel.onmessage = dataChannelMessage;
+            obsChannel.onclose = dataChannelClose;
+            obsChannel.onopen = dataChannelOpen;
+
         }).then(function (err) {
-            console.log("getUserMediaError", err);
-        });
-    };
-
-    var setUpConnection = function (stream, lVideo, rVideo) {
-        var configuration = {
-            "iceServers": [
-                {
-                    'urls': ['stun:stun.services.mozilla.com', 'stun:stun2.1.google.com:19302']
-                },
-                {
-                    urls: guestHostService.numbCredentials()[0],
-                    username: guestHostService.numbCredentials()[1],
-                    credential: guestHostService.numbCredentials()[2]
-                }
-            ]
-        };
-
-        var rtcPeerConnection = RTCPeerConnection || webkitRTCPeerConnection || mozRTCPeerConnection || msRTCPeerConnection;
-        yourConn = new rtcPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
-        yourConn.ondatachannel = function (e) {
-            receiveChannel = e.channel;
-            console.log(e.channel);
-            receiveChannel.onmessage = function (e) {
-                var obj = JSON.parse(e.data);
-                chatArea.innerHTML += obj.name + ": " + obj.message + "<br />";
-            };
-        };
-        yourConn.addStream(stream);
-        yourConn.addEventListener("addstream", function (e) {
-            console.log("adding streams", e);
-            rVideo.src = window.URL.createObjectURL(stream);
-            rVideo.muted = true;
-            lVideo.src = window.URL.createObjectURL(e.stream);
-            lVideo.muted = false;
-            setUpMediaRecorder(e.stream, myStream);
-        });
-        // Setup ice handling
-        yourConn.onicecandidate = function (event) {
-            if (event.candidate) {
-                send({
-                    type: "candidate",
-                    candidate: JSON.stringify(event.candidate),
-                    room: $scope.myRoom
-                });
+            if(err){
+                console.log("getUserMediaError", err);
             }
+        });
+    };
+
+    var connectionOnDataChannel = function (e) {
+        receiveChannel = e.channel;
+        console.log("new channel received: ", e.channel);
+        receiveChannel.onmessage = function (e) {
+            var obj = JSON.parse(e.data);
+            chatArea.innerHTML += obj.name + ": " + obj.message + "<br />";
         };
     };
-    var setUpDataChannel = function () {
-        dataChannel = yourConn.createDataChannel($scope.myRoom, {reliable: true});
-
-        dataChannel.onerror = function (error) {
-            console.log("Ooops...error:", error);
-        };
-
-        //when we receive a message from the other peer, display it on the screen
-        dataChannel.onmessage = function (event) {
-            chatArea.innerHTML += connectedUser + ": " + event.data + "<br />";
-        };
-
-        dataChannel.onclose = function () {
-            console.log("data channel is closed");
-        };
+    var guestOnIceCandidate = function (event) {
+        console.log("ICE Candidate received: ", event);
+        if (event.candidate) {
+            send({
+                type: "candidate",
+                candidate: JSON.stringify(event.candidate),
+                room: $scope.myRoom,
+                sendTo : "guest"
+            });
+        }
     };
+
+    var obsOnIceCandidate = function (event) {
+        console.log("ICE Candidate received: ", event);
+        if (event.candidate) {
+            send({
+                type: "candidate",
+                candidate: JSON.stringify(event.candidate),
+                room: $scope.myRoom,
+                sendTo : "observer"
+            });
+        }
+    };
+
+
+
+    var printError = function (error) {
+        console.log("Ooops...error:", error);
+    };
+    var dataChannelMessage = function (event) {
+        console.log("dataChannelMessage: ", event);
+        console.log("dataChannelMessage data: ", event.data);
+        chatArea.innerHTML += "tmp: " + event.data + "<br />";
+    };
+    var dataChannelClose = function () {
+        console.log("data channel is closed");
+    };
+    var dataChannelOpen = function () {
+        console.log("data channel is open");
+    };
+
+
+    $scope.callGuest = function () {
+        guestConn.createOffer(function (offer) {
+            console.log("sending an offer with guestConn")
+            send({
+                type: "offer",
+                offer: JSON.stringify(offer),
+                room: $scope.myRoom,
+                sendTo : "guest"
+            });
+            console.log("offer", offer);
+            guestConn.setLocalDescription(offer);
+        }, function (error) {
+            if (error) {
+                alert("Error when creating an offer");
+            }
+        });
+    };
+
+    $scope.callObs = function () {
+        obsConn.createOffer(function (offer) {
+            console.log("sending an offer with obsConn")
+            send({
+                type: "offer",
+                offer: JSON.stringify(offer),
+                room: $scope.myRoom,
+                sendTo : "observer"
+            });
+            // console.log("offer", offer);
+            obsConn.setLocalDescription(offer);
+        }, function (error) {
+            if (error) {
+                alert("Error when creating an offer");
+            }
+        });
+    };
+
+
+//when somebody sends us an offer
+    function handleOffer(data) {
+        if (data.role == "observer") {
+            connectionHandleOffer(data, obsConn);
+        } else if (data.role == "guest") {
+            connectionHandleOffer(data, guestConn);
+        }else{
+            console.log("no role defined: Offer");
+        }
+    };
+
+    function connectionHandleOffer(data, connection){
+        var offer = JSON.parse(data.offer);
+        connection.setRemoteDescription(new RTCSessionDescription(offer));
+        connection.createAnswer(function (answer) {
+            connection.setLocalDescription(answer);
+            send({
+                type: "answer",
+                answer: JSON.stringify(answer),
+                room: $scope.myRoom,
+                sendTo : data.role
+            });
+        }, function (error) {
+            alert("Error when creating an answer");
+        });
+    }
+
+
+
+
+
+//when we got an answer from a remote user
+    function handleAnswer(data) {
+        var answer = JSON.parse(data.answer);
+        if (data.role == "observer") {
+            obsConn.setRemoteDescription(new RTCSessionDescription(answer));
+        } else if (data.role == "guest") {
+            guestConn.setRemoteDescription(new RTCSessionDescription(answer));
+        }else{
+            console.log("no role defined: Answer");
+        }
+    }
+
+//when we got an ice candidate from a remote user
+    function handleCandidate(data) {
+        var candidate = JSON.parse(data.candidate);
+        if (data.role == "observer") {
+            obsConn.addIceCandidate(new RTCIceCandidate(candidate));
+
+        } else if (data.role == "guest") {
+            guestConn.addIceCandidate(new RTCIceCandidate(candidate)).then(function(val){
+                console.log("addIceCandidate promise? ", val);
+            }).catch(function(err){
+                console.log("addIceCandidate Error: ", err);
+            });
+        }else{
+            console.log("no role defined: Candidate");
+        }
+
+    };
+
+
+    function handleLeave() {
+        if(obsConn){
+            obsConn.close();
+            obsConn.onicecandidate = null;
+        }
+        if(guestConn){
+            guestConn.close();
+            guestConn.onicecandidate = null;
+        }
+    };
+
+
+    function handleNewMember(val) {
+        currentMembers.innerHTML = "Currently in chat..."
+        console.log("handlenemember", val);
+        val.forEach(function (element) {
+            currentMembers.innerHTML += "<br />" + element + "<br />";
+        }, this);
+
+    };
+
+
+//when user clicks the "send message" button
+    sendMsgBtn.addEventListener("click", function (event) {
+        // var val = msgInput.value;
+        var val = {
+            type: "chatMessage",
+            message: msgInput.value,
+            name: hostInfo.firstName + hostInfo.lastName,
+            room: $scope.myRoom
+        };
+        chatArea.innerHTML += val.name + ": " + val.message + "<br />";
+        // obsChannel.send(JSON.stringify(val));
+        guestChannel.send(JSON.stringify(val));
+
+        console.log("sent message", val);
+        msgInput.value = "";
+    });
+
+
+
+
+    //____________________________________________________________________________________________________
+    //____________________________________________________________________________________________________
+    // ___________________________________________________________________________________________________
 
     var chunks = [];
     var mediaRecorder;
@@ -307,103 +483,20 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
 
         }, 5000);
 
-    }
-
-    callBtn.addEventListener("click", function () {
-        yourConn.createOffer(function (offer) {
-            send({
-                type: "offer",
-                offer: JSON.stringify(offer),
-                room: $scope.myRoom
-            });
-            console.log("offer", offer);
-            yourConn.setLocalDescription(offer);
-        }, function (error) {
-            if(error){
-                alert("Error when creating an offer");
-            }
-        });
-    });
-
-
-//when somebody sends us an offer
-    function handleOffer(offer, name) {
-        connectedUser = name;
-        yourConn.setRemoteDescription(new RTCSessionDescription(offer));
-        //create an answer to an offer
-        yourConn.createAnswer(function (answer) {
-            yourConn.setLocalDescription(answer);
-            send({
-                type: "answer",
-                answer: JSON.stringify(answer),
-                room: $scope.myRoom
-            });
-        }, function (error) {
-            alert("Error when creating an answer");
-        });
-
     };
-
-//when we got an answer from a remote user
-    function handleAnswer(answer) {
-        yourConn.setRemoteDescription(new RTCSessionDescription(answer));
-    };
-
-//when we got an ice candidate from a remote user
-    function handleCandidate(candidate) {
-        console.log("candidate", candidate);
-        yourConn.addIceCandidate(new RTCIceCandidate(candidate));
-    };
-
-
-    function handleLeave() {
-        connectedUser = null;
-        yourConn.close();
-        yourConn.onicecandidate = null;
-    };
-
-
-    function handleNewMember(val) {
-        currentMembers.innerHTML = "Currently in chat..."
-        console.log("handlenemember", val);
-        val.forEach(function (element) {
-            currentMembers.innerHTML += "<br />" + element + "<br />";
-        }, this);
-
-    };
-
-
-//when user clicks the "send message" button
-    sendMsgBtn.addEventListener("click", function (event) {
-        // var val = msgInput.value;
-        var val = {
-            type: "chatMessage",
-            message: msgInput.value,
-            name: hostInfo.firstName+hostInfo.lastName,
-            room: $scope.myRoom
-        };
-        chatArea.innerHTML += val.name + ": " + val.message + "<br />";
-        console.log("dataChannel: ", dataChannel);
-        //sending a message to a connected peer
-        dataChannel.send(JSON.stringify(val));
-        console.log("sent message", val);
-        msgInput.value = "";
-    });
-
-
 
     //_____________________________________________________________________________________________________
-    $scope.saveRecording = function(){
+    $scope.saveRecording = function () {
 
         //make file using blob object made during recording; add name and date fields to make it a file
         //need to add fields for amazonS3 keys
-        $scope.Recording.file =  $scope.blobHost;
+        $scope.Recording.file = $scope.blobHost;
         // $scope.Recording.file.name = $scope.Recording.name;
         // $scope.Recording.file.lastModifiedDate = new Date();
         console.log($scope.Recording);
 
         //make download link for recording
-        $scope.videoLink  = URL.createObjectURL($scope.Recording.file);
+        $scope.videoLink = URL.createObjectURL($scope.Recording.file);
 
         //uncomment if you want to download recording when saving to s3
         $scope.download();
@@ -418,9 +511,9 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     };
 
     //download recording file function
-    $scope.download = function() {
+    $scope.download = function () {
         var a = document.getElementById("a");
-        var name = $scope.Recording.name +".mp4";
+        var name = $scope.Recording.name + ".mp4";
         a.href = URL.createObjectURL($scope.Recording.file);
         $scope.videoLink = a.href;
         a.download = name;

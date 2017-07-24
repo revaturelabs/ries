@@ -107,48 +107,83 @@
     }
 </style>
 
-<h4>SESSION HOST</h4>
+<h4>SESSION Observer</h4>
 
-<div ng-controller="hostCtrl">
+<div ng-controller="observerCtrl">
 
-    <div id="callPage" class="call-page container-fluid" style="display:none">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3 ">
-                <div style="text-align: center">
-                    <button id="callBtn" class="btn-primary btn">Begin</button>
-                    <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
-                    <button id="recordBtn" ng-class="{'btn-success': isRecording,'btn': isRecording}">
-                        <i class="fa fa-microphone" aria-hidden="true"></i> Record
-                    </button>
-                    <button id="endRecordBtn" class="btn-danger btn">End Recording</button>
-                </div>
-            </div>
-        </div>
-        <div class="row is-flex ">
-            <div class="col-md-2 col-md-offset-1 asdf">
-                <div id="currentlyInChat">
-                    Waiting for others to connect....
-                </div>
-                <div class="bottom">
-                    <video id="remote" autoplay controls></video>
-                </div>
-            </div>
-            <div class="col-md-6 ">
-                <video id="local" autoplay muted controls></video>
-            </div>
-
-            <form id="chatForm" class="col-md-2 asdf panel panel-primary" style="text-align: center;overflow: auto;">
-                <!--<div class="col-md-12  panel panel-primary">-->
-                <div class="panel-heading">Text chat</div>
-                <div id="chatarea" class="panel-body text-left "></div>
-                <div class=" bottom">
-                    <input  id="msgInput" type="text" placeholder="message"/>
-                    <button id="sendMsgBtn" class="btn-primary almost-fullspace btn">Send</button>
-                </div>
-                <!--</div>-->
-            </form>
-
-        </div>
+    <div class="table-responsive" id="sessionSelect" ng-show="isSelecting">
+        <table class="table table-hover table-bordered table-condensed">
+            <thead class="thead-inverse">
+            <tr>
+                <th>#</th>
+                <!--<th>Edit</th>-->
+                <th>ID</th>
+                <th>Create Date</th>
+                <th>Interview Date</th>
+                <th>Host</th>
+                <th>Guest</th>
+                <th>Recruiter</th>
+                <th>Link</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="re in myRequisistions" data-toggle="modal" data-target="#urlModal" scope="row">
+                <td>{{$index + 1}}</td>
+                <!--<td> <button type="button" class="btn btn-primary" ng-click="goToRequisition('re.reqId')">Edit</button></td>-->
+                <td>{{re.reqId}}</td>
+                <td>{{re.createDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
+                <td>{{re.interviewDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
+                <td>{{re.reqHost}}</td>
+                <td>{{re.reqGuest}}</td>
+                <td>{{re.reqRecruiter}}</td>
+                <td><a href="#" ng-click="selectSession(re.reqHost,re.reqGuest)">Join Session</a></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
+    <div id="session" ng-hide="isSelecting">
+        <button ng-click="startSession()" class="btn btn-primary"> Join Session</button>
+        <button id="callBtn" class="btn-primary btn">Begin</button>
+        <div id="callPage" class="call-page container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 ">
+                    <div style="text-align: center">
+                        <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row is-flex ">
+                <div class="col-md-2 col-md-offset-1 asdf">
+                    <div id="currentlyInChat">
+                        Waiting for others to join...
+                    </div>
+                    <div class="bottom">
+                        <video id="remote" autoplay></video>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <video id="local" autoplay muted></video>
+                </div>
+
+                <form id="chatForm" class="col-md-2 asdf panel panel-primary"
+                      style="text-align: center;overflow: auto;">
+                    <div class="panel-heading">Text chat</div>
+                    <div id="chatarea" class="panel-body text-left "></div>
+                    <div class="bottom">
+                        <input class="" id="msgInput" type="text" placeholder="message"/>
+                        <button id="sendMsgBtn" class="btn-primary almost-fullspace btn">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <p>End session</p>
+                <span class="close">&times;</span>
+                <button id="endSessionBtn" class="btn-danger btn">End Session</button>
+                <button id="endSessionCancelBtn" ng-click="turnOffModal()" class="btn btn-primary">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>

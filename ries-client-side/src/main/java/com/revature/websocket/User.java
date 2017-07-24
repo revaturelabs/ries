@@ -9,15 +9,24 @@ public class User {
     private String room;
     private WebSocketSession session;
     private String name;
-
+    private String role;
 
     public User() {
     }
 
-    public User(String room, WebSocketSession session, String name) {
+    public User(String room, WebSocketSession session, String name, String role) {
         this.room = room;
         this.session = session;
         this.name = name;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getRoom() {
