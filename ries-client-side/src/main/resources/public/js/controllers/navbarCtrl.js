@@ -3,9 +3,10 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("navbarCtrl", function($scope, $state){
+app.controller("navbarCtrl", function($scope, $state, $cookies){
 
     $scope.logout = function(){
+        $cookies.remove('JSESSIONID');
         $state.go('login');
     };
 

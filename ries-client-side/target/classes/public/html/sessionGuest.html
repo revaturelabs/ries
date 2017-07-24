@@ -109,6 +109,17 @@
     }
 </style>
 <div ng-controller="guestCtrl">
+
+    <div id="loginModal" class="modal" style="display:block" >
+        <div class="modal-content">
+            <p>Revature records technical interviews to improve the quality of trainings</p>
+            <button ng-click="craigSignIn()" class="btn btn-primary">Sign in as Craig</button>
+            <button ng-click="jhoanSignIn()" class="btn btn-primary">Sign in as Jhoan</button>
+            <button class="btn btn-danger" >Cancel</button>
+        </div>
+    </div>
+
+
     <div id="equipmentTest" class="call-page container-fluid">
         <div class="row">
             <div class="col-md-12">

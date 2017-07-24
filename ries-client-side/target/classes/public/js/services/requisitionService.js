@@ -3,7 +3,7 @@
  */
 var app = angular.module("RIESApp");
 
-app.service("requisitionService", function($http){
+app.service("requisitionService", function($http, $cookies){
     var self = this;
 
     self.getAllRequisitions = function(res) {

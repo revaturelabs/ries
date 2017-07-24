@@ -1,4 +1,4 @@
-app.controller("homeCtrl", function(moment, calendarConfig, requisitionService){
+app.controller("homeCtrl", function(moment, calendarConfig, requisitionService, infoService, trainers, userInfo, recruiters){
 
     var vm = this;
     //Array for storing all of the requisitions
@@ -27,7 +27,7 @@ app.controller("homeCtrl", function(moment, calendarConfig, requisitionService){
                 actions: actions
             });
         }
-    }
+    };
     //These variables MUST be set as a minimum for the calendar to work
     vm.calendarView = 'month';
     vm.viewDate = new Date();

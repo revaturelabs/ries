@@ -4,11 +4,34 @@
 
 var app = angular.module("RIESApp");
 
-app.controller("mainCtrl", function($scope, $location, $state, $cookies){
+app.controller("mainCtrl", function($scope, $state, $cookies, infoService, trainers, recruiters, userInfo){
     $scope.init = function(){
-        if ($location.search().JSESSIONID){
-            console.log($location.search().JSESSIONID);
-            $cookies.put("JSESSIONID", $location.search().JSESSIONID);
+        if ($cookies.get('JSESSIONID')){
+            console.log($cookies.get('JSESSIONID'));
+
+            infoService.getAllTrainers(function(response){
+                console.log(response.data);
+                trainers = response.data;
+                console.log(trainers);
+            },function(response){
+                console.log("error retrieving trainers");
+            });
+
+            infoService.getAllRecruiters(function(response){
+                console.log(response.data);
+                recruiters = response.data;
+                console.log(recruiters);
+            },function(response){
+                console.log("error retrieving recruiters");
+            });
+
+            infoService.getUserInfo(function(response){
+                console.log(response.data);
+                userInfo = response.data;
+                console.log(userInfo);
+            },function(response){
+                console.log("error retrieving the userInfo");
+            });
 
             $state.go('home');
         }
@@ -17,6 +40,4 @@ app.controller("mainCtrl", function($scope, $location, $state, $cookies){
             $state.go('login');
         }
     };
-
-
 });

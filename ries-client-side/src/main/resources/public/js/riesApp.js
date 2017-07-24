@@ -35,11 +35,12 @@ var app = angular.module("RIESApp", ['ui.router','ngSanitize', 'ngCsv','mwl.cale
 // );
 
 app.value('trainers', []);
-app.value('requisitions',[]);
-app.value('user',{});
-app.value('singleRequisition',{});
+app.value('userInfo',{});
+app.value('recruiters',[]);
 
-app.config(function($stateProvider, $urlRouterProvider, $locationProvider){
+app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
+
+    $httpProvider.defaults.withCredentials = true;
 
     // the login screen view
     $stateProvider.state('login',{

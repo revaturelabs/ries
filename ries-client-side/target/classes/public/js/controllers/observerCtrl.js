@@ -1,3 +1,4 @@
+
 /**
  * Created by craig on 7/18/2017.
  */
@@ -6,61 +7,54 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("observerCtrl", function ($scope) {
+app.controller("observerCtrl", function ($scope, guestHostService) {
 
-    var hasUserMedia = function () {
-        //check for WebRTC support
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia
-            || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-        return !!navigator.getUserMedia;
-    }
 
+
+    $scope.myRequisistions = guestHostService.getAllRequisitions();
+
+    $scope.isSelecting = true;
+    $scope.guestName = "";
+    $scope.selectSession = function(host,guest){
+        $scope.myRoom = host + guest;
+        $scope.guestName = guest;
+        $scope.isSelecting = false;
+    };
+    $scope.backtoSelection = function(){
+        $scope.isSelecting = true;
+    };
+
+
+
+    //----------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
+    var callBtn = document.querySelector('#callBtn');
+    var usernameInput = document.querySelector('#usernameInput');
+    var callPage = document.querySelector('#callPage');
+    var hangUpBtn = document.querySelector('#hangUpBtn');
+    var msgInput = document.querySelector('#msgInput');
+    var sendMsgBtn = document.querySelector('#sendMsgBtn');
+    var chatArea = document.querySelector('#chatarea');
+    var currentMembers = document.querySelector('#currentlyInChat');
+    var guestConn;
+    var hostConn;
+    var guestChannel;
+    var hostChannel;
+    var recordedVideo = document.querySelector('#recordedVideo');
+    var modalEndSess = document.getElementById('myModal');
+    var outsideModal = document.getElementsByClassName("close")[0];
+    $scope.myIpV4 = "no response yet...";
     $scope.message = "";
-    var name;
-    var connectedUser;
     $scope.isTesting = true;
-
+    $scope.isRecording = true;
+    $scope.myRoom = guestHostService.getSessionInfo().room;
+    $scope.myName = "Jim from Recruiting";
 
     //connecting to our signaling server
-    var conn = new WebSocket('ws://localhost:3001/socket');
-    conn.onopen = function () {
-        console.log("Connected to the signaling server");
-    };
+    var conn = guestHostService.setUpWebsocket(handleLogin,handleOffer,handleAnswer,handleCandidate,handleLeave,handleNewMember);
 
-    //when we got a message from a signaling server
-    conn.onmessage = function (msg) {
 
-        var data = JSON.parse(msg.data);
-        console.log("Got message", data);
-        switch (data.type) {
-            case "login":
-                handleLogin(data.success);
-                break;
-            //when somebody wants to call us
-            case "offer":
-                handleOffer(JSON.parse(data.offer), data.name);
-                break;
-            case "answer":
-                handleAnswer(JSON.parse(data.answer));
-                break;
-            //when a remote peer sends an ice candidate to us
-            case "candidate":
-                handleCandidate(JSON.parse(data.candidate));
-                break;
-            case "leave":
-                handleLeave();
-                break;
-            case "newMember":
-                handleNewMember(data.name);
-                break;
-            default:
-                break;
-        }
-    };
-
-    conn.onerror = function (err) {
-        console.log("Got error", err);
-    };
 
     window.addEventListener("beforeunload", function (event) {
         if (yourConn) {
@@ -69,126 +63,43 @@ app.controller("observerCtrl", function ($scope) {
 
     });
 
-    var testEquipmentStream = {};
-    var testChunk = [];
-
-    function setUpGenericMediaRecorder(stream) {
-
-        testEquipmentStream = new MediaRecorder(stream);
-        testEquipmentStream.ondataavailable = function (e) {
-            console.log("data ready");
-            testChunk.push(e.data);
-        }
-        testEquipmentStream.onstop = function (e) {
-            console.log("stopping...");
-            console.log("asdf", testEquipmentStream);
-            var blob = new Blob(testChunk, {'type': 'video/ogg; codecs=opus'});
-            var testResult = document.querySelector("#testResult");
-            testResult.src = window.URL.createObjectURL(blob);
-
-            testChunk = [];
-            return testEquipmentStream.blob;
-        }
-        return testEquipmentStream;
-    }
-
-    $scope.testEquipment = function () {
-        if (hasUserMedia()) {
-
-            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia
-                || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-            navigator.getUserMedia({video: true, audio: false}, function (stream) {
-                console.log("stream tracks");
-                console.log(stream.getTracks());
-
-                myStream = stream;
-                var testRecord = document.querySelector("#testRecord");
-                testRecord.src = window.URL.createObjectURL(myStream);
-                setUpGenericMediaRecorder(myStream);
-                testEquipmentStream.start();
-                $scope.isTesting = true;
-                console.log($scope.isTesting);
-                document.querySelector('#startTestEquipment').innerHTML = "Recording...";
-            }, function (err) {
-                console.log("something went wrong", err);
-            });
-        } else {
-            alert("Your browser is not supported, please use Chrome or Firefox.");
-        }
-
-    }
-
-    $scope.endTest = function () {
-        var testBlob = testEquipmentStream.stop();
-        $scope.isTesting = false;
-        console.log($scope.isTesting);
-        document.querySelector('#startTestEquipment').innerHTML = "Test Again?";
-    }
-
-
     $scope.startSession = function () {
         console.log("starting session");
-        document.querySelector('#callPage').style.display = 'block';
-        document.querySelector('#equipmentTest').style.display = 'none';
         send({
             type: "login",
-            name: "host"
+            name: $scope.myName,
+            room: $scope.myRoom
         });
 
-    }
+    };
 
     //alias for sending JSON encoded messages
     function send(message) {
-
-        //attach the other peer username to our messages
-        if (connectedUser) {
-            message.name = connectedUser;
-        }
+        message.role = "observer";
 
         conn.send(JSON.stringify(message));
     };
 
 
-    var usernameInput = document.querySelector('#usernameInput');
-    var callPage = document.querySelector('#callPage');
-    var callToUsernameInput = document.querySelector('#callToUsernameInput');
-    var callBtn = document.querySelector('#callBtn');
-
-    var hangUpBtn = document.querySelector('#hangUpBtn');
-    var msgInput = document.querySelector('#msgInput');
-    var sendMsgBtn = document.querySelector('#sendMsgBtn');
-    var recordBtn = document.querySelector('#recordBtn');
-    var endRecordBtn = document.querySelector('#endRecordBtn');
-
-    var chatArea = document.querySelector('#chatarea');
-    var currentMembers = document.querySelector('#currentlyInChat');
-    var yourConn;
-    var dataChannel;
-    callPage.style.display = "none";
-
-    var recordedVideo = document.querySelector('#recordedVideo');
-
-    ////Check ending session code and DOM handling--------------------------------------
-    var modalEndSess = document.getElementById('myModal');
-    var modalBtn = document.getElementById("modalBtn");
-    var outsideModal = document.getElementsByClassName("close")[0];
-
-    modalBtn.onclick = function () {
-        modalEndSess.style.display = "block";
-    }
     outsideModal.onclick = function () {
-        modalEndSess.style.display = "none";
-    }
+        $scope.turnOffModal();
+    };
     window.onclick = function (event) {
         if (event.target == modalEndSess) {
-            modalEndSess.style.display = "none";
+            $scope.turnOffModal();
         }
+    };
+    $scope.turnOffModal = function(){
+        modalEndSess.style.display = "none";
     }
+
+
+
 
     //hang up
     hangUpBtn.onclick = function () {
         modalEndSess.style.display = "block";
-    }
+    };
 
     var endSessionBtn = document.getElementById("endSessionBtn");
     endSessionBtn.addEventListener("click", function () {
@@ -201,227 +112,178 @@ app.controller("observerCtrl", function ($scope) {
         modalEndSess.style.display = "none";
     });
 
-    //-----------------------------------------------------
-
-
-    $scope.isRecording = true;
-    recordBtn.addEventListener("click", function (event) {
-        startRecording();
-        $scope.isRecording = !$scope.isRecording;
-        recordBtn.innerHTML = "Recording...";
-    });
-
-    endRecordBtn.addEventListener("click", function (event) {
-        stopRecording();
-        $scope.isRecording = !$scope.isRecording;
-        recordBtn.innerHTML = "<i class='fa fa-microphone' aria-hidden='true'></i> Record";
-    });
-
-    var myStream;
-    function handleLogin(success) {
-
-        if (success === false) {
-            alert("Ooops...try a different username");
-        } else {
-
-            if (hasUserMedia()) {
-
-                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia
-                    || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-                // //get audio and video streams
-                navigator.getUserMedia({video: true, audio: false}, function (stream) {
-
-
-                    // setUpMediaRecorder(stream);
-
-                    myStream = stream;
-                    setUpMediaRecorderHost(stream);
-                    var lVideo = document.querySelector("#local");
-                    var rVideo = document.querySelector("#remote");
-                    lVideo.src = window.URL.createObjectURL(stream);
-
-                    setUpConnection(stream, lVideo, rVideo);
-                    setUpDataChannel();
-                    console.log(dataChannel);
-
-
-                }, function (err) {
-                    console.log("getUserMediaError", err);
-                });
+    //----------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
+    var configuration = {
+        "iceServers": [
+            {
+                'urls': ['stun:stun.services.mozilla.com', 'stun:stun2.1.google.com:19302']
+            },
+            {
+                urls: guestHostService.numbCredentials()[0],
+                username: guestHostService.numbCredentials()[1],
+                credential: guestHostService.numbCredentials()[2]
             }
-        }
+        ]
+    };
+    var rtcPeerConnection = RTCPeerConnection || webkitRTCPeerConnection || mozRTCPeerConnection || msRTCPeerConnection;
+
+    function handleLogin(success) {
+        navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(function (stream) {
+            var lVideo = document.querySelector("#local");
+            var rVideo = document.querySelector("#remote");
+            guestConn = new rtcPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
+            guestConn.ondatachannel = connectionOnDataChannel;
+            guestConn.addStream(stream);
+            guestConn.addEventListener("addstream", function (e) {
+                console.log("received Stream from guest");
+                lVideo.src = window.URL.createObjectURL(e.stream);
+                lVideo.muted = false;
+            });
+            guestConn.onicecandidate = guestOnIceCandidate;
+
+            guestChannel = guestConn.createDataChannel("channel1", {reliable: true});
+            guestChannel.onerror = printError;
+            guestChannel.onmessage = dataChannelMessage;
+            guestChannel.onclose = dataChannelClose;
+            guestChannel.onopen = dataChannelOpen;
+
+
+            hostConn = new rtcPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
+            hostConn.ondatachannel = connectionOnDataChannel;
+            hostConn.addStream(stream);
+            hostConn.addEventListener("addstream", function (e) {
+                console.log("received Stream from host");
+                rVideo.src = window.URL.createObjectURL(e.stream);
+                rVideo.muted = true;
+            });
+            // Setup ice handling
+            hostConn.onicecandidate = hostOnIceCandidate;
+
+            hostChannel = hostConn.createDataChannel("channel1", {reliable: true});
+            hostChannel.onerror = printError;
+            hostChannel.onmessage = dataChannelMessage;
+            hostChannel.onclose = dataChannelClose;
+            hostChannel.onopen = dataChannelOpen;
+        });
+
     };
 
 
-    var setUpConnection = function (stream, lVideo, rVideo) {
-        var configuration = {
-            "iceServers": [{'urls': 'stun:stun.services.mozilla.com'}, {"urls": "stun:stun2.1.google.com:19302"}]
+    var connectionOnDataChannel = function (e) {
+        receiveChannel = e.channel;
+        console.log("new channel received: ", e.channel);
+        receiveChannel.onmessage = function (e) {
+            var obj = JSON.parse(e.data);
+            chatArea.innerHTML += obj.name + ": " + obj.message + "<br />";
         };
-        var rtcPeerConnection = RTCPeerConnection || webkitRTCPeerConnection || mozRTCPeerConnection || msRTCPeerConnection;
-        yourConn = new rtcPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
-        yourConn.ondatachannel = function (e) {
-            receiveChannel = e.channel;
-            console.log(e.channel);
-            receiveChannel.onmessage = function (e) {
-                var obj = JSON.parse(e.data);
-                chatArea.innerHTML += obj.name + ": " + obj.message + "<br />";
-            }
-        }
-
-        yourConn.addStream(stream);
-        yourConn.addEventListener("addstream", function (e) {
-            console.log("adding streams", e);
-            //rVideo.src = window.URL.createObjectURL(stream);
-            lVideo.src = window.URL.createObjectURL(e.stream);
-            //setUpMediaRecorder(e.stream,myStream);
-        });
-
-
-        // Setup ice handling
-        yourConn.onicecandidate = function (event) {
-            if (event.candidate) {
-                send({
-                    type: "candidate",
-                    candidate: JSON.stringify(event.candidate)
-                });
-            }
-        };
-
-    }
-    var setUpDataChannel = function () {
-        dataChannel = yourConn.createDataChannel("channel1", {reliable: true});
-
-        dataChannel.onerror = function (error) {
-            console.log("Ooops...error:", error);
-        };
-
-        //when we receive a message from the other peer, display it on the screen
-        dataChannel.onmessage = function (event) {
-            chatArea.innerHTML += connectedUser + ": " + event.data + "<br />";
-        };
-
-        dataChannel.onclose = function () {
-            console.log("data channel is closed");
-        };
-    }
-
-    var chunks = [];
-    var mediaRecorder;
-    var blobGuest;
-
-    function setUpMediaRecorder(streamGuest,streamHost) {
-        console.log("streamHost");
-        console.log(streamHost);
-        console.log(streamHost.getTracks());
-        mediaRecorder = new MediaRecorder([streamGuest,streamHost.getTracks()[0]]);
-
-        // mediaRecorder = new MediaRecorder([streamGuest.getTracks()[0],streamGuest.getTracks()[1],streamHost.getTracks()[0]]);
-
-
-        // mediaRecorder = new MediaRecorder(streamGuest);
-        mediaRecorder.ondataavailable = function (e) {
-            console.log("data is available");
-            chunks.push(e.data);
-        }
-        mediaRecorder.onstop = function (e) {
-            console.log("recorder stopped");
-            console.log(mediaRecorder.state);
-            blobGuest = new Blob(chunks, {'type': 'video/ogg; codecs=opus'});
-            recordedVideo.src = window.URL.createObjectURL(blobGuest);
-            // var tmp = record(new MediaStream([blobGuest, blobHost]),10000);
-
-            recordedVideo.src = window.URL.createObjectURL(tmp);
-            chunks = [];
-
-        }
-        //console.log(mediaRecorder);
-    }
-
-
-    var chunkHost = [];
-    var mediaRecorderHost;
-    var blobHost;
-
-
-    function setUpMediaRecorderHost(stream) {
-        mediaRecorderHost = new MediaRecorder(stream);
-        mediaRecorderHost.ondataavailable = function (e) {
-            console.log("data is available");
-            chunkHost.push(e.data);
-            chunks.push(e.data);
-        }
-        mediaRecorderHost.onstop = function (e) {
-            blobHost = new Blob(chunkHost, {'type': 'video/ogg; codecs=opus'});
-            // recordedVideo.src = window.URL.createObjectURL(blob);
-            chunkHost = [];
-
-        }
-    }
-
-    var startRecording = function () {
-        mediaRecorder.start();
-        mediaRecorderHost.start();
-        console.log(mediaRecorder.state);
-    }
-    var stopRecording = function () {
-        mediaRecorderHost.stop();
-
-        setTimeout(function () {
-            mediaRecorder.stop();
-            $scope.message = "Video Recorded. Press save button to store recording."
-
-        }, 5000);
-
-    }
-
-    callBtn.addEventListener("click", function () {
-        yourConn.createOffer(function (offer) {
+    };
+    var guestOnIceCandidate = function (event) {
+        console.log("ICE Candidate received: ", event);
+        if (event.candidate) {
             send({
-                type: "offer",
-                offer: JSON.stringify(offer)
+                type: "candidate",
+                candidate: JSON.stringify(event.candidate),
+                room: $scope.myRoom,
+                sendTo : "guest"
             });
-            console.log("offer", offer);
-            yourConn.setLocalDescription(offer);
-        }, function (error) {
-            alert("Error when creating an offer");
-        });
-    });
+        }
+    };
+    var hostOnIceCandidate = function (event) {
+        console.log("ICE Candidate received: ", event);
+        if (event.candidate) {
+            send({
+                type: "candidate",
+                candidate: JSON.stringify(event.candidate),
+                room: $scope.myRoom,
+                sendTo : "host"
+            });
+        }
+    };
+    var printError = function (error) {
+        console.log("Ooops...error:", error);
+    };
+    var dataChannelMessage = function (event) {
+        chatArea.innerHTML += "tmp: " + event.data + "<br />";
+    };
+    var dataChannelClose = function () {
+        console.log("data channel is closed");
+    };
+    var dataChannelOpen = function (a) {
+        console.log("data channel is open" + a);
+    };
 
 
-    //when somebody sends us an offer
-    function handleOffer(offer, name) {
-        connectedUser = name;
-        yourConn.setRemoteDescription(new RTCSessionDescription(offer));
-        console.log("1111111111111111111111");
-        //create an answer to an offer
-        yourConn.createAnswer(function (answer) {
-            yourConn.setLocalDescription(answer);
+
+
+
+//when somebody sends us an offer
+    function handleOffer(data) {
+        if (data.role == "host") {
+            connectionHandleOffer(data, hostConn);
+        } else if (data.role == "guest") {
+            connectionHandleOffer(data, guestConn);
+        }else{
+            console.log("no role defined: Offer");
+        }
+    };
+
+    function connectionHandleOffer(data, connection){
+        var offer = JSON.parse(data.offer);
+        connection.setRemoteDescription(new RTCSessionDescription(offer));
+        connection.createAnswer(function (answer) {
+            connection.setLocalDescription(answer);
             send({
                 type: "answer",
-                answer: JSON.stringify(answer)
+                answer: JSON.stringify(answer),
+                room: $scope.myRoom,
+                sendTo : data.role
             });
         }, function (error) {
             alert("Error when creating an answer");
         });
+    }
 
+//when we got an answer from a remote user
+    function handleAnswer(data) {
+        var answer = JSON.parse(data.answer);
+        if (data.role == "host") {
+            hostConn.setRemoteDescription(new RTCSessionDescription(answer));
+        } else if (data.role == "guest") {
+            guestConn.setRemoteDescription(new RTCSessionDescription(answer));
+        }else{
+            console.log("no role defined: Answer");
+        }
     };
 
-    //when we got an answer from a remote user
-    function handleAnswer(answer) {
-        yourConn.setRemoteDescription(new RTCSessionDescription(answer));
-    };
-
-    //when we got an ice candidate from a remote user
-    function handleCandidate(candidate) {
-        console.log("candidate", candidate);
-        yourConn.addIceCandidate(new RTCIceCandidate(candidate));
+//when we got an ice candidate from a remote user
+    function handleCandidate(data) {
+        var candidate = JSON.parse(data.candidate);
+        console.log("candidate:  asdfasdfasdfasdfasdf",candidate);
+        if (data.role == "host") {
+            hostConn.addIceCandidate(new RTCIceCandidate(candidate));
+        } else if (data.role == "guest") {
+            guestConn.addIceCandidate(new RTCIceCandidate(candidate)).then(function(val){
+                console.log("addIceCandidate promise? ", val);
+            }).catch(function(err){
+                console.log("addIceCandidate Error: ", err);
+            });
+        }else{
+            console.log("no role defined: Candidate");
+        }
     };
 
 
     function handleLeave() {
-        connectedUser = null;
-        yourConn.close();
-        yourConn.onicecandidate = null;
+        if(hostConn){
+            hostConn.close();
+            hostConn.onicecandidate = null;
+        }
+        if(guestConn){
+            guestConn.close();
+            guestConn.onicecandidate = null;
+        }
     };
 
 
@@ -435,27 +297,60 @@ app.controller("observerCtrl", function ($scope) {
     };
 
 
-    //when user clicks the "send message" button
+//when user clicks the "send message" button
     sendMsgBtn.addEventListener("click", function (event) {
         // var val = msgInput.value;
         var val = {
             type: "chatMessage",
             message: msgInput.value,
-            name: "host"
+            name: $scope.myName,
+            room: $scope.myRoom
         };
         chatArea.innerHTML += val.name + ": " + val.message + "<br />";
-        console.log("dataChannel: ", dataChannel);
-        //sending a message to a connected peer
-        dataChannel.send(JSON.stringify(val));
+        hostChannel.send(JSON.stringify(val));
+        guestChannel.send(JSON.stringify(val));
+
         console.log("sent message", val);
         msgInput.value = "";
     });
 
 
-    //___________________________________________________________________________________
-    //video handling
-    var videoTrack;
-    var mediaStream;
+    callBtn.addEventListener("click", function () {
+
+        hostConn.createOffer(function (offer) {
+            console.log("sending an offer with HOSTConn");
+            send({
+                type: "offer",
+                offer: JSON.stringify(offer),
+                room: $scope.myRoom,
+                sendTo : "guest"
+            });
+            // console.log("offer", offer);
+            hostConn.setLocalDescription(offer);
+        }, function (error) {
+            if (error) {
+                alert("Error when creating an offer");
+            }
+        });
+
+        guestConn.createOffer(function (offer) {
+            console.log("sending an offer with guestConn");
+            send({
+                type: "offer",
+                offer: JSON.stringify(offer),
+                room: $scope.myRoom,
+                sendTo : "guest"
+            });
+            // console.log("offer", offer);
+            guestConn.setLocalDescription(offer);
+        }, function (error) {
+            if (error) {
+                alert("Error when creating an offer");
+            }
+        });
+
+
+    });
 
 
 });
