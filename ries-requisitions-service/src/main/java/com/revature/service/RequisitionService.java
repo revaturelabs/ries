@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -30,4 +31,6 @@ public class RequisitionService {
     public void deleteById(Integer id) { dao.delete(id); }
 
     public void delete(Requisition requisition) { dao.delete(requisition); }
+
+    public List<Requisition> getAllOutdated(Date d){ return dao.findByReqInterviewDateLess_Than(d); }
 }

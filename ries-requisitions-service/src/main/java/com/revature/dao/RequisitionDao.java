@@ -4,6 +4,7 @@ import com.revature.domain.Requisition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -14,4 +15,6 @@ public interface RequisitionDao extends JpaRepository<Requisition, Integer> {
     List<Requisition> findByReqRecruiter(String reqRecruiter);
 
     List<Requisition> findByReqHost(String reqHost);
+
+    List<Requisition> findByReqInterviewDateLess_Than(Date d);
 }
