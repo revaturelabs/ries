@@ -64,4 +64,8 @@ security:
       grant-type: authentication-code
     resource:
       user-info-uri: ${salesforce.oauth2-url}/userinfo
+<<<<<<< Updated upstream
   login-default-redirect-url: http://ec2-13-58-97-184.us-east-2.compute.amazonaws.com:3001/home
+=======
+  login-default-redirect-url: http://ec2-13-58-97-184.us-east-2.compute.amazonaws.com:3001/session
+>>>>>>> Stashed changes
