@@ -18,8 +18,8 @@ import java.util.*;
 public class WebSocketHandler extends TextWebSocketHandler {
 
     WebSocketSession session;
-    private static Set<WebSocketSession> clients =
-            Collections.synchronizedSet(new HashSet<WebSocketSession>());
+//    private static Set<WebSocketSession> clients =
+//            Collections.synchronizedSet(new HashSet<WebSocketSession>());
 
     private static ArrayList<String> names = new ArrayList<String>();
 
@@ -32,7 +32,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         System.out.println("Connection established");
         this.session = session;
         System.out.println(session);
-        clients.add(session);
+//        clients.add(session);
         //session.sendMessage(new TextMessage("connected to server"));
     }
 
@@ -40,9 +40,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 
-        clients.remove(session);
+        Iterator<User> iter = clientArray.iterator();
+        while(iter.hasNext()){
+            if(iter.next().equals(session)){
+                iter.remove();
+                session.close();
+            }
+        }
         System.out.println("User has left the session: " + session);
-
     }
 
 
@@ -55,7 +60,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         switch (msg.getType()) {
             case "login":
 
-                User user = new User(msg.getRoom(), session, msg.getName());
+                User user = new User(msg.getRoom(), session, msg.getName(), msg.getRole());
                 clientArray.add(user);
 
 
@@ -96,16 +101,24 @@ public class WebSocketHandler extends TextWebSocketHandler {
             // Iterate over the connected sessions
             // and broadcast the received message
             System.out.println(msg.toString());
-            System.out.println("____________________________________________________________________");
-            System.out.println();
-
             List<WebSocketSession> clients = new ArrayList<>();
             for (User u : clientArray) {
                 if (u.getRoom().equals(msg.getRoom())) {
-                    clients.add(u.getSession());
+                    if(msg.getSendTo() != null){
+                        if(msg.getSendTo().equals(u.getRole())){
+                            clients.add(u.getSession());
+                        }
+                    }else{
+                        clients.add(u.getSession());
+                    }
                 }
             }
+            System.out.println("Sent to "+clients.size() +" client(s)");
             System.out.println(clients.toString());
+            System.out.println("____________________________________________________________________");
+
+
+
             String jsonLogin = gson.toJson(msg);
             if (!toAll) {
                 for (WebSocketSession client : clients) {

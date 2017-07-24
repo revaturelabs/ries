@@ -17,6 +17,10 @@ public class Message {
     private String message;
     private boolean success;
     private String room;
+    private String role;
+    private String sendTo;
+
+
     private ArrayList<String> members = new ArrayList<String>();
 
     public Message() {
@@ -27,6 +31,21 @@ public class Message {
         this.message = message;
     }
 
+    public String getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(String sendTo) {
+        this.sendTo = sendTo;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public void addToMembers(String str){
         members.add(str);
@@ -116,15 +135,17 @@ public class Message {
     public String toString() {
         return "Message{" +
                 "type='" + type + '\'' +
-                ", data='" + data + '\'' +
+                ", room='" + room + '\'' +
+                ", role='" + role + '\'' +
+                ", sendTo='" + sendTo + '\'' +
                 ", name='" + name + '\'' +
                 ", offer='" + offer + '\'' +
                 ", answer='" + answer + '\'' +
-                ", candidate='" + candidate + '\'' +
                 ", message='" + message + '\'' +
-                ", success=" + success +
-                ", room='" + room + '\'' +
-                ", members=" + members +
+                ", success=" + success + '\'' +
+                ", members=" + members + '\'' +
+                ", candidate='" + candidate + '\'' +
+                ", data='" + data + '\'' +
                 '}';
     }
 }
