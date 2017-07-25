@@ -491,7 +491,6 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     $scope.saveRecording = function () {
 
         $scope.download();
-
         signalingService.saveRecording($scope.Recording)
             .then(function(response) {
                 $scope.feedback = response.data;
