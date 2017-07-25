@@ -80,9 +80,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 names.add(msg.getName());
                 session.sendMessage(new TextMessage(jsonLogin));
 
-                msg.setType("newMember");
-                msg.setMembers(names);
-                sendMessage(session, msg, gson, true);
+//                msg.setType("newMember");
+//                msg.setMembers(names);
+//                sendMessage(session, msg, gson, true);
+
+                updateChatMembers(session, msg, gson);
                 break;
             case "offer":
                 sendMessage(session, msg, gson, false);
