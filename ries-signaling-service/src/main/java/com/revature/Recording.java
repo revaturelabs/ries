@@ -7,11 +7,20 @@ import java.io.File;
  */
 public class Recording {
     private String name;
-    private File file;
+    private String fileDirectory;
     private String accessKeyId;
     private String secretKey;
+    private File file;
 
     public Recording() {
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 
     public String getAccessKeyId() {
@@ -38,19 +47,18 @@ public class Recording {
         this.name = name;
     }
 
-    public File getFile() {
-        return file;
+    public String getFileDirectory() {
+        return fileDirectory;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setFileDirectory(String fileDirectory) {
+        this.fileDirectory = fileDirectory;
     }
-
     @Override
     public String toString() {
         return "Recording{" +
                 "name='" + name + '\'' +
-                ", file=" + file +
+                ", file=" + fileDirectory +
                 ", accessKeyId='" + accessKeyId + '\'' +
                 ", secretKey='" + secretKey + '\'' +
                 '}';
