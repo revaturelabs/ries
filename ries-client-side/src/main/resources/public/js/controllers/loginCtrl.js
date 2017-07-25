@@ -6,7 +6,7 @@ var app = angular.module("RIESApp");
 app.controller("loginCtrl", function($scope, $state, $window){
 
     $scope.goToSalesForceLogin = function(){
-         $window.location.href = "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/test/localhost/3001";
+        $window.location.href = "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/test/localhost/3001";
         //$window.location.href = "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com";
     };
 

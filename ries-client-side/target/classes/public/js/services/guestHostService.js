@@ -67,9 +67,6 @@ app.service("guestHostService", function ($http, requisitionService) {
 
 
 
-
-
-
     this.setUpWebsocket = function (handleLogin, handleOffer, handleAnswer, handleCandidate, handleLeave, handleNewMember) {
         var conn = new WebSocket(this.getWebsocketEndPoint());
         conn.onopen = function () {

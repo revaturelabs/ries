@@ -59,6 +59,7 @@ public class User {
                 "room='" + room + '\'' +
                 ", session=" + session +
                 ", name='" + name + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

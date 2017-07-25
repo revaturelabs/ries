@@ -171,15 +171,20 @@
 
         <div id="callPage" class="call-page container-fluid" style="display:none">
             <div class="row">
-                <div class="col-md-6 col-md-offset-3 ">
+                <div class="col-md-3 col-md-offset-3">
                     <div style="text-align: center">
-                        <button ng-click="callGuest()" class="btn-primary btn">Call Guest</button>
-                        <button ng-click="callObs()" class="btn-primary btn">Call obs</button>
+                        <button id = "callGuestBtn" ng-click="callGuest()" class="btn">Begin Session</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button id="recordBtn" class = "btn btn-success" style = "display:none">
+                        <i class="fa fa-microphone" aria-hidden="true" ></i> Record
+                    </button>
+                    <button id="endRecordBtn" class="btn-danger btn" style = "display:none">End Recording</button>
+                </div>
+                <div class="col-md-3">
+                    <div style="text-align: center">
                         <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
-                        <button id="recordBtn" ng-class="{'btn-success': isRecording,'btn': isRecording}">
-                            <i class="fa fa-microphone" aria-hidden="true"></i> Record
-                        </button>
-                        <button id="endRecordBtn" class="btn-danger btn">End Recording</button>
                     </div>
                 </div>
             </div>

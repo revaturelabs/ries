@@ -3,30 +3,43 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostService) {
-
-
+app.controller("hostCtrl", function ($scope, $http, $state, signalingService, guestHostService) {
+    //____________________________________________________________________________________________________
+    //____________________________________________________________________________________________________
+    // ___________________________________________________________________________________________________
+    //Session selection, handle flow from selecting the room to enter
     $scope.myRequisistions = guestHostService.getAllRequisitions();
 
     $scope.isSelecting = true;
-    $scope.guestName = "";
+    $scope.guestName = "guest";
+    $scope.hostName = "host";
     $scope.selectSession = function(host,guest){
         $scope.myRoom = host + guest;
         $scope.guestName = guest;
+        $scope.hostName = host;
         $scope.isSelecting = false;
+        console.log("host: ", host, "guest: ", guest, "room: ", $scope.myRoom);
     };
     $scope.backtoSelection = function(){
-        $scope.isSelecting = true;
+        handleLeave();
+        $state.reload();
     };
-
-
 
 
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
+    // Session handling: handle communication between peers and with server (WebSocketHandler java class)
+
+
+    var guestConn;
+    var obsConn;
+    var guestChannel;
+    var obsChannel;
+
     var usernameInput = document.querySelector('#usernameInput');
     var callPage = document.querySelector('#callPage');
+
     var hangUpBtn = document.querySelector('#hangUpBtn');
     var msgInput = document.querySelector('#msgInput');
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
@@ -34,80 +47,25 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     var endRecordBtn = document.querySelector('#endRecordBtn');
     var chatArea = document.querySelector('#chatarea');
     var currentMembers = document.querySelector('#currentlyInChat');
-    var guestConn;
-    var obsConn;
-    var guestChannel;
-    var obsChannel;
-    callPage.style.display = "none";
     var recordedVideo = document.querySelector('#recordedVideo');
     var modalEndSess = document.getElementById('myModal');
-    //var modalBtn = document.getElementById("modalBtn");
     var outsideModal = document.getElementsByClassName("close")[0];
     $scope.myIpV4 = "no response yet...";
     $scope.feedback = "";
     $scope.isTesting = true;
     $scope.doneRecording = false;
-
-    var hostInfo = guestHostService.getHostInfo();
+    $scope.inSession = false;
+    $scope.isRecordingSession = false;
 
     //connecting to our signaling server
-    var conn = guestHostService.setUpWebsocket(handleLogin, handleOffer, handleAnswer, handleCandidate, handleLeave, handleNewMember);
-
+    if(conn){
+    }else{
+        var conn = guestHostService.setUpWebsocket(handleLogin, handleOffer, handleAnswer, handleCandidate, handleLeave, handleNewMember);
+    }
 
     window.addEventListener("beforeunload", function (event) {
         handleLeave();
     });
-
-    var testEquipmentStream = {};
-    var testChunk = [];
-
-    function setUpGenericMediaRecorder(stream) {
-
-        testEquipmentStream = new MediaRecorder(stream);
-        testEquipmentStream.ondataavailable = function (e) {
-            console.log("data ready");
-            testChunk.push(e.data);
-        }
-        testEquipmentStream.onstop = function (e) {
-            console.log("stopping...");
-            console.log("asdf", testEquipmentStream);
-            var blob = new Blob(testChunk, {'type': 'video/ogg; codecs=opus'});
-            var testResult = document.querySelector("#testResult");
-            testResult.src = window.URL.createObjectURL(blob);
-
-            testChunk = [];
-            return testEquipmentStream.blob;
-        }
-        return testEquipmentStream;
-    }
-
-    $scope.testEquipment = function () {
-        navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(function (stream) {
-            myStream = stream;
-            var testRecord = document.querySelector("#testRecord");
-            testRecord.src = window.URL.createObjectURL(myStream);
-            setUpGenericMediaRecorder(myStream);
-            testEquipmentStream.start();
-            $scope.isTesting = true;
-            document.querySelector('#startTestEquipment').innerHTML = "Recording...";
-        }).then(function (err) {
-            console.log(err);
-        });
-    };
-    $scope.endTest = function () {
-        var testBlob = testEquipmentStream.stop();
-        $scope.isTesting = false;
-        document.querySelector('#startTestEquipment').innerHTML = "Test Again?";
-    };
-    $scope.startSession = function () {
-        document.querySelector('#callPage').style.display = 'block';
-        document.querySelector('#equipmentTest').style.display = 'none';
-        send({
-            type: "login",
-            name: hostInfo.firstName + hostInfo.lastName,
-            room: $scope.myRoom
-        });
-    };
 
     //alias for sending JSON encoded messages
     function send(message) {
@@ -126,7 +84,8 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     };
     $scope.turnOffModal = function () {
         modalEndSess.style.display = "none";
-    }
+    };
+
     //hang up
     hangUpBtn.onclick = function () {
         modalEndSess.style.display = "block";
@@ -134,23 +93,25 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     var endSessionBtn = document.getElementById("endSessionBtn");
     endSessionBtn.addEventListener("click", function () {
         console.log("trying to end session...");
-        send({
-            type: "leave",
-            room: $scope.myRoom
-        });
+        // send({
+        //     type: "leave",
+        //     room: $scope.myRoom
+        // });
 
         handleLeave();
         modalEndSess.style.display = "none";
     });
-    $scope.isRecording = true;
+    // $scope.isRecording = true;
     recordBtn.addEventListener("click", function (event) {
+        recordBtn.style.display = 'none';
+        endRecordBtn.style.display = 'block';
         startRecording();
-        $scope.isRecording = !$scope.isRecording;
-        recordBtn.innerHTML = "Recording...";
+        // $scope.isRecording = !$scope.isRecording;
+
     });
     endRecordBtn.addEventListener("click", function (event) {
         stopRecording();
-        $scope.isRecording = !$scope.isRecording;
+        // $scope.isRecording = !$scope.isRecording;
         recordBtn.innerHTML = "<i class='fa fa-microphone' aria-hidden='true'></i> Record";
         $scope.doneRecording = true;
     });
@@ -167,8 +128,6 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
             }
         ]
     };
-
-
     var myStream;
 
     function handleLogin(success) {
@@ -255,8 +214,6 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
         }
     };
 
-
-
     var printError = function (error) {
         console.log("Ooops...error:", error);
     };
@@ -275,7 +232,7 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
 
     $scope.callGuest = function () {
         guestConn.createOffer(function (offer) {
-            console.log("sending an offer with guestConn")
+            console.log("sending an offer with guestConn");
             send({
                 type: "offer",
                 offer: JSON.stringify(offer),
@@ -284,31 +241,16 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
             });
             console.log("offer", offer);
             guestConn.setLocalDescription(offer);
+            document.getElementById('recordBtn').style.display = "block";
+            document.getElementById('callGuestBtn').style.display = "none";
+            $scope.inSession = true;
         }, function (error) {
             if (error) {
                 alert("Error when creating an offer");
             }
         });
-    };
 
-    $scope.callObs = function () {
-        obsConn.createOffer(function (offer) {
-            console.log("sending an offer with obsConn")
-            send({
-                type: "offer",
-                offer: JSON.stringify(offer),
-                room: $scope.myRoom,
-                sendTo : "observer"
-            });
-            // console.log("offer", offer);
-            obsConn.setLocalDescription(offer);
-        }, function (error) {
-            if (error) {
-                alert("Error when creating an offer");
-            }
-        });
     };
-
 
 //when somebody sends us an offer
     function handleOffer(data) {
@@ -375,11 +317,14 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     function handleLeave() {
         if(obsConn){
             obsConn.close();
-            obsConn.onicecandidate = null;
+            obsChannel.close();
+            obsConn = null;
+
         }
         if(guestConn){
             guestConn.close();
-            guestConn.onicecandidate = null;
+            guestChannel.close();
+            guestConn = null;
         }
     };
 
@@ -400,7 +345,7 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
         var val = {
             type: "chatMessage",
             message: msgInput.value,
-            name: hostInfo.firstName + hostInfo.lastName,
+            name: $scope.hostName,
             room: $scope.myRoom
         };
         chatArea.innerHTML += val.name + ": " + val.message + "<br />";
@@ -417,6 +362,59 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
+    //Recordings: handle equipment testing, guest and host recordings during session
+
+    var testEquipmentStream = {};
+    var testChunk = [];
+
+    function setUpGenericMediaRecorder(stream) {
+
+        testEquipmentStream = new MediaRecorder(stream);
+        testEquipmentStream.ondataavailable = function (e) {
+            console.log("data ready");
+            testChunk.push(e.data);
+        }
+        testEquipmentStream.onstop = function (e) {
+            console.log("stopping...");
+            console.log("asdf", testEquipmentStream);
+            var blob = new Blob(testChunk, {'type': 'video/ogg; codecs=opus'});
+            var testResult = document.querySelector("#testResult");
+            testResult.src = window.URL.createObjectURL(blob);
+
+            testChunk = [];
+            return testEquipmentStream.blob;
+        }
+        return testEquipmentStream;
+    }
+
+    $scope.testEquipment = function () {
+        navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(function (stream) {
+            myStream = stream;
+            var testRecord = document.querySelector("#testRecord");
+            testRecord.src = window.URL.createObjectURL(myStream);
+            setUpGenericMediaRecorder(myStream);
+            testEquipmentStream.start();
+            $scope.isTesting = true;
+            document.querySelector('#startTestEquipment').innerHTML = "Recording...";
+        }).then(function (err) {
+            console.log(err);
+        });
+    };
+    $scope.endTest = function () {
+        var testBlob = testEquipmentStream.stop();
+        $scope.isTesting = false;
+        document.querySelector('#startTestEquipment').innerHTML = "Test Again?";
+    };
+    $scope.startSession = function () {
+        document.querySelector('#callPage').style.display = 'block';
+        document.querySelector('#equipmentTest').style.display = 'none';
+        send({
+            type: "login",
+            name: $scope.hostName,
+            room: $scope.myRoom
+        });
+    };
+
 
     var chunks = [];
     var mediaRecorder;
@@ -485,7 +483,11 @@ app.controller("hostCtrl", function ($scope, $http, signalingService, guestHostS
 
     };
 
-    //_____________________________________________________________________________________________________
+    //____________________________________________________________________________________________________
+    //____________________________________________________________________________________________________
+    // ___________________________________________________________________________________________________
+    //Logic for saving session to the bucket
+
     $scope.saveRecording = function () {
 
         //make file using blob object made during recording; add name and date fields to make it a file

@@ -39,15 +39,25 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-
+//        System.out.println("Removing session");
+//        System.out.println("Session closing: "+session);
+        for(User u: clientArray){
+            System.out.println(u.toString());
+        }
         Iterator<User> iter = clientArray.iterator();
         while(iter.hasNext()){
-            if(iter.next().equals(session)){
+            User tmp = iter.next();
+            if(tmp.getSession().equals(session)){
                 iter.remove();
                 session.close();
             }
         }
-        System.out.println("User has left the session: " + session);
+//        System.out.println("Current Sessions");
+//        for(User u: clientArray){
+//            System.out.println(u.toString());
+//        }
+//
+//        System.out.println("User has left the session: " + session);
     }
 
 
@@ -134,5 +144,26 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    public void updateChatMembers(WebSocketSession session, Message msg, Gson gson) throws IOException{
+        Message newMemberMessage = new Message();
+        newMemberMessage.setType("newMember");
+        ArrayList<String> membersInRoom = new ArrayList<String>();
 
+        //collect the names of the people in the room
+        for (User u : clientArray) {
+            if (u.getRoom().equals(msg.getRoom())) {
+                membersInRoom.add(u.getName());
+            }
+        }
+
+        newMemberMessage.setMembers(membersInRoom);
+        String jsonInString = gson.toJson(newMemberMessage);
+        TextMessage jsonMessage = new TextMessage(jsonInString);
+
+        for (User u : clientArray) {
+            if (u.getRoom().equals(msg.getRoom())) {
+                u.getSession().sendMessage(jsonMessage);
+            }
+        }
+    }
 }
