@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -16,5 +17,5 @@ public interface RequisitionDao extends JpaRepository<Requisition, Integer> {
 
     List<Requisition> findByReqHost(String reqHost);
 
-    List<Requisition> findByReqInterviewDateLess_Than(Date d);
+    List<Requisition> findByInterviewDateBefore(Timestamp d);
 }

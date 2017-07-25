@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -32,5 +33,8 @@ public class RequisitionService {
 
     public void delete(Requisition requisition) { dao.delete(requisition); }
 
-    public List<Requisition> getAllOutdated(Date d){ return dao.findByReqInterviewDateLess_Than(d); }
+    public List<Requisition> getAllOutdated(Date d){
+        Timestamp timestamp = new Timestamp(d.getTime());
+        return dao.findByInterviewDateBefore(timestamp);
+    }
 }
