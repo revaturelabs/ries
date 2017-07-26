@@ -5,7 +5,7 @@ var app = angular.module("RIESApp");
 
 
 app.service("signalingService", function ($http) {
-    var reqUrl = "https://ec2-13-58-151-115.us-east-2.compute.amazonaws.com/ries/signaling/";
+    var reqUrl = "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/signaling/signal";
     var self = this;
 
     self.saveRecording = function (data) {

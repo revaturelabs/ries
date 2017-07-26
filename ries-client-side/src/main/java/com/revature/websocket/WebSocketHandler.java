@@ -70,9 +70,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 names.add(msg.getName());
                 session.sendMessage(new TextMessage(jsonLogin));
 
-                msg.setType("newMember");
-                msg.setMembers(names);
-                sendMessage(session, msg, gson, true);
+                updateChatMembers(session, msg, gson);
                 break;
             case "offer":
                 sendMessage(session, msg, gson, false);
@@ -134,5 +132,26 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    public void updateChatMembers(WebSocketSession session, Message msg, Gson gson) throws IOException{
+        Message newMemberMessage = new Message();
+        newMemberMessage.setType("newMember");
+        ArrayList<String> membersInRoom = new ArrayList<String>();
 
+        //collect the names of the people in the room
+        for (User u : clientArray) {
+            if (u.getRoom().equals(msg.getRoom())) {
+                membersInRoom.add(u.getName());
+            }
+        }
+
+        newMemberMessage.setMembers(membersInRoom);
+        String jsonInString = gson.toJson(newMemberMessage);
+        TextMessage jsonMessage = new TextMessage(jsonInString);
+
+        for (User u : clientArray) {
+            if (u.getRoom().equals(msg.getRoom())) {
+                u.getSession().sendMessage(jsonMessage);
+            }
+        }
+    }
 }
