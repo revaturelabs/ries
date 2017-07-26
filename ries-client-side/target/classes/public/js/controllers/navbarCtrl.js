@@ -6,13 +6,16 @@ var app = angular.module("RIESApp");
 app.controller("navbarCtrl", function($scope, $state, $cookies, loginService, globalVarService){
 
     $scope.logout = function(){
-        loginService.employeeLogout(function(response){
-            consoloe.log("SUCCESS LOGGING OUT");
-            $cookies.remove('JSESSIONID');
-            $state.go('login');
-        }, function(response){
-            console.log("ERROR LOGGIN OUT");
-        });
+        // loginService.employeeLogout(function(response){
+        //     consoloe.log("SUCCESS LOGGING OUT");
+        //     $cookies.remove('JSESSIONID');
+        //     $state.go('login');
+        // }, function(response){
+        //     console.log("ERROR LOGGIN OUT");
+        // });
+
+        $cookies.remove('JSESSIONID');
+        $state.go('login');
     };
 
     $scope.goToHome = function(){
