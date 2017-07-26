@@ -35,27 +35,27 @@
             </div>
         </div>
     </div>
+    <div class="">
+        <div class="toolbar">
+            <h2>{{title}}</h2>
 
-    <div class="toolbar">
-        <h2>{{title}}</h2>
-
-        <div class="toolbar-inner">
-            <button type="button" class="btn btn-primary" ng-click="AddRequisitionButton()">Create Requisition</button>
-            <button type="button" class="btn btn-primary" ng-click="viewResolvedReq()">Resolved Requisitions</button>
-            <button type="button" class="btn btn-primary" ng-csv="formatRequisition()" filename="requisition.csv"><span class="glyphicon glyphicon-download-alt dlbutton" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary"><span class="dlbutton glyphicon glyphicon-filter dropbtn"></span>
-                    <div class="dropdown-content">
-                        <a ng-click="filterBy('All')">All</a>
-                        <a ng-clickc="filterBy('your')">My Requistions</a>
-                    </div>
-                </button>
+            <div class="toolbar-inner">
+                <button type="button" class="btn btn-primary" ng-click="AddRequisitionButton()">Create Requisition</button>
+                <button type="button" class="btn btn-primary" ng-click="viewResolvedReq()">Resolved Requisitions</button>
+                <button type="button" class="btn btn-primary " ng-csv="formatRequisition()" filename="requisition.csv"><span class="glyphicon glyphicon-download-alt dlbutton" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary dlbutton"><span class="glyphicon glyphicon-filter dropbtn dlbutton"></span>
+                        <div class="dropdown-content">
+                            <a ng-click="filterBy('All')">All</a>
+                            <a ng-clickc="filterBy('your')">My Requistions</a>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="table-responsive" id="reqExport">
-        <table class="table table-hover table-bordered table-condensed">
-            <thead class="thead-inverse">
+        <div class="table-responsive" id="reqExport">
+            <table class="table table-hover table-bordered table-condensed">
+                <thead class="thead-inverse">
                 <tr>
                     <th>#</th>
                     <th>ID</th>
@@ -65,9 +65,9 @@
                     <th>Guest</th>
                     <th>Recruiter</th>
                 </tr>
-            </thead>
+                </thead>
 
-            <tbody>
+                <tbody>
                 <tr>
                     <td>1</td>
                     <td>23</td>
@@ -86,7 +86,8 @@
                     <td>{{re.reqGuest}}</td>
                     <td>{{re.reqRecruiter.name}}</td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

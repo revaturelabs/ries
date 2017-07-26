@@ -1,9 +1,9 @@
-body{
+.riesBody{
     background-color: lightgray;
+    height:600px;
 }
 
 .riesContainer{
-    padding:10px;
     background-color: lightgray;
 }
 
@@ -11,6 +11,7 @@ body{
     padding: 10px;
     background-color:white;
 }
+
 
 
 /* CSS specifics for the navbar*/
@@ -92,8 +93,8 @@ body{
 
 /*CSS specifics for toolbars*/
 .toolbar{
-    background-color: lightgray;
-    color:black;
+    background-color: darkslategray;
+    color:white;
     padding:5px;
 }
 
@@ -133,4 +134,12 @@ body{
 
 .dlbutton{
     color: lime;
+}
+
+#reqHost{
+    height: 26px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: orangered;
+    border-style: inset;
 }

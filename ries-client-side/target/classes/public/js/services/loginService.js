@@ -9,6 +9,7 @@ app.service("loginService", function($http){
         $http({
             url:"https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/auth/guest/login",
             method:"POST",
+            headers:{'Content-Type': 'application/json'},
             data:{
                 'pin': pin
             }
