@@ -13,5 +13,6 @@
         <module>ries-auth-service</module>
         <module>ries-client-side</module>
         <module>ries-proxy-gateway</module>
+        <module>ries-requisitions-service</module>
     </modules>
 </project>

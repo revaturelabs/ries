@@ -17,7 +17,14 @@ public class CorsFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         logger.info("Received Request in CorsFilter");
-        response.addHeader("Access-Control-Allow-Origin","*");
+        String origin = request.getHeader("Origin");
+        if(origin != null && origin.contains("localhost")) {
+            response.addHeader("Access-Control-Allow-Origin", origin);
+        }
+        else {
+            response.addHeader("Access-Control-Allow-Origin", "http://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:3001");
+        }
+        response.addHeader("Access-Control-Allow-Credentials", "true");
 
         //check preflight
         /*preflights send certain headers
