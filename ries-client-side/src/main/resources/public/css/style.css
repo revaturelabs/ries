@@ -9,6 +9,9 @@
 
 .riesContent{
     background-color:white;
+    border-radius: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .riesTable{
@@ -98,10 +101,13 @@
     background-color: darkslategray;
     color:white;
     padding:5px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
 }
 
 .toolbar h2{
     text-align: left;
+    padding-left: 3%;
 }
 
 .toolbar button{
