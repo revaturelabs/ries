@@ -3,7 +3,7 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("addReqCtrl", function($scope, $state, $http, moment, globalVarService){
+app.controller("addReqCtrl", function($scope, $state, $http, moment, globalVarService, requisitionService, guestHostService){
     $scope.trainerList = globalVarService.getTrainerList();
     $scope.user = globalVarService.getUserInfo();
     console.log($scope.trainerList);
@@ -20,32 +20,40 @@ app.controller("addReqCtrl", function($scope, $state, $http, moment, globalVarSe
         // converts date to milliseconds
         var interviewDateMil = new Date($scope.interviewDate).getTime();
         console.log(interviewDateMil);
-        var requisitionObj = {
-            'guest' : {
+
+        var guestObj = {
                 'firstName' : $scope.guestFname,
                 'lastName' : $scope.guestLname,
                 'email' : $scope.guestEmail
-            },
-            'requisition' : {
+
+        };
+
+        var guestJson = angular.toJson(guestObj);
+        console.log(guestJson);
+
+        guestHostService.addGuest(guestJson, function(response){
+            console.log(response);
+            $scope.guest = response.data;
+
+            var requisObj = {
                 'interviewDate': interviewDateMil,
-                'reqHost': $scope.reqHost,
-                'reqRecruiter': $scope.recruiter
+                'reqHost': $scope.reqHost.employeeId,
+                'reqRecruiter': $scope.user.employeeId,
+                'reqGuest': $scope.guest.guestId
+            };
 
-        }};
+            var requisJson = angular.toJson(requisObj);
+            console.log(requisJson);
 
-        var requisJson = angular.toJson(requisitionObj);
-        $http({
-            method: 'POST',
-            url: 'http://localhost:8085/requisition/create',
-            data: requisJson,
-            headers: {'Content-Type': 'application/JSON'}
-        })
-            .then(function(res) {
-                console.log("data successfully sent");
+            requisitionService.addRequisition(requisJson, function(response){
+                console.log("SUCCESSFULLY MADE BOTH THE GUEST AND REQUISITION!!");
                 $state.go('requisitions');
-            }, function(err) {
-                console.log("shit");
+            }, function(response){
+                console.log("FAILED TO JUST CREATED A REQUISITION AFTER THE GUEST WAS SUCCESSFULLY MADE");
             });
+        }, function(response){
+            console.log("FAILED TO CREATED A GUEST AND THEREFORE FAILED REQUISITION AS WELL");
+        });
     };
 
     $scope.cancelButton = function(){

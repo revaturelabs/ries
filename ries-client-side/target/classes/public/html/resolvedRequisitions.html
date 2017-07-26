@@ -5,9 +5,9 @@
         <div class="toolbar-inner">
 
             <button type="button" class="btn btn-primary" ng-click="viewRequisitions()">Upcoming Requisitions</button>
-            <button type="button" class="btn btn-primary" ng-csv="formatRequisition()" filename="ResolvedReq.csv"><span class="glyphicon glyphicon-download-alt" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
+            <button type="button" class="btn btn-primary" ng-csv="formatRequisition()" filename="ResolvedReq.csv"><span class="glyphicon glyphicon-download-alt dlbutton" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
             <div class="dropdown">
-                <button type="button" class="btn btn-primary dlbutton"><span class="glyphicon glyphicon-filter dropbtn"></span>
+                <button type="button" class="btn btn-primary dlbutton"><span class="glyphicon glyphicon-filter dropbtn dlbutton"></span>
                     <div class="dropdown-content">
                         <a ng-click="filterBy('All')">All</a>
                         <a ng-clickc="filterBy('your')">My Requistions</a>
@@ -19,7 +19,7 @@
     </div>
 
 
-    <div class="table-responsive">
+    <div class="table-responsive riesTable" id="reqExport">
         <table class="table table-hover table-bordered table-condensed">
             <thead class="thead-inverse">
                 <tr>
@@ -35,16 +35,6 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>101</td>
-                    <td>07/17/2017</td>
-                    <td>10/25/2017</td>
-                    <td>Jhoan Osorno</td>
-                    <td>August Duet</td>
-                    <td>Rachna Tyagi</td>
-                    <td>Click me to watch interview</td>
-                </tr>
                 <tr ng-repeat="resReq in resolvedReqs">
                     <td>{{$index + 1}}</td>
                     <td>{{resReq.id}}</td>

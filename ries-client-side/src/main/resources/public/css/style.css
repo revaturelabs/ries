@@ -4,13 +4,16 @@
 
 .riesContainer{
     background-color: lightgray;
+    padding: 10px;
 }
 
 .riesContent{
-    padding: 10px;
     background-color:white;
 }
 
+.riesTable{
+    padding: 2px;
+}
 
 
 /* CSS specifics for the navbar*/

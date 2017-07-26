@@ -39,4 +39,13 @@ app.service("requisitionService", function($http, $cookies){
         });
         return promise;
     };
+
+    self.addRequisition = function(requisition, done, err){
+        $http({
+            method:"POST",
+            url:"https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/requisition/requisition/create",
+            headers: {'Content-Type': 'application/JSON'},
+            data:requisition
+        }).then(done,err);
+    }
 });

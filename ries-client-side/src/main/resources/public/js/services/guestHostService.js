@@ -13,6 +13,14 @@ app.service("guestHostService", function ($http, requisitionService) {
         return 'ws://localhost:3001/socket';
     };
 
+    this.addGuest = function(guest, done, err){
+        $http({
+            method:"POST",
+            url:"https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/auth/guest",
+            headers: {'Content-Type': 'application/JSON'},
+            data:guest
+        }).then(done,err);
+    };
 
     this.getAllRequisitions = function () {
 

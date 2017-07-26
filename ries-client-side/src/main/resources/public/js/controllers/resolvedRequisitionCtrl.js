@@ -4,7 +4,7 @@
 var app = angular.module("RIESApp");
 
 app.controller("resolvedReqCtrl", function($scope, $state, $window, resolvedReqService){
-    $scope.title = "Resolved Requisition's";
+    $scope.title = "Resolved Requisitions";
     $scope.resolvedReqs = [];
 
     resolvedReqService.getAllResolvedReqs().then(function(res){

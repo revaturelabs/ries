@@ -44,7 +44,7 @@
                 <button type="button" class="btn btn-primary" ng-click="viewResolvedReq()">Resolved Requisitions</button>
                 <button type="button" class="btn btn-primary " ng-csv="formatRequisition()" filename="requisition.csv"><span class="glyphicon glyphicon-download-alt dlbutton" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
                 <div class="dropdown">
-                    <button type="button" class="btn btn-primary dlbutton"><span class="glyphicon glyphicon-filter dropbtn dlbutton"></span>
+                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-filter dropbtn dlbutton"></span>
                         <div class="dropdown-content">
                             <a ng-click="filterBy('All')">All</a>
                             <a ng-clickc="filterBy('your')">My Requistions</a>
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive" id="reqExport">
+        <div class="table-responsive riesTable" id="reqExport">
             <table class="table table-hover table-bordered table-condensed">
                 <thead class="thead-inverse">
                 <tr>
@@ -68,24 +68,15 @@
                 </thead>
 
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>23</td>
-                    <td>7/16/2017</td>
-                    <td>7/17/2017</td>
-                    <td>August Duet</td>
-                    <td>Jhaon Osorno</td>
-                    <td>Rachna Tyagi</td>
-                </tr>
-                <tr ng-repeat="re in requisitionList" data-toggle="modal" data-target="#urlModal" ng-click="selectReq(re)" scope="row">
-                    <td>{{$index + 1}}</td>
-                    <td>{{re.reqId}}</td>
-                    <td>{{re.createDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
-                    <td>{{re.interviewDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
-                    <td>{{re.reqHost.name}}</td>
-                    <td>{{re.reqGuest}}</td>
-                    <td>{{re.reqRecruiter.name}}</td>
-                </tr>
+                    <tr ng-repeat="re in requisitionList" data-toggle="modal" data-target="#urlModal" ng-click="selectReq(re)" scope="row">
+                        <td>{{$index + 1}}</td>
+                        <td>{{re.reqId}}</td>
+                        <td>{{re.createDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
+                        <td>{{re.interviewDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
+                        <td>{{re.reqHost.name}}</td>
+                        <td>{{re.reqGuest}}</td>
+                        <td>{{re.reqRecruiter.name}}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
