@@ -1,7 +1,3 @@
-<style>
-
-</style>
-
 <div ng-controller="requisitionCtrl">
 
     <div class="modal fade" id="urlModal" tabindex="-1" role="dialog" aria-labelledby="detailModalTitle" aria-hidden="true">
@@ -46,12 +42,12 @@
         <div class="toolbar-inner">
             <button type="button" class="btn btn-primary" ng-click="AddRequisitionButton()">Create Requisition</button>
             <button type="button" class="btn btn-primary" ng-click="viewResolvedReq()">Resolved Requisitions</button>
-            <button type="button" class="btn btn-primary" ng-csv="formatRequisition()" filename="requisition.csv"><span id="dlbutton" class="glyphicon glyphicon-download-alt" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
+            <button type="button" class="btn btn-primary dlbutton" ng-csv="formatRequisition()" filename="requisition.csv"><span class="glyphicon glyphicon-download-alt" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
             <div class="dropdown">
-                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-filter dropbtn"></span>
+                <button type="button" class="btn btn-primary dlbutton"><span class="glyphicon glyphicon-filter dropbtn"></span>
                     <div class="dropdown-content">
-                        <a ng-click="allReq()">All</a>
-                        <a ng-clickc="yourReq()">My Requistions</a>
+                        <a ng-click="filterBy('All')">All</a>
+                        <a ng-clickc="filterBy('your')">My Requistions</a>
                     </div>
                 </button>
             </div>
@@ -62,7 +58,6 @@
             <thead class="thead-inverse">
                 <tr>
                     <th>#</th>
-                    <!--<th>Edit</th>-->
                     <th>ID</th>
                     <th>Create Date</th>
                     <th>Interview Date</th>
@@ -82,19 +77,16 @@
                     <td>Jhaon Osorno</td>
                     <td>Rachna Tyagi</td>
                 </tr>
-                <tr ng-repeat="re in requisitions" data-toggle="modal" data-target="#urlModal" ng-click="selectReq(re)" scope="row">
+                <tr ng-repeat="re in requisitionList" data-toggle="modal" data-target="#urlModal" ng-click="selectReq(re)" scope="row">
                     <td>{{$index + 1}}</td>
-                    <!--<td> <button type="button" class="btn btn-primary" ng-click="goToRequisition('re.reqId')">Edit</button></td>-->
                     <td>{{re.reqId}}</td>
                     <td>{{re.createDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
                     <td>{{re.interviewDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
-                    <td>{{re.reqHost}}</td>
+                    <td>{{re.reqHost.name}}</td>
                     <td>{{re.reqGuest}}</td>
-                    <td>{{re.reqRecruiter}}</td>
+                    <td>{{re.reqRecruiter.name}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-
 </div>

@@ -4,7 +4,6 @@
 var app = angular.module("RIESApp");
 
 app.service("infoService", function($http){
-
     var self = this;
 
     self.getAllTrainers = function(done, err){
@@ -21,7 +20,13 @@ app.service("infoService", function($http){
             url:"https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/recruiters"
             //url:""
         }).then(done,err);
+    };
 
+    self.getAllGuests = function(done, err){
+        $http({
+            method:"GET",
+            url:"https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/guests"
+        }).then(done,err);
     };
 
     self.getUserInfo = function(done, err){
@@ -30,6 +35,5 @@ app.service("infoService", function($http){
             url:"https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/userinfo"
             //url:""
         }).then(done,err);
-
     };
 });

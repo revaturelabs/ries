@@ -3,7 +3,11 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("addReqCtrl", function($scope, $state, $http, moment){
+app.controller("addReqCtrl", function($scope, $state, $http, moment, globalVarService){
+    $scope.trainerList = globalVarService.getTrainerList();
+    $scope.user = globalVarService.getUserInfo();
+    console.log($scope.trainerList);
+
     $http.defaults.headers.post["Content-Type"] = "text/plain";
 
     $scope.interviewDatePopup = false;

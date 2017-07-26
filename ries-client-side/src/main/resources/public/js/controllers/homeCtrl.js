@@ -1,4 +1,4 @@
-app.controller("homeCtrl", function(moment, calendarConfig, requisitionService, infoService, trainers, userInfo, recruiters){
+app.controller("homeCtrl", function(moment, calendarConfig, requisitionService){
 
     var vm = this;
     //Array for storing all of the requisitions

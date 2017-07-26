@@ -1,7 +1,7 @@
 /**
  * Created by scott on 7/19/2017.
  */
-var app = angular.module("RIESApp")
+var app = angular.module("RIESApp");
 
 
 app.service("signalingService", function ($http) {

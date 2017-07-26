@@ -3,40 +3,9 @@
  */
 var app = angular.module("RIESApp", ['ui.router','ngSanitize', 'ngCsv','mwl.calendar', 'ui.bootstrap', 'ngCookies']);
 
-// app.constant("employees",[{
-//         employeeId:"005g0000004JNzlAAG",
-//         name:"Test Trainer",
-//         nickname:"test_trainer1",
-//         password:"abcd",
-//         email:"keving@revature.com",
-//         firstName:"Test",
-//         lastName:"Trainer",
-//         picture:"https://revature--INT1--c.cs17.content.force.com/profilephoto/005/F",
-//         thumbnail:"https://revature--INT1--c.cs17.content.force.com/profilephoto/005/T",
-//         role:{
-//             roleId:"00Ei0000000ccV0EAI",
-//             name:"Trainers"
-//             }
-//         },{
-//         employeeId:"006g000005JNz1AAG",
-//         name:"Test Recruiter",
-//         nickname:"test_recruiter1",
-//         password:"abcd",
-//         email:"esteban@revature.com",
-//         firstname:"Test",
-//         lastname:"Recruiter",
-//         picture:"something",
-//         thumbnail:"something else",
-//         role:{
-//             "roleId":"00Ei0000000Gcu3EAC",
-//             "name":"Training Recruiters"
-//         }
-//     }]
-// );
-
-app.value('trainers', []);
-app.value('userInfo',{});
-app.value('recruiters',[]);
+// app.value('trainers', []);
+// app.value('userInfo',{});
+// app.value('recruiters',[]);
 
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
 

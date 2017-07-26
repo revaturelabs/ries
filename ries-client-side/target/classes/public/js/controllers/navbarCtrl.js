@@ -3,7 +3,7 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("navbarCtrl", function($scope, $state, $cookies){
+app.controller("navbarCtrl", function($scope, $state, $cookies, globalVarService){
 
     $scope.logout = function(){
         $cookies.remove('JSESSIONID');
@@ -42,7 +42,23 @@ app.controller("navbarCtrl", function($scope, $state, $cookies){
         $state.go('addRequisition');
     };
 
-    $scope.hideTab = function(){
+    $scope.hideFromTrainer = function(){
+        // var role = globalVarService.getUserRole();
+        // if (role === "00Ei0000000Gcu3EAC"){
+        //     return true;
+        // }
+        // else{
+        //     return false;
+        // }/
+    };
 
+    $scope.hideFromRecruiter = function(){
+      // var role = globalVarService.getUserRole();
+      // if(role === "00Ei0000000ccV0EAI"){
+      //     return true;
+      // }
+      // else{
+      //     return false;
+      // }
     };
 });

@@ -1,10 +1,23 @@
 <div ng-controller="resolvedReqCtrl">
-    <h2>{{title}}</h2>
+    <div class="toolbar">
+        <h2>{{title}}</h2>
 
-    <div class="row">
-        <button type="button" class="btn btn-primary" ng-click="viewRequisitions()">Upcoming Requisitions</button>
-        <button type="button" class="btn btn-primary" ng-csv="formatRequisition()" filename="ResolvedReq.csv"><span class="glyphicon glyphicon-download-alt" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
+        <div class="toolbar-inner">
+
+            <button type="button" class="btn btn-primary" ng-click="viewRequisitions()">Upcoming Requisitions</button>
+            <button type="button" class="btn btn-primary" ng-csv="formatRequisition()" filename="ResolvedReq.csv"><span class="glyphicon glyphicon-download-alt" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
+            <div class="dropdown">
+                <button type="button" class="btn btn-primary dlbutton"><span class="glyphicon glyphicon-filter dropbtn"></span>
+                    <div class="dropdown-content">
+                        <a ng-click="filterBy('All')">All</a>
+                        <a ng-clickc="filterBy('your')">My Requistions</a>
+                    </div>
+                </button>
+            </div>
+        </div>
+
     </div>
+
 
     <div class="table-responsive">
         <table class="table table-hover table-bordered table-condensed">

@@ -3,7 +3,7 @@ body{
 }
 
 .riesContainer{
-    padding: 10px;
+    padding:10px;
     background-color: lightgray;
 }
 
@@ -128,9 +128,9 @@ body{
     border-color: orangered;
 }
 .glyphicon{
-    color:lime;
+    color:orangered;
 }
 
-/*#dlbutton{*/
-    /*color: lime;*/
-/*}*/
+.dlbutton{
+    color: lime;
+}
