@@ -42,9 +42,9 @@
         <div class="toolbar-inner">
             <button type="button" class="btn btn-primary" ng-click="AddRequisitionButton()">Create Requisition</button>
             <button type="button" class="btn btn-primary" ng-click="viewResolvedReq()">Resolved Requisitions</button>
-            <button type="button" class="btn btn-primary dlbutton" ng-csv="formatRequisition()" filename="requisition.csv"><span class="glyphicon glyphicon-download-alt" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
+            <button type="button" class="btn btn-primary" ng-csv="formatRequisition()" filename="requisition.csv"><span class="glyphicon glyphicon-download-alt dlbutton" data-toggle="tooltips" title="Export To CSV" data-placement="bottom"></span></button>
             <div class="dropdown">
-                <button type="button" class="btn btn-primary dlbutton"><span class="glyphicon glyphicon-filter dropbtn"></span>
+                <button type="button" class="btn btn-primary"><span class="dlbutton glyphicon glyphicon-filter dropbtn"></span>
                     <div class="dropdown-content">
                         <a ng-click="filterBy('All')">All</a>
                         <a ng-clickc="filterBy('your')">My Requistions</a>

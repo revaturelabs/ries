@@ -134,3 +134,10 @@ body{
 .dlbutton{
     color: lime;
 }
+#reqHost{
+    height: 26px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: orangered;
+    border-style: inset;
+}
