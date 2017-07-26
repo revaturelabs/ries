@@ -4,10 +4,6 @@
         height: auto !important;
     }
 
-    .manualHeight {
-        height: 400px;
-    }
-
     .asdf {
         border: thin solid black;
     }
@@ -111,7 +107,7 @@
 
 <div ng-controller="hostCtrl">
 
-    <div class="table-responsive" id="sessionSelect" ng-show="isSelecting">
+    <div class="table-responsive" id="sessionSelect" ng-show = "isSelecting">
         <table class="table table-hover table-bordered table-condensed">
             <thead class="thead-inverse">
             <tr>
@@ -136,19 +132,19 @@
                 <td>{{re.reqHost}}</td>
                 <td>{{re.reqGuest}}</td>
                 <td>{{re.reqRecruiter}}</td>
-                <td><a href="#" ng-click="selectSession(re.reqHost,re.reqGuest)">Join Session</a></td>
+                <td><a href = "#" ng-click = "selectSession(re.reqHost,re.reqGuest)">Join Session</a></td>
             </tr>
             </tbody>
         </table>
     </div>
 
 
-    <div id="session" ng-hide="isSelecting">
-        <div><a href="#" ng-click="backtoSelection()">Back</a></div>
+    <div id = "session" ng-hide = "isSelecting">
+        <div><a href = "#" ng-click = "backtoSelection()">Back</a></div>
         <div>Session with: {{guestName}}</div>
         <div id="equipmentTest" class="call-page container-fluid">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 ">
                     <div class="row">
                         <div style="text-align: center">
                             <button id="startTestEquipment" ng-click="testEquipment()" class="btn btn-primary">
@@ -172,25 +168,23 @@
                 </div>
             </div>
         </div>
+
         <div id="callPage" class="call-page container-fluid" style="display:none">
             <div class="row">
-                <div class="col-md-3 col-md-offset-3">
+                <div class="col-md-6 col-md-offset-3 ">
                     <div style="text-align: center">
-                        <button id="callGuestBtn" ng-click="callGuest()" class="btn">Begin Session</button>
-                    </div>
-                    <button id="recordBtn" class="btn btn-success" style="display:none">
-                        <i class="fa fa-microphone" aria-hidden="true"></i> Record
-                    </button>
-                    <button id="endRecordBtn" class="btn-danger btn" style="display:none">End Recording</button>
-                </div>
-                <div class="col-md-3">
-                    <div style="text-align: center">
+                        <button ng-click="callGuest()" class="btn-primary btn">Call Guest</button>
+                        <button ng-click="callObs()" class="btn-primary btn">Call obs</button>
                         <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
+                        <button id="recordBtn" ng-class="{'btn-success': isRecording,'btn': isRecording}">
+                            <i class="fa fa-microphone" aria-hidden="true"></i> Record
+                        </button>
+                        <button id="endRecordBtn" class="btn-danger btn">End Recording</button>
                     </div>
                 </div>
             </div>
             <div class="row is-flex ">
-                <div class="col-md-2 col-md-offset-1 asdf manualHeight">
+                <div class="col-md-2 col-md-offset-1 asdf">
                     <div id="currentlyInChat">
                         Waiting for others to connect....
                     </div>
@@ -198,25 +192,26 @@
                         <video id="remote" autoplay controls></video>
                     </div>
                 </div>
-                <div class="col-md-6 manualHeight">
+                <div class="col-md-6 ">
                     <video id="local" autoplay muted controls></video>
                 </div>
-                <form id="chatForm" class="col-md-2 asdf panel panel-primary manualHeight"
+
+                <form id="chatForm" class="col-md-2 asdf panel panel-primary"
                       style="text-align: center;overflow: auto;">
-                    <div>
-                        <div class="panel-heading">Text chat</div>
-                        <div id="chatarea" class="panel-body text-left "></div>
-                    </div>
+                    <!--<div class="col-md-12  panel panel-primary">-->
+                    <div class="panel-heading">Text chat</div>
+                    <div id="chatarea" class="panel-body text-left "></div>
                     <div class=" bottom">
                         <input id="msgInput" type="text" placeholder="message"/>
                         <button id="sendMsgBtn" class="btn-primary almost-fullspace btn">Send</button>
                     </div>
+                    <!--</div>-->
                 </form>
 
             </div>
         </div>
 
-<button ng-click = "">show video below</button>
+
         <!--<button id="modalBtn">End Session?</button>-->
         <div id="myModal" class="modal">
             <div class="modal-content">
@@ -227,17 +222,15 @@
             </div>
         </div>
 
-        <div class="row" id="recordedVideoArea" ng-show="doneRecording">
-            <div col-md-6 col-md-offset-3>
-                <video id="recordedVideo" autoplay controls></video>
-                <p>{{feedback}}</p>
-                <form novalidate>
-                    Recording Name<input type="text" ng-model="Recording.name"/>
-                    AWS AccessKeyId<input type="text" ng-model="Recording.accessKeyId"/>
-                    AWS SecretKey<input type="text" ng-model="Recording.secretKey"/>
-                    <a href="" id="a" ng-click="saveRecording()">Save Recording</a>
-                </form>
-            </div>
+        <div>
+            <video id="recordedVideo" autoplay controls></video>
+            <p>{{feedback}}</p>
+            <form novalidate>
+                Recording Name<input type="text" ng-model="Recording.name"/>
+                AWS AccessKeyId<input type="text" ng-model="Recording.accessKeyId"/>
+                AWS SecretKey<input type="text" ng-model="Recording.secretKey"/>
+                <a href="" id="a" ng-click="saveRecording()">Save Recording</a>
+            </form>
         </div>
     </div>
 

@@ -18,6 +18,20 @@ app.service("globalVarService", function(infoService){
         infoService.getAllTrainers(function(response){
             console.log(response.data);
             self.trainerList = response.data;
+            self.trainerList.push({
+                "employeeId":"005g0000004JNzlAAG",
+                "name":"Test Trainer",
+                "nickname":"test_trainer",
+                "email":"keving@revature.com",
+                "firstName":"Test",
+                "lastName":"Trainer",
+                "picture":"https://revature--INT1--c.cs17.content.force.com/profilephoto/005/F",
+                "thumbnail":"https://revature--INT1--c.cs17.content.force.com/profilephoto/005/T",
+                "role":{
+                    "roleId":"00Ei0000000ccV0EAI",
+                    "name":"Trainers"
+                }
+            });
         },function(response){
             console.log("error retrieving trainers");
         });
@@ -25,6 +39,7 @@ app.service("globalVarService", function(infoService){
         infoService.getAllRecruiters(function(response){
             console.log(response.data);
             self.recruiterList = response.data;
+            self.recruiterList.push({});
         },function(response){
             console.log("error retrieving recruiters");
         });

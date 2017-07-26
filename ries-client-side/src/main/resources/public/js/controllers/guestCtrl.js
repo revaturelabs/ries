@@ -4,7 +4,6 @@
 /**
  * Created by Jhoan Osorno on 7/14/2017.
  */
-
 var app = angular.module("RIESApp");
 
 app.controller("guestCtrl", function ($scope, guestHostService) {
@@ -13,18 +12,11 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
     $scope.craigSignIn = function () {
         document.querySelector('#loginModal').style.display = "none";
         $scope.myRoom = "Emily Higgins" + "Craig Hatch";
-        $scope.guestName = "Craig Hatch";
     };
     $scope.jhoanSignIn = function () {
         document.querySelector('#loginModal').style.display = "none";
         $scope.myRoom = "August Duet" + "Jhaon Osorno";
-        $scope.guestName = "Jhaon Osorno";
     };
-
-    $scope.cancel = function () {
-        $state.go('guestLogin');
-    };
-
 
 
     var usernameInput = document.querySelector('#usernameInput');
@@ -34,6 +26,8 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
     var chatArea = document.querySelector('#chatarea');
     var currentMembers = document.querySelector('#currentlyInChat');
+    var connections = [];
+    var allDataChannels = [];
     var obsConn;
     var hostConn;
     var obsChannel;
@@ -44,6 +38,7 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
     var outsideModal = document.getElementsByClassName("close")[0];
     $scope.myIpV4 = "no response yet...";
     $scope.message = "";
+    var connectedUser;
     $scope.isTesting = true;
     $scope.isRecording = true;
     var myStream;
@@ -108,9 +103,10 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
         document.querySelector('#equipmentTest').style.display = 'none';
         send({
             type: "login",
-            name:  $scope.guestName,
+            name: guestInfo.firstName + guestInfo.lastName,
             room: $scope.myRoom
         });
+
     };
 
     //alias for sending JSON encoded messages
@@ -361,3 +357,4 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
 
 
 });
+

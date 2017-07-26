@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by tyler on 7/10/2017.
  */
-@CrossOrigin
+
 @RestController
 public class RequisitionController {
     @Autowired
@@ -83,12 +83,14 @@ public class RequisitionController {
         // System.out.println(requisition);
         // Only a recruiter can create a requisition
         Employee employee = force.getCurrentEmployee(auth);
-        if (isEmployeeAuth(auth) && UserAuth.isRecruiter(employee)) {
+        if (isEmployeeAuth(auth)) { //&& UserAuth.isRecruiter(employee)) {
             Requisition requisition1 = UrlGenerator.generateUrls(requisition);
             service.save(requisition1);
             return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
     }
 
     @RequestMapping(value="/requisition/delete/by/{id}/{link}", method=RequestMethod.POST)
