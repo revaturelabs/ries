@@ -85,9 +85,9 @@ app.controller("requisitionCtrl", function($scope, $state, requisitionService, g
            var reqId = req.reqId;
            var reqCDate = req.createDate;
            var reqIDate = req.interviewDate;
-           var reqHost = req.reqHost;
+           var reqHost = req.reqHost.name;
            var reqGuest = req.reqGuest;
-           var reqRecruiter = req.reqRecruiter;
+           var reqRecruiter = req.reqRecruiter.name;
            var reqHURL = req.hostUrl;
            var reqGURL = req.guestUrl;
            var reqOURL = req.oberseverUrl;

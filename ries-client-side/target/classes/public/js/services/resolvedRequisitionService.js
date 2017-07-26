@@ -8,7 +8,8 @@ app.service("resolvedReqService", function($http){
 
     self.getAllResolvedReqs = function(res) {
         var promise = $http({
-            url: "http://localhost:8085/resolvedRequisition/all",
+            //url: "http://localhost:8085/resolvedRequisition/all",
+            url: "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/requisition/resolvedRequisition/all",
             method: "GET"
         });
         promise = promise.then(function(res) {
@@ -19,7 +20,7 @@ app.service("resolvedReqService", function($http){
 
     self.getResolvedReqByRecruiter = function(recruiterId, res) {
         var promise = $http({
-            url: "http://localhost:8085/resolvedRequisition/recruiter/{recruiter}{" + id + "}",
+            url: "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/requisition/resolvedRequisition/recruiter/{recruiter}{" + id + "}",
             method: "GET"
         });
         promise = promise.then(function(res){

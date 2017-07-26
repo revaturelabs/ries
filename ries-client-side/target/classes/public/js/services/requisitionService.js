@@ -20,7 +20,7 @@ app.service("requisitionService", function($http, $cookies){
 
     self.getRequisitionsByRecruiter = function(recruiterId, res) {
         var promise = $http({
-            url: "http://localhost:8085/requisition/recruiter/{" + id + "}",
+            url: "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/requisition/requisition/recruiter/{" + id + "}",
             method: "GET"
         });
         promise = promise.then(function(res){
@@ -31,7 +31,7 @@ app.service("requisitionService", function($http, $cookies){
 
     self.getRequisitionsByInterviewer = function(interviewerId, res) {
         var promise = $http({
-            url: "http://localhost:8085/requisition/interviewer/{" + id + "}",
+            url: "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/requisition/requisition/interviewer/{" + id + "}",
             method: "GET"
         });
         promise = promise.then(function(res) {
