@@ -1,8 +1,6 @@
 package com.revature;
 
 import com.google.gson.Gson;
-import com.revature.config.SalesForceAuthSuccessHandler;
-import com.revature.config.SalesForceLogoutHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +18,11 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { JacksonAutoConfiguration.class })
@@ -50,6 +53,18 @@ public class RiesProxyGatewayApplication {
 	public OAuth2RestTemplate oAuth2RestTemplate(
 			OAuth2ProtectedResourceDetails resourceDetails, OAuth2ClientContext clientContext) {
 		return new OAuth2RestTemplate(resourceDetails, clientContext);
+	}
+
+	@Bean
+	public CorsFilter corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.setAllowedOrigins(Arrays.asList("http://localhost:3001", "http://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:3001"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+		config.setAllowedHeaders(Arrays.asList("Authentication", "Content-Type"));
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
 	}
 
 }
