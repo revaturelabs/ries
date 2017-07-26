@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 public class AuthController {
     @Autowired

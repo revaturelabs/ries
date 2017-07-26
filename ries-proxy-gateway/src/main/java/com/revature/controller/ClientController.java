@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 
-@CrossOrigin
 @Controller
 public class ClientController {
     @Value("${security.login-default-redirect-url}")
