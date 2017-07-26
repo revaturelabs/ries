@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by tyler on 7/10/2017.
  */
-@CrossOrigin
+
 @RestController
 public class RequisitionController {
     @Autowired
