@@ -23,12 +23,12 @@ public class UrlGenerator {
         System.out.println("in the stupid url generator");
         System.out.println(r.toString());
 
-        String urlbase = "www.insertrealaddresslater.com/guestsession/?gid="+r.getReqGuest().toString()+"&rid="+r.getReqRecruiter()+"&key=";
+        String urlbase = "www.ries.revaturelabs.com/guestsession/?gid="+r.getReqGuest().toString()+"&rid="+r.getReqRecruiter()+"&key=";
         String guesturl = "guest" + r.getReqGuest().toString() + r.getReqRecruiter().toString();
         guesturl = DigestUtils.sha1Hex(guesturl);
         guesturl = urlbase + guesturl;
         r.setGuestUrl(guesturl);
-        urlbase = "www.insertrealaddresslater.com/session/?gid="+r.getReqGuest().toString()+"&rid="+r.getReqRecruiter()+"&key=";
+        urlbase = "www.ries.revaturelabs.com/session/?gid="+r.getReqGuest().toString()+"&rid="+r.getReqRecruiter()+"&key=";
         String hosturl = "host" + r.getReqGuest().toString() + r.getReqRecruiter().toString();
         hosturl = DigestUtils.sha1Hex(hosturl);
         hosturl = urlbase + hosturl;
@@ -38,7 +38,7 @@ public class UrlGenerator {
         observeurl = urlbase + observeurl;
         r.setObserverUrl(observeurl);
 
-        //KinesisEmailProducer.writeURLEmails(r);
+        KinesisEmailProducer.writeURLEmails(r);
         return r;
     }
 }
