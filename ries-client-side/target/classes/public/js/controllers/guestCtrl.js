@@ -357,12 +357,12 @@ app.controller("guestCtrl", function ($scope,$state, guestHostService,guestHostF
             room: $scope.myRoom
         };
         chatArea.innerHTML += val.name + ": " + val.message + "<br />";
-
+        console.log("sent message", val);
+        msgInput.value = "";
         //sending a message to a connected peer
         //obsChannel.send(JSON.stringify(val));
         hostChannel.send(JSON.stringify(val));
-        console.log("sent message", val);
-        msgInput.value = "";
+
     });
 
 

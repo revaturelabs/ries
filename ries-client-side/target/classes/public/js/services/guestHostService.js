@@ -9,8 +9,8 @@ app.service("guestHostService", function ($http, requisitionService) {
         return ["turn:numb.viagenie.ca:3478", "craighatch90@gmail.com", "pr0gs4d4yz"];
     };
     this.getWebsocketEndPoint = function () {
-        // return "ws://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:3001/socket"
-        return 'ws://localhost:3001/socket';
+        return "wss://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:443/socket"
+        // return 'ws://localhost:3001/socket';
     };
 
     this.addGuest = function (guest, done, err) {
@@ -41,7 +41,7 @@ app.service("guestHostService", function ($http, requisitionService) {
             reqRecruiter: "Rachna Tyagi"
         };
         req3 = {
-            reqId: 23,
+            reqId: 24,
             createDate: "7/16/2017",
             interviewDate: "7/24/2017",
             reqHost: "August Duet",

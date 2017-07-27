@@ -9,6 +9,7 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     // ___________________________________________________________________________________________________
     //Session selection, handle flow from selecting the room to enter
     $scope.myRequisistions = guestHostService.getAllRequisitions();
+
     $scope.isSelecting = true;
     $scope.guestName = "guest";
     $scope.hostName = "host";

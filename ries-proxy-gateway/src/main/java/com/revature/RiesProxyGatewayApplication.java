@@ -60,8 +60,8 @@ public class RiesProxyGatewayApplication {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.setAllowedOrigins(Arrays.asList("http://localhost:3001", "http://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:3001"));
-		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+		config.setAllowedOrigins(Arrays.asList("https://localhost", "https://ec2-13-58-14-134.us-east-2.compute.amazonaws.com"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		config.setAllowedHeaders(Arrays.asList("Authentication", "Content-Type"));
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);

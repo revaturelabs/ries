@@ -16,7 +16,7 @@ public class ClientController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String client(HttpSession session) {
         String id = session.getId();
-        return "redirect:" + redirectUrl + "sessioin?JSESSIONID=" + id;
+        return "redirect:" + redirectUrl + "session?JSESSIONID=" + id;
     }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
