@@ -1,13 +1,14 @@
-<h1>Sesssion guest</h1>
-
 <style>
     video {
         width: 100% !important;
         height: auto !important;
     }
-
+    .manualHeight {
+        height: 400px;
+    }
     .asdf {
         border: thin solid black;
+        border-radius: 5px;
     }
 
     .row.is-flex {
@@ -112,14 +113,13 @@
 
     <div id="loginModal" class="modal" style="display:block" >
         <div class="modal-content">
-            <p>Revature records technical interviews to improve the quality of trainings</p>
-            <button ng-click="craigSignIn()" class="btn btn-primary">Sign in as Craig</button>
-            <button ng-click="jhoanSignIn()" class="btn btn-primary">Sign in as Jhoan</button>
-            <button class="btn btn-danger" >Cancel</button>
+            <p>Hi, {{guestName}}! Revature records technical interviews to improve the quality of trainings</p>
+            <!--<button ng-click="craigSignIn()" class="btn btn-primary">Sign in as Craig</button>-->
+            <!--<button ng-click="jhoanSignIn()" class="btn btn-primary">Sign in as Jhoan</button>-->
+            <button ng-click = "accept()" class="btn btn-primary" >Accept</button>
+            <button ng-click = "cancel()" class="btn btn-danger" >Cancel</button>
         </div>
     </div>
-
-
     <div id="equipmentTest" class="call-page container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -158,18 +158,18 @@
         </div>
         <div class="row is-flex ">
             <div class="col-md-2 col-md-offset-1 asdf">
-                <div id="currentlyInChat">
+                <div id="currentlyInChat manualHeight">
                     Waiting for others to join...
                 </div>
                 <div class="bottom">
                     <video id="remote" autoplay></video>
                 </div>
             </div>
-            <div class="col-md-6 ">
+            <div class="col-md-6 manualHeight">
                 <video id="local" autoplay muted></video>
             </div>
 
-            <form id="chatForm" class="col-md-2 asdf panel panel-primary" style="text-align: center;overflow: auto;">
+            <form id="chatForm" class="col-md-2 asdf panel panel-primary manualHeight" style="text-align: center;overflow: auto;">
                 <div class="panel-heading">Text chat</div>
                 <div id="chatarea" class="panel-body text-left "></div>
                 <div class="bottom">
