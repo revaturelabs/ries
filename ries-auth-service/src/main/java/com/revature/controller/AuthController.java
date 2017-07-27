@@ -28,8 +28,6 @@ public class AuthController {
 
     @RequestMapping(value = "/guests", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAllGuests(OAuth2Authentication auth) {
-        if(!force.getCurrentEmployee(auth).isRecruiter())
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not a recruiter.");
         return ResponseEntity.ok(service.getAll());
     }
 
