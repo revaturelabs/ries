@@ -62,8 +62,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
                 User user = new User(msg.getRoom(), session, msg.getName(), msg.getRole());
                 clientArray.add(user);
-
-
+                System.out.println("new User: "+ user.toString());
                 msg.setSuccess(true);
                 String jsonLogin = gson.toJson(msg);
 
@@ -87,6 +86,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
             case "chatMessage":
                 sendMessage(session, msg, gson, false);
                 break;
+            case "back":
+                System.out.println("Back button pressed");
+                Iterator<User> iter = clientArray.iterator();
+                while(iter.hasNext()){
+                    if(iter.next().equals(session)){
+                        iter.remove();
+                    }
+                }
             default:
                 Message errorMessage = new Message("error", "Message type not found");
                 String jsonInString = gson.toJson(errorMessage);
@@ -150,6 +157,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         for (User u : clientArray) {
             if (u.getRoom().equals(msg.getRoom())) {
+                System.out.println("new members sent to: " + u+ "with members: "+ newMemberMessage.getMembers());
                 u.getSession().sendMessage(jsonMessage);
             }
         }

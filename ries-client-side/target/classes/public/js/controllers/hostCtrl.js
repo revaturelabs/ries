@@ -22,6 +22,9 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     };
     $scope.backtoSelection = function () {
         handleLeave();
+        send({
+            type: "back"
+        });
         $state.reload();
     };
 
@@ -335,9 +338,10 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
 
     function handleNewMember(val) {
         currentMembers.innerHTML = "Currently in chat..."
+        currentMembers.innerHTML += '<hr style="height:2px!important; background-color: darkslategray !important; border: solid 2px darkslategray !important;">'
         console.log("handlenemember", val);
         val.forEach(function (element) {
-            currentMembers.innerHTML += "<br />" + element + "<br />";
+            currentMembers.innerHTML += element + "<br />" ;
         }, this);
 
     };
@@ -353,11 +357,12 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
             room: $scope.myRoom
         };
         chatArea.innerHTML += val.name + ": " + val.message + "<br />";
+        console.log("sent message", val);
+        msgInput.value = "";
         // obsChannel.send(JSON.stringify(val));
         guestChannel.send(JSON.stringify(val));
 
-        console.log("sent message", val);
-        msgInput.value = "";
+
     });
 
 

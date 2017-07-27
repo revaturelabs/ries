@@ -4,6 +4,27 @@
         height: auto !important;
     }
 
+    .btn-session{
+        background: orangered;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .btn-session2 {
+        background: darkslategray;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
     .manualHeight {
         height: 400px;
     }
@@ -50,14 +71,12 @@
         bottom: 0;
     }
 
-    .ninety-height {
-        position: relative;
-        height: 90%;
-    }
-
     .almost-fullspace {
         width: 90%;
         height: 90%;
+    }
+    .centered{
+        margin:auto;
     }
 
     .modal {
@@ -141,18 +160,18 @@
     </div>
 
     <div id="session" ng-hide="isSelecting">
-        <div><a href="#" ng-click="backtoSelection()">Back</a></div>
-        <div>Session with: {{guestName}}</div>
+        <div style="padding:10px"><a href="#" ng-click="backtoSelection()">Back</a></div>
+        <div style="padding:10px">Session with: {{guestName}}</div>
         <div id="equipmentTest" class="call-page container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
                         <div style="text-align: center">
-                            <button id="startTestEquipment" ng-click="testEquipment()" class="btn btn-primary">
+                            <button id="startTestEquipment" ng-click="testEquipment()" class="btn-session">
                                 Test Equipment
                             </button>
-                            <button id="endTestEquipment" ng-click="endTest()" class="btn btn-primary">End Test</button>
-                            <button ng-hide="isTesting" ng-click="startSession()" class="btn btn-primary">Join Session
+                            <button id="endTestEquipment" ng-click="endTest()" class="btn-session">End Test</button>
+                            <button ng-hide="isTesting" ng-click="startSession()" class="btn-session">Join Session
                             </button>
                         </div>
                     </div>
@@ -169,25 +188,10 @@
                 </div>
             </div>
         </div>
-        <div id="callPage" class="call-page container-fluid" style="display:none">
-            <div class="row">
-                <div class="col-md-3 col-md-offset-3">
-                    <div>
-                        <button id="callGuestBtn" ng-click="callGuest()" class="btn">Begin Session</button>
-                    </div>
-                    <button id="recordBtn" class="btn btn-success" style="display:none">
-                        <i class="fa fa-microphone" aria-hidden="true"></i> Record
-                    </button>
-                    <button id="endRecordBtn" class="btn-danger btn" style="display:none">End Recording</button>
-                </div>
-                <div class="col-md-3">
-                    <div style="text-align: center">
-                        <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
-                    </div>
-                </div>
-            </div>
+        <div id="callPage" class="call-page container-fluid" style="display:none;">
+
             <div class="row is-flex ">
-                <div class="col-md-2 col-md-offset-1 asdf manualHeight">
+                <div class="col-md-2 col-md-offset-1 asdf manualHeight" style = "padding:10px">
                     <div id="currentlyInChat">
                         Waiting for others to connect....
                     </div>
@@ -196,18 +200,33 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <video id="local" height='400' autoplay muted controls></video>
-                </div>
-                <div class = "manualHeight asdf col-md-2">
-                    <div>
-                        <!--<div class="panel-heading">Text chat</div>-->
-                        <!--<div id="chatarea" class="panel-body text-left "></div>-->
-                        <div id="chatarea" class="text-left "  style="text-align: left;overflow: auto;height:320px;"></div>
+                    <video id="local" style="height: 500px !important;" class = 'manualHeight' autoplay muted controls></video>
+                    <div class="row" style="padding:10px">
+                        <div class="col-md-3 col-md-offset-1">
+                            <div>
+                                <button id="callGuestBtn" ng-click="callGuest()" class="btn-session2">
+                                    Begin Session</button>
+                            </div>
+                            <button id="recordBtn" class="btn btn-success" style="display:none">
+                                <i class="fa fa-microphone" aria-hidden="true"></i> Record
+                            </button>
+                            <button id="endRecordBtn" class="btn-danger btn" style="display:none">End Recording</button>
+                        </div>
+                        <div class="col-md-3 col-md-offset-4">
+                            <div style="text-align: center; float:right">
+                                <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
+                            </div>
+                        </div>
                     </div>
-                    <form id="chatForm" class=" panel panel-primary">
+                </div>
+                <div class = "manualHeight col-md-2" style="text-align:center">
+                    <div>
+                        <div id="chatarea" class="text-left asdf centered"  style="text-align: left;overflow: auto;height:320px;"></div>
+                    </div>
+                    <form id="chatForm" style="text-align:center">
                         <div class="bottom" style="text-align:center">
                             <input id="msgInput" type="text" placeholder="message"/>
-                            <button id="sendMsgBtn" class="btn-primary almost-fullspace btn">Send</button>
+                            <button id="sendMsgBtn" class="btn-session2 almost-fullspace btn">Send</button>
                         </div>
                     </form>
 
@@ -219,7 +238,7 @@
         <!--<button id="modalBtn">End Session?</button>-->
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <p>End session</p>
+                <p>End session?</p>
                 <span class="close">&times;</span>
                 <button id="endSessionBtn" class="btn-danger btn">End Session</button>
                 <button id="endSessionCancelBtn" ng-click="turnOffModal()" class="btn btn-primary">Cancel</button>
