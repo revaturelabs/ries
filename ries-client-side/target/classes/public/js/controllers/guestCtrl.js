@@ -336,10 +336,12 @@ app.controller("guestCtrl", function ($scope,$state, guestHostService,guestHostF
 
 
     function handleNewMember(val) {
+        console.log("adding new members...");
         currentMembers.innerHTML = "Currently in chat..."
+        currentMembers.innerHTML += '<hr style="height:2px!important; background-color: darkslategray !important; border: solid 2px darkslategray !important;">'
         console.log("handlenemember", val);
         val.forEach(function (element) {
-            currentMembers.innerHTML += "<br />" + element + "<br />";
+            currentMembers.innerHTML += element + "<br />" ;
         }, this);
 
     };
