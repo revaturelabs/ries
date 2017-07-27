@@ -17,7 +17,7 @@ app.service("guestHostService", function ($http, requisitionService) {
         $http({
             method: "POST",
             url: "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/auth/guest",
-            headers: {'Content-Type': 'application/JSON'},
+            headers: {'Content-Type': 'text/plain'},
             data: guest
         }).then(done, err);
     };
@@ -43,8 +43,8 @@ app.service("guestHostService", function ($http, requisitionService) {
         req3 = {
             reqId: 24,
             createDate: "7/16/2017",
-            interviewDate: "7/24/2017",
-            reqHost: "August Duet",
+            interviewDate: "7/27/2017",
+            reqHost: "Test Trainer",
             reqGuest: "Hello World",
             reqRecruiter: "Rachna Tyagi"
         };

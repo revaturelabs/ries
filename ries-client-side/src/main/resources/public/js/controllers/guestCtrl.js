@@ -27,7 +27,7 @@ app.controller("guestCtrl", function ($scope,$state, guestHostService,guestHostF
 
     var guestInfo = guestHostFactory.getGuestInfo();
     $scope.guestName = guestInfo.firstName +" "+guestInfo.lastName;
-    $scope.myRoom = "August Duet" + $scope.guestName;
+    $scope.myRoom = "Test Trainer" + $scope.guestName;
     console.log("$scope.myRoom",$scope.myRoom);
     $scope.cancel = function () {
         $state.go('guestLogin');

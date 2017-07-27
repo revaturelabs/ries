@@ -3,13 +3,28 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("hostCtrl", function ($scope, $http, $state, signalingService, guestHostService) {
+app.controller("hostCtrl", function ($scope, $http, $state, signalingService, guestHostService,requisitionService) {
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
     //Session selection, handle flow from selecting the room to enter
     $scope.myRequisistions = guestHostService.getAllRequisitions();
+    // requisitionService.getAllRequisitions().then(function(res) {
+    //     $scope.myRequisistions  = res;
+    //
+    //     for(var i = 0; i < $scope.requisitions.length; i++){
+    //         var trainerId = $scope.requisitions[i].reqHost;
+    //         var requisitionId = $scope.requisitions[i].reqRecruiter;
+    //         $scope.requisitions[i].reqHost = globalVarService.getTrainerById(trainerId);
+    //         $scope.requisitions[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
+    //         $scope.requisitionList = $scope.requisitions;
+    //     }
+    // });
 
+
+
+
+    console.log("$scope.myRequisistions", $scope.myRequisistions);
     $scope.isSelecting = true;
     $scope.guestName = "guest";
     $scope.hostName = "host";
@@ -121,7 +136,8 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
 
         recordBtn.style.display = 'block';
         endRecordBtn.style.display = 'none';
-        document.querySelector('#recordedVideoArea').display = 'block';
+        document.querySelector('#recordedVideoArea').style.display = 'block';
+        document.querySelector('#showRecording').style.display= 'block';
         $scope.doneRecording = true;
         console.log("$scope.doneRecording", $scope.doneRecording);
         stopRecording();
@@ -481,15 +497,26 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         mediaRecorderHost.start();
 
     }
+    // var stopRecording = function () {
+    //     mediaRecorderHost.stop();
+    //
+    //     setTimeout(function () {
+    //         mediaRecorder.stop();
+    //
+    //     }, 5000);
+    //
+    // };
+
     var stopRecording = function () {
         mediaRecorderHost.stop();
+        mediaRecorder.stop();
 
-        setTimeout(function () {
-            mediaRecorder.stop();
-
-        }, 5000);
 
     };
+
+
+
+
 
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________

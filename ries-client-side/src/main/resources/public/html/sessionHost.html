@@ -211,6 +211,9 @@
                                 <i class="fa fa-microphone" aria-hidden="true"></i> Record
                             </button>
                             <button id="endRecordBtn" class="btn-danger btn" style="display:none">End Recording</button>
+                            <button id = "showRecording" ng-click = "videotest()" class="btn-session2" style="display:none">View and Save</button>
+                            <!--<button ng-click = "videotest()" class="btn-session2">View and Save</button>-->
+
                         </div>
                         <div class="col-md-3 col-md-offset-4">
                             <div style="text-align: center; float:right">
@@ -234,7 +237,7 @@
             </div>
         </div>
 
-        <button ng-click="videotest()">show video below</button>
+
         <!--<button id="modalBtn">End Session?</button>-->
         <div id="myModal" class="modal">
             <div class="modal-content">
@@ -247,7 +250,7 @@
 
         <div class="row" id="recordedVideoArea" ng-show="doneRecording">
             <div col-md-6 col-md-offset-3>
-                <video id="recordedVideo" autoplay controls></video>
+                <video id="recordedVideo" style="height: 500px !important;" autoplay controls></video>
                 <p>{{feedback}}</p>
                 <form novalidate>
                     Recording Name<input type="text" ng-model="Recording.name"/>
