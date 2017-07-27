@@ -1,8 +1,14 @@
 spring:
   application:
     name: ries-requisitions-service
-server:
-  port: 8081
+
+#server:
+#  port: 8081
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: password
+#    keyStoreType: PKCS12
+#    keyAlias: tomcat
 eureka:
   client:
     service-url:

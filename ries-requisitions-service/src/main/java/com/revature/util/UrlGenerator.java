@@ -38,7 +38,7 @@ public class UrlGenerator {
         observeurl = urlbase + observeurl;
         r.setObserverUrl(observeurl);
 
-        //KinesisEmailProducer.writeURLEmails(r);
+        KinesisEmailProducer.writeURLEmails(r);
         return r;
     }
 }

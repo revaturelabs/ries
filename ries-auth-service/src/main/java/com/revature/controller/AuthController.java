@@ -1,5 +1,6 @@
 package com.revature.controller;
 
+import com.google.gson.Gson;
 import com.revature.Force;
 import com.revature.model.Guest;
 import com.revature.model.RequisitionDTO;
@@ -27,7 +28,7 @@ public class AuthController {
     OAuth2RestTemplate restTemplate;
 
     @RequestMapping(value = "/guests", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getAllGuests(OAuth2Authentication auth) {
+    public ResponseEntity getAllGuests() {
         return ResponseEntity.ok(service.getAll());
     }
 
@@ -42,11 +43,11 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/guest", method = RequestMethod.POST)
-    public ResponseEntity createGuest(OAuth2Authentication auth, @RequestBody GuestRequisitionHolder holder) {
+    public ResponseEntity createGuest(OAuth2Authentication auth, @RequestBody String guestJson) {
         if(!force.getCurrentEmployee(auth).isRecruiter())
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not a recruiter.");
-        Guest guest = holder.guest;
-        RequisitionDTO requisitionDTO = holder.requisition;
+
+        Guest guest = new Gson().fromJson(guestJson, Guest.class);
 
         //Generate a random number using currentTimeMillis as a seed for a bit more security.
         Random r = new Random(System.currentTimeMillis());
@@ -60,9 +61,7 @@ public class AuthController {
                 service.save(guest);
                 System.out.println(guest);
 
-                requisitionDTO.setGuestId(guest.getGuestId());
-
-                return restTemplate.postForEntity("http://ries-requisitions-service/requisition/create", restTemplate, Void.class);
+                return ResponseEntity.ok(guest);
             }
             catch (ConstraintViolationException e) {
                 timeoutCount--;
