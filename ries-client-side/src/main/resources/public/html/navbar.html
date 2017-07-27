@@ -31,7 +31,7 @@
                 <ul class="nav navbar-nav">
 
                     <li>
-                        <a ng-click="goToHome()"><img src="img/revature_logo_250.png" alt="Revature Logo"></a>
+                        <a ng-click="goToHome()"><img style="height: 3.5em" src="img/revature_logo_250.png" alt="Revature Logo"></a>
                     </li>
 
                     <li><a class="" ng-click="goToHome()">Home</a></li>
@@ -53,6 +53,10 @@
                         </div>
                     </li>
                     <li><a class="" ng-click="logout()">Logout</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav pull-right">
+                    <li><a><img ng-src="{{userInfo.thumbnail}}" alt="Profile Picture"></a></li>
                 </ul>
             </div>
         </div>
