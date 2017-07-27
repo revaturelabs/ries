@@ -41,7 +41,7 @@ app.service("guestHostService", function ($http, requisitionService) {
             reqRecruiter: "Rachna Tyagi"
         };
         req3 = {
-            reqId: 23,
+            reqId: 24,
             createDate: "7/16/2017",
             interviewDate: "7/24/2017",
             reqHost: "August Duet",

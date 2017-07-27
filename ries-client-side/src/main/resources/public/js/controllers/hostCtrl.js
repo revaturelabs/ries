@@ -3,13 +3,13 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("hostCtrl", function ($scope, $http, $state, signalingService, guestHostService,globalVarService) {
+app.controller("hostCtrl", function ($scope, $http, $state, signalingService, guestHostService) {
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
     //Session selection, handle flow from selecting the room to enter
-    //$scope.myRequisistions = guestHostService.getAllRequisitions();
-    globalVarService.get
+    $scope.myRequisistions = guestHostService.getAllRequisitions();
+
     $scope.isSelecting = true;
     $scope.guestName = "guest";
     $scope.hostName = "host";
