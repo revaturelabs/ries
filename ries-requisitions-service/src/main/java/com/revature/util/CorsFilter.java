@@ -16,8 +16,8 @@ import java.io.IOException;
 /**
  * Created by tyler on 7/14/2017.
  */
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+//@Component
+//@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter extends OncePerRequestFilter {
     private Logger logger = LoggerFactory.getLogger(CorsFilter.class);
 

@@ -1,5 +1,8 @@
 package com.revature.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.revature.Force;
 import com.revature.domain.Employee;
 import com.revature.domain.Requisition;
@@ -36,11 +39,8 @@ public class RequisitionController {
 
     @RequestMapping(value="/requisition/all", method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Requisition>> getRequisitions(OAuth2Authentication auth) {
-        if (isEmployeeAuth(auth)) {
-            List<Requisition> list = service.getAll();
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        List<Requisition> list = service.getAll();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @RequestMapping(value="/requisition/by/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -77,19 +77,19 @@ public class RequisitionController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value="/requisition/create", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createRequisition(@RequestBody Requisition requisition, OAuth2Authentication auth) {
+    @RequestMapping(value="/requisition/create", method=RequestMethod.POST)
+    public ResponseEntity<Void> createRequisition(@RequestBody String requisitionJson, OAuth2Authentication auth) {
         //Requisition requisition1 = UrlGenerator.generateUrls(requisition); // Add urls to the requisition
         // System.out.println(requisition);
         // Only a recruiter can create a requisition
-        Employee employee = force.getCurrentEmployee(auth);
-        if (isEmployeeAuth(auth)) { //&& UserAuth.isRecruiter(employee)) {
-            Requisition requisition1 = UrlGenerator.generateUrls(requisition);
-            service.save(requisition1);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        JsonObject element = new Gson().fromJson(requisitionJson, JsonElement.class).getAsJsonObject();
+        Timestamp timestamp = new Timestamp(element.get("interviewDate").getAsLong());
+        element.remove("interviewDate");
+        Requisition requisition = new Gson().fromJson(element, Requisition.class);
+        requisition.setInterviewDate(timestamp);
+        Requisition requisition1 = UrlGenerator.generateUrls(requisition);
+        service.save(requisition1);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 

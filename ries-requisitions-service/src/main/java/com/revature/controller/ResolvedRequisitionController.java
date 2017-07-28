@@ -27,11 +27,8 @@ public class ResolvedRequisitionController {
 
     @RequestMapping(value = "/resolvedRequisition/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ResolvedRequisition>> getAllResolvedRequisitions(OAuth2Authentication auth){
-        if (isEmployeeAuth(auth)) {
-            List<ResolvedRequisition> res_req = service.getAll();
-            return new ResponseEntity<List<ResolvedRequisition>>(res_req, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        List<ResolvedRequisition> res_req = service.getAll();
+        return new ResponseEntity<List<ResolvedRequisition>>(res_req, HttpStatus.OK);
     }
 
     @RequestMapping(value ="/resolvedRequisition/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
