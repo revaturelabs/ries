@@ -9,6 +9,7 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     // ___________________________________________________________________________________________________
     //Session selection, handle flow from selecting the room to enter
     $scope.myRequisistions = guestHostService.getAllRequisitions();
+    console.log("$scope.myRequisistions",$scope.myRequisistions);
     // requisitionService.getAllRequisitions().then(function(res) {
     //     $scope.myRequisistions  = res;
     //
