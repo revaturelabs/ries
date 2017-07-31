@@ -15,6 +15,8 @@ import java.util.List;
 
 /**
  * Created by ath73 on 7/11/2017.
+ * Updated by Tyler Deans 7/17/2017
+ * - I added authorization through OAuth
  */
 
 @RestController

@@ -10,7 +10,8 @@ import javax.persistence.Table;
 import java.sql.Timestamp;
 
 /**
- * Created by tyler on 7/10/2017.
+ * Created by Tyler Deans on 7/10/2017.
+ * This Java object is mapped to the Requisition table in the database
  */
 @Entity
 @Table(name="Requisition")

@@ -17,5 +17,6 @@ public interface RequisitionDao extends JpaRepository<Requisition, Integer> {
 
     List<Requisition> findByReqHost(String reqHost);
 
+    // finds the requisitions that occurred before a given date
     List<Requisition> findByInterviewDateBefore(Timestamp d);
 }

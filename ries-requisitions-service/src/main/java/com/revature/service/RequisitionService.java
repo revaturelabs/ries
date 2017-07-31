@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Created by tyler on 7/10/2017.
+ * Created by Tyler Deans on 7/10/2017.
  */
 @Service
 @Transactional
@@ -34,6 +34,11 @@ public class RequisitionService {
     public void delete(Requisition requisition) { dao.delete(requisition); }
 
     public List<Requisition> getAllOutdated(Date d){
+        /*
+        The RequisitonResolver class (removes old requisitions) uses Date object
+        But in order for the query in the DAO is has to be a SQL Timestamp object
+        So here the Date object is converted to a Timestamp object and then put into the dao method
+        */
         Timestamp timestamp = new Timestamp(d.getTime());
         return dao.findByInterviewDateBefore(timestamp);
     }

@@ -20,7 +20,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Created by tyler on 7/10/2017.
+ * Created by Tyler Deans on 7/10/2017.
+ * Updated it to add OAuth authorization to restrict access to employees
  */
 
 @RestController
@@ -79,18 +80,23 @@ public class RequisitionController {
 
     @RequestMapping(value="/requisition/create", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createRequisition(@RequestBody Requisition requisition, OAuth2Authentication auth) {
-        //Requisition requisition1 = UrlGenerator.generateUrls(requisition); // Add urls to the requisition
-        // System.out.println(requisition);
-        // Only a recruiter can create a requisition
-        Employee employee = force.getCurrentEmployee(auth);
-        if (isEmployeeAuth(auth) && UserAuth.isRecruiter(employee)) {
+
+        /*
+            Only a recruiter can create a requisition in theory
+            Was unable to verify if the employee is a recruiter correctly
+            So I only checked if the user was an employee
+         */
+        if (isEmployeeAuth(auth)) {
             Requisition requisition1 = UrlGenerator.generateUrls(requisition);
             service.save(requisition1);
             return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
     }
 
+    // The link is the link to the S3 bucket where the video recording is stored
     @RequestMapping(value="/requisition/delete/by/{id}/{link}", method=RequestMethod.POST)
     public ResponseEntity<Void> removeRequisitionById(@PathVariable Integer id, @PathVariable String link) {
         Requisition requisition = service.getById(id);
@@ -117,7 +123,7 @@ public class RequisitionController {
 //
 //    }
 
-    //Update interview date of an requisition
+    //Update interview date of an requisition - has not been tested if it works (in theory it should)
     @RequestMapping(value="/requisition/update/{id}", method=RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateRequisition(@PathVariable Integer id, @RequestParam String newDate, OAuth2Authentication auth) {
         Employee employee = force.getCurrentEmployee(auth);
@@ -131,7 +137,7 @@ public class RequisitionController {
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    // May put in a external class
+    
     private boolean isEmployeeAuth(OAuth2Authentication auth) {
         Employee employee = force.getCurrentEmployee(auth);
         if (employee == null) {
