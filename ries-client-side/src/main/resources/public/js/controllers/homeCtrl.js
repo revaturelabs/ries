@@ -22,6 +22,7 @@ app.controller("homeCtrl", function(moment, calendarConfig, requisitionService, 
     var convertReqToEvents = function(){
         for(i=0;i<vm.reqList.length;i++) {
             var curr = vm.reqList[i];
+            console.log(curr);
             vm.events.push({
                 title: curr.reqHost.name + " is interviewing " + curr.reqGuest.firstName + ' ' + curr.reqGuest.lastName,
                 color: { // can also be calendarConfig.colorTypes.warning for shortcuts to the deprecated event types
