@@ -128,7 +128,7 @@ app.service("globalVarService", function (infoService) {
 
     self.getGuestById = function (id) {
         for (var i = 0; i < self.guestList.length; i++) {
-            if (id === self.guestList[i]) {
+            if (id === self.guestList[i].guestId) {
                 return self.guestList[i];
             }
         }
