@@ -17,6 +17,8 @@ app.controller("requisitionCtrl", function($scope, $state, requisitionService, g
         for(var i = 0; i < $scope.requisitions.length; i++){
             var trainerId = $scope.requisitions[i].reqHost;
             var requisitionId = $scope.requisitions[i].reqRecruiter;
+            var guestId = $scope.requisitions[i].reqGuest;
+            $scope.requisitions[i].reqGuest = globalVarService.getGuestById(guestId);
             $scope.requisitions[i].reqHost = globalVarService.getTrainerById(trainerId);
             $scope.requisitions[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
             $scope.requisitionList = $scope.requisitions;

@@ -1,4 +1,4 @@
-app.controller("homeCtrl", function(moment, calendarConfig, requisitionService){
+app.controller("homeCtrl", function(moment, calendarConfig, requisitionService, globalVarService){
 
     var vm = this;
     //Array for storing all of the requisitions
@@ -8,6 +8,14 @@ app.controller("homeCtrl", function(moment, calendarConfig, requisitionService){
     //Calls our requisition service to populate the requisitions list, and also turn those into viewable events
     requisitionService.getAllRequisitions().then(function(resp){
         vm.reqList=resp;
+        for(var i = 0; i < $scope.reqList.length; i++){
+            var trainerId = $scope.reqList[i].reqHost;
+            var requisitionId = $scope.reqList[i].reqRecruiter;
+            var guestId = $scope.reqList[i].reqGuest;
+            $scope.reqList[i].reqHost = globalVarService.getTrainerById(trainerId);
+            $scope.reqList[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
+            $scope.reqList[i].reqGuest = globalVarService.getGuestById(guestId);
+        }
         convertReqToEvents();
     });
 
@@ -15,7 +23,7 @@ app.controller("homeCtrl", function(moment, calendarConfig, requisitionService){
         for(i=0;i<vm.reqList.length;i++) {
             var curr = vm.reqList[i];
             vm.events.push({
-                title: curr.reqHost + " is interviewing " + curr.reqGuest,
+                title: curr.reqHost.name + " is interviewing " + curr.reqGuest.firstName + ' ' + curr.reqGuest.lastName,
                 color: { // can also be calendarConfig.colorTypes.warning for shortcuts to the deprecated event types
                     primary: '#ffa500', // the primary event color (should be darker than secondary)
                     secondary: '#ffeeaa' // the secondary event color (should be lighter than primary)
