@@ -10,12 +10,12 @@ app.controller("resolvedReqCtrl", function($scope, $state, $window, resolvedReqS
     resolvedReqService.getAllResolvedReqs().then(function(res){
         $scope.resolvedReqs = res;
         for(var i = 0; i < $scope.resolvedReqs.length; i++){
-            var trainerId = $scope.resolvedReqs[i].reqHost;
-            var requisitionId = $scope.resolvedReqs[i].reqRecruiter;
-            var guestId = $scope.resolvedReqs[i].reqGuest;
-            $scope.resolvedReqs[i].reqGuest = globalVarService.getGuestById(guestId);
-            $scope.resolvedReqs[i].reqHost = globalVarService.getTrainerById(trainerId);
-            $scope.resolvedReqs[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
+            var trainerId = $scope.resolvedReqs[i].host;
+            var requisitionId = $scope.resolvedReqs[i].recruiter;
+            var guestId = $scope.resolvedReqs[i].guest;
+            $scope.resolvedReqs[i].guest = globalVarService.getGuestById(guestId);
+            $scope.resolvedReqs[i].host = globalVarService.getTrainerById(trainerId);
+            $scope.resolvedReqs[i].recruiter = globalVarService.getRecruiterById(requisitionId);
         }
     });
 

@@ -19,7 +19,7 @@
                         <div class="panel-body">{{currReq.interviewDate | date:'MM/dd/yyyy @ h:mm a'}}</div>
                     </div>
                     <div class="panel panel-default">
-                        <div class="panel-heading"><h3 class="panel-title">Url for Interviewee {{currReq.reqGuest.firstName + ' ' + currReq.reqGuest.lastName}}</h3></div>
+                        <div class="panel-heading"><h3 class="panel-title">Url for Interviewee {{currReq.reqGuest.firstName}} {{currReq.reqGuest.lastName}}</h3></div>
                         <div class="panel-body"><a>{{currReq.guestUrl}}</a></div>
                     </div>
                     <div class="panel panel-default">
@@ -75,7 +75,7 @@
                         <td>{{re.createDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
                         <td>{{re.interviewDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
                         <td>{{re.reqHost.name}}</td>
-                        <td>{{re.reqGuest.firstName + ' '+re.reqGuest.lastName}}</td>
+                        <td>{{re.reqGuest.firstName}} {{re.reqGuest.lastName}}</td>
                         <td>{{re.reqRecruiter.name}}</td>
                     </tr>
                 </tbody>
