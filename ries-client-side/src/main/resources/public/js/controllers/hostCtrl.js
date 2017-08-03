@@ -524,32 +524,32 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     // ___________________________________________________________________________________________________
     //Logic for saving session to the bucket
 
-    $scope.saveRecording = function () {
-
-        $scope.download();
-
-        signalingService.saveRecording($scope.Recording)
-            .then(function (response) {
-                $scope.feedback = response.data;
-            }, function (error) {
-                $scope.feedback = error.data;
-                console.log(error);
-            });
-
-
-    };
-
-    //download recording file function
-    $scope.download = function () {
-        var a = document.getElementById("a");
-        var name = $scope.Recording.name + ".ogg";
-        a.href = URL.createObjectURL($scope.blobHost);
-        $scope.videoLink = a.href;
-        a.download = name;
-//        console.log(a);
-//        a.click();
-
-    };
+//     $scope.saveRecording = function () {
+//
+//         $scope.download();
+//
+//         signalingService.saveRecording($scope.Recording)
+//             .then(function (response) {
+//                 $scope.feedback = response.data;
+//             }, function (error) {
+//                 $scope.feedback = error.data;
+//                 console.log(error);
+//             });
+//
+//
+//     };
+//
+//     //download recording file function
+//     $scope.download = function () {
+//         var a = document.getElementById("a");
+//         var name = $scope.Recording.name + ".ogg";
+//         a.href = URL.createObjectURL($scope.blobHost);
+//         $scope.videoLink = a.href;
+//         a.download = name;
+// //        console.log(a);
+// //        a.click();
+//
+//     };
 
 
 });
