@@ -8,13 +8,13 @@ app.controller("homeCtrl", function(moment, calendarConfig, requisitionService, 
     //Calls our requisition service to populate the requisitions list, and also turn those into viewable events
     requisitionService.getAllRequisitions().then(function(resp){
         vm.reqList=resp;
-        for(var i = 0; i < $scope.reqList.length; i++){
-            var trainerId = $scope.reqList[i].reqHost;
-            var requisitionId = $scope.reqList[i].reqRecruiter;
-            var guestId = $scope.reqList[i].reqGuest;
-            $scope.reqList[i].reqHost = globalVarService.getTrainerById(trainerId);
-            $scope.reqList[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
-            $scope.reqList[i].reqGuest = globalVarService.getGuestById(guestId);
+        for(var i = 0; i < vm.reqList.length; i++){
+            var trainerId = vm.reqList[i].reqHost;
+            var requisitionId = vm.reqList[i].reqRecruiter;
+            var guestId = vm.reqList[i].reqGuest;
+            vm.reqList[i].reqHost = globalVarService.getTrainerById(trainerId);
+            vm.reqList[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
+            vm.reqList[i].reqGuest = globalVarService.getGuestById(guestId);
         }
         convertReqToEvents();
     });
