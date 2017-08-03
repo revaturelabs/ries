@@ -9,6 +9,7 @@ app.controller("resolvedReqCtrl", function($scope, $state, $window, resolvedReqS
 
     resolvedReqService.getAllResolvedReqs().then(function(res){
         $scope.resolvedReqs = res;
+        console.log($scope.resolvedReqs);
         for(var i = 0; i < $scope.resolvedReqs.length; i++){
             var trainerId = $scope.resolvedReqs[i].host;
             var requisitionId = $scope.resolvedReqs[i].recruiter;
@@ -17,6 +18,7 @@ app.controller("resolvedReqCtrl", function($scope, $state, $window, resolvedReqS
             $scope.resolvedReqs[i].host = globalVarService.getTrainerById(trainerId);
             $scope.resolvedReqs[i].recruiter = globalVarService.getRecruiterById(requisitionId);
         }
+        console.log($scope.resolvedReqs);
     });
 
     $scope.viewRequisitions = function(){
