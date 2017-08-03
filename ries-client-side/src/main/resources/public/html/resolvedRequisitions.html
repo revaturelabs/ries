@@ -96,14 +96,14 @@
             </thead>
 
             <tbody>
-                <tr ng-repeat="resReq in resolvedReqs" data-toggle="modal" data-target="#resReqModal" ng-click="selectResReq(resReq)" scope="row">
+                <tr ng-repeat="resReq in resolvedReqs">
                     <td>{{$index + 1}}</td>
                     <td>{{resReq.id}}</td>
                     <td>{{resReq.createDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
                     <td>{{resReq.interviewDate | date:'MM/dd/yyyy @ h:mm a'}}</td>
-                    <td>{{resReq.guest}}</td>
-                    <td>{{resReq.host}}</td>
-                    <td>{{resReq.recruiter}}</td>
+                    <td>{{resReq.guest.firstName + ' '+resReq.guest.lastName}}</td>
+                    <td>{{resReq.host.name}}</td>
+                    <td>{{resReq.recruiter.name}}</td>
                     <td><a>{{resReq.video}}</a></td>
                 </tr>
             </tbody>

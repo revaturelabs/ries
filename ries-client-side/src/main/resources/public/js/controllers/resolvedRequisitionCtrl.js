@@ -3,12 +3,20 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("resolvedReqCtrl", function($scope, $state, $window, resolvedReqService){
+app.controller("resolvedReqCtrl", function($scope, $state, $window, resolvedReqService, globalVarService){
     $scope.title = "Resolved Requisitions";
     $scope.resolvedReqs = [];
 
     resolvedReqService.getAllResolvedReqs().then(function(res){
         $scope.resolvedReqs = res;
+        for(var i = 0; i < $scope.resolvedReqs.length; i++){
+            var trainerId = $scope.resolvedReqs[i].reqHost;
+            var requisitionId = $scope.resolvedReqs[i].reqRecruiter;
+            var guestId = $scope.resolvedReqs[i].reqGuest;
+            $scope.resolvedReqs[i].reqGuest = globalVarService.getGuestById(guestId);
+            $scope.resolvedReqs[i].reqHost = globalVarService.getTrainerById(trainerId);
+            $scope.resolvedReqs[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
+        }
     });
 
     $scope.viewRequisitions = function(){
