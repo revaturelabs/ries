@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-public class cookies {
+public class CookieController {
 
     @RequestMapping(value = "/session")
     public String setCookie(HttpServletRequest request, HttpServletResponse response) {

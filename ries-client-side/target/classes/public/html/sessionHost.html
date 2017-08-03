@@ -4,8 +4,34 @@
         height: auto !important;
     }
 
+    .btn-session{
+        background: orangered;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .btn-session2 {
+        background: darkslategray;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .manualHeight {
+        height: 400px;
+    }
+
     .asdf {
         border: thin solid black;
+        border-radius: 5px;
     }
 
     .row.is-flex {
@@ -45,14 +71,12 @@
         bottom: 0;
     }
 
-    .ninety-height {
-        position: relative;
-        height: 90%;
-    }
-
     .almost-fullspace {
         width: 90%;
         height: 90%;
+    }
+    .centered{
+        margin:auto;
     }
 
     .modal {
@@ -102,12 +126,9 @@
         cursor: pointer;
     }
 </style>
-
-<h4>SESSION HOST</h4>
-
 <div ng-controller="hostCtrl">
 
-    <div class="table-responsive" id="sessionSelect" ng-show = "isSelecting">
+    <div class="table-responsive" id="sessionSelect" ng-show="isSelecting">
         <table class="table table-hover table-bordered table-condensed">
             <thead class="thead-inverse">
             <tr>
@@ -132,26 +153,25 @@
                 <td>{{re.reqHost}}</td>
                 <td>{{re.reqGuest}}</td>
                 <td>{{re.reqRecruiter}}</td>
-                <td><a href = "#" ng-click = "selectSession(re.reqHost,re.reqGuest)">Join Session</a></td>
+                <td><a href="#" ng-click="selectSession(re.reqHost,re.reqGuest)">Join Session</a></td>
             </tr>
             </tbody>
         </table>
     </div>
 
-
-    <div id = "session" ng-hide = "isSelecting">
-        <div><a href = "#" ng-click = "backtoSelection()">Back</a></div>
-        <div>Session with: {{guestName}}</div>
+    <div id="session" ng-hide="isSelecting">
+        <div style="padding:10px"><a href="#" ng-click="backtoSelection()">Back</a></div>
+        <div style="padding:10px">Session with: {{guestName}}</div>
         <div id="equipmentTest" class="call-page container-fluid">
             <div class="row">
-                <div class="col-md-12 ">
+                <div class="col-md-12">
                     <div class="row">
                         <div style="text-align: center">
-                            <button id="startTestEquipment" ng-click="testEquipment()" class="btn btn-primary">
+                            <button id="startTestEquipment" ng-click="testEquipment()" class="btn-session">
                                 Test Equipment
                             </button>
-                            <button id="endTestEquipment" ng-click="endTest()" class="btn btn-primary">End Test</button>
-                            <button ng-hide="isTesting" ng-click="startSession()" class="btn btn-primary">Join Session
+                            <button id="endTestEquipment" ng-click="endTest()" class="btn-session">End Test</button>
+                            <button ng-hide="isTesting" ng-click="startSession()" class="btn-session">Join Session
                             </button>
                         </div>
                     </div>
@@ -168,23 +188,10 @@
                 </div>
             </div>
         </div>
+        <div id="callPage" class="call-page container-fluid" style="display:none;">
 
-        <div id="callPage" class="call-page container-fluid" style="display:none">
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3 ">
-                    <div style="text-align: center">
-                        <button ng-click="callGuest()" class="btn-primary btn">Call Guest</button>
-                        <button ng-click="callObs()" class="btn-primary btn">Call obs</button>
-                        <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
-                        <button id="recordBtn" ng-class="{'btn-success': isRecording,'btn': isRecording}">
-                            <i class="fa fa-microphone" aria-hidden="true"></i> Record
-                        </button>
-                        <button id="endRecordBtn" class="btn-danger btn">End Recording</button>
-                    </div>
-                </div>
-            </div>
             <div class="row is-flex ">
-                <div class="col-md-2 col-md-offset-1 asdf">
+                <div class="col-md-2 col-md-offset-1 asdf manualHeight" style = "padding:10px">
                     <div id="currentlyInChat">
                         Waiting for others to connect....
                     </div>
@@ -192,22 +199,41 @@
                         <video id="remote" autoplay controls></video>
                     </div>
                 </div>
-                <div class="col-md-6 ">
-                    <video id="local" autoplay muted controls></video>
-                </div>
+                <div class="col-md-6">
+                    <video id="local" style="height: 500px !important;" class = 'manualHeight' autoplay muted controls></video>
+                    <div class="row" style="padding:10px">
+                        <div class="col-md-3 col-md-offset-1">
+                            <div>
+                                <button id="callGuestBtn" ng-click="callGuest()" class="btn-session2">
+                                    Begin Session</button>
+                            </div>
+                            <button id="recordBtn" class="btn btn-success" style="display:none">
+                                <i class="fa fa-microphone" aria-hidden="true"></i> Record
+                            </button>
+                            <button id="endRecordBtn" class="btn-danger btn" style="display:none">End Recording</button>
+                            <button id = "showRecording" ng-click = "videotest()" class="btn-session2" style="display:none">View and Save</button>
+                            <!--<button ng-click = "videotest()" class="btn-session2">View and Save</button>-->
 
-                <form id="chatForm" class="col-md-2 asdf panel panel-primary"
-                      style="text-align: center;overflow: auto;">
-                    <!--<div class="col-md-12  panel panel-primary">-->
-                    <div class="panel-heading">Text chat</div>
-                    <div id="chatarea" class="panel-body text-left "></div>
-                    <div class=" bottom">
-                        <input id="msgInput" type="text" placeholder="message"/>
-                        <button id="sendMsgBtn" class="btn-primary almost-fullspace btn">Send</button>
+                        </div>
+                        <div class="col-md-3 col-md-offset-4">
+                            <div style="text-align: center; float:right">
+                                <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
+                            </div>
+                        </div>
                     </div>
-                    <!--</div>-->
-                </form>
+                </div>
+                <div class = "manualHeight col-md-2" style="text-align:center">
+                    <div>
+                        <div id="chatarea" class="text-left asdf centered"  style="text-align: left;overflow: auto;height:320px;"></div>
+                    </div>
+                    <form id="chatForm" style="text-align:center">
+                        <div class="bottom" style="text-align:center">
+                            <input id="msgInput" type="text" placeholder="message"/>
+                            <button id="sendMsgBtn" class="btn-session2 almost-fullspace btn">Send</button>
+                        </div>
+                    </form>
 
+                </div>
             </div>
         </div>
 
@@ -215,22 +241,24 @@
         <!--<button id="modalBtn">End Session?</button>-->
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <p>End session</p>
+                <p>End session?</p>
                 <span class="close">&times;</span>
                 <button id="endSessionBtn" class="btn-danger btn">End Session</button>
                 <button id="endSessionCancelBtn" ng-click="turnOffModal()" class="btn btn-primary">Cancel</button>
             </div>
         </div>
 
-        <div>
-            <video id="recordedVideo" autoplay controls></video>
-            <p>{{feedback}}</p>
-            <form novalidate>
-                Recording Name<input type="text" ng-model="Recording.name"/>
-                AWS AccessKeyId<input type="text" ng-model="Recording.accessKeyId"/>
-                AWS SecretKey<input type="text" ng-model="Recording.secretKey"/>
-                <a href="" id="a" ng-click="saveRecording()">Save Recording</a>
-            </form>
+        <div class="row" id="recordedVideoArea" ng-show="doneRecording">
+            <div col-md-6 col-md-offset-3>
+                <video id="recordedVideo" style="height: 500px !important;" autoplay controls></video>
+                <p>{{feedback}}</p>
+                <form novalidate>
+                    Recording Name<input type="text" ng-model="Recording.name"/>
+                    AWS AccessKeyId<input type="text" ng-model="Recording.accessKeyId"/>
+                    AWS SecretKey<input type="text" ng-model="Recording.secretKey"/>
+                    <a href="" id="a" ng-click="saveRecording()">Save Recording</a>
+                </form>
+            </div>
         </div>
     </div>
 

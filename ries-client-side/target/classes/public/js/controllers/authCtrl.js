@@ -3,7 +3,7 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("authCtrl", function($scope,$http, $state, $window, $location, loginService){
+app.controller("authCtrl", function($scope,$http, $state, $window, $location, loginService, guestHostFactory){
 
     var authCtrl = this;
 
@@ -35,7 +35,7 @@ app.controller("authCtrl", function($scope,$http, $state, $window, $location, lo
 
     $scope.guestLogin = function(){
         loginService.guestLogin($scope.guestPin, function(response){
-            //NEED TO STORE THE GUEST OBJECT????
+            guestHostFactory.setGuestInfo(response.data);
             console.log(response.data);
             authCtrl.guestLoggedIn = true;
             $state.go('sessionGuest');

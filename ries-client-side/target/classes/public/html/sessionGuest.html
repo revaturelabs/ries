@@ -1,13 +1,42 @@
-<h1>Sesssion guest</h1>
-
 <style>
     video {
         width: 100% !important;
         height: auto !important;
     }
 
+    .manualHeight {
+        height: 400px;
+    }
+
     .asdf {
         border: thin solid black;
+        border-radius: 5px;
+    }
+
+    .manualHeight {
+        height: 400px;
+    }
+
+    .btn-session {
+        background: orangered;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    .btn-session2 {
+        background: darkslategray;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     .row.is-flex {
@@ -110,30 +139,29 @@
 </style>
 <div ng-controller="guestCtrl">
 
-    <div id="loginModal" class="modal" style="display:block" >
+    <div id="loginModal" class="modal" style="display:block">
         <div class="modal-content">
-            <p>Revature records technical interviews to improve the quality of trainings</p>
-            <button ng-click="craigSignIn()" class="btn btn-primary">Sign in as Craig</button>
-            <button ng-click="jhoanSignIn()" class="btn btn-primary">Sign in as Jhoan</button>
-            <button class="btn btn-danger" >Cancel</button>
+            <p>Hi, {{guestName}}! Revature records technical interviews to improve the quality of trainings</p>
+            <!--<button ng-click="craigSignIn()" class="btn btn-primary">Sign in as Craig</button>-->
+            <!--<button ng-click="jhoanSignIn()" class="btn btn-primary">Sign in as Jhoan</button>-->
+            <button ng-click="accept()" class="btn btn-primary">Accept</button>
+            <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
         </div>
     </div>
-
-
     <div id="equipmentTest" class="call-page container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
                     <div style="text-align: center">
-                        <button id="startTestEquipment" ng-click="testEquipment()" class="btn btn-primary">
+                        <button id="startTestEquipment" ng-click="testEquipment()" class="btn-session">
                             Test Equipment
                         </button>
-                        <button id="endTestEquipment" ng-click="endTest()" class="btn btn-primary">End Test</button>
-                        <button ng-hide="isTesting" ng-click="startSession()" class="btn btn-primary">Join Session
+                        <button id="endTestEquipment" ng-click="endTest()" class="btn-session">End Test</button>
+                        <button ng-hide="isTesting" ng-click="startSession()" class="btn-session">Join Session
                         </button>
                     </div>
                 </div>
-                <div class="row" ng-hide="!isTesting" >
+                <div class="row" ng-hide="!isTesting">
                     <div class="col-md-6 col-md-offset-3 asdf">
                         <video id="testRecord" autoplay muted></video>
                     </div>
@@ -151,38 +179,41 @@
     <div id="callPage" class="call-page container-fluid" style="display:none">
         <div class="row">
             <div class="col-md-6 col-md-offset-3 ">
-                <div style="text-align: center">
+                <div style="text-align: right">
                     <button id="hangUpBtn" class="btn-danger btn">Hang Up</button>
                 </div>
             </div>
         </div>
         <div class="row is-flex ">
-            <div class="col-md-2 col-md-offset-1 asdf">
-                <div id="currentlyInChat">
+            <div class="col-md-2 col-md-offset-1 asdf manualHeight">
+                <div id="currentlyInChat" class =" manualHeight">
                     Waiting for others to join...
                 </div>
                 <div class="bottom">
                     <video id="remote" autoplay></video>
                 </div>
             </div>
-            <div class="col-md-6 ">
-                <video id="local" autoplay muted></video>
+            <div class="col-md-6 manualHeight">
+                <video style="height: 400px !important;" id="local" autoplay muted></video>
             </div>
 
-            <form id="chatForm" class="col-md-2 asdf panel panel-primary" style="text-align: center;overflow: auto;">
-                <div class="panel-heading">Text chat</div>
-                <div id="chatarea" class="panel-body text-left "></div>
-                <div class="bottom">
-                    <input class="" id="msgInput" type="text" placeholder="message"/>
-                    <button id="sendMsgBtn" class="btn-primary almost-fullspace btn">Send</button>
+            <div class="manualHeight col-md-2" style="text-align:center">
+                <div>
+                    <div id="chatarea" class="text-left asdf centered"
+                         style="text-align: left;overflow: auto;height:320px;"></div>
                 </div>
-            </form>
-
+                <form id="chatForm" style="text-align:center">
+                    <div class="bottom" style="text-align:center">
+                        <input id="msgInput" type="text" placeholder="message"/>
+                        <button id="sendMsgBtn" class="btn-session2 almost-fullspace btn">Send</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div id="myModal" class="modal">
         <div class="modal-content">
-            <p>End session</p>
+            <p>End session?</p>
             <span class="close">&times;</span>
             <button id="endSessionBtn" class="btn-danger btn">End Session</button>
             <button id="endSessionCancelBtn" ng-click="turnOffModal()" class="btn btn-primary">Cancel</button>

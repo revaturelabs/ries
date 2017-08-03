@@ -5,6 +5,7 @@ com\revature\domain\ResolvedRequisition.class
 com\revature\service\ResolvedRequisitionService.class
 com\revature\maintenance\RequisitionMaintenance.class
 com\revature\util\KinesisEmailProducer.class
+com\revature\config\WebSecurityConfig.class
 com\revature\util\CorsFilter.class
 com\revature\maintenance\RequisitionResolver.class
 com\revature\util\Email.class

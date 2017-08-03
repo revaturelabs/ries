@@ -62,17 +62,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
                 User user = new User(msg.getRoom(), session, msg.getName(), msg.getRole());
                 clientArray.add(user);
-
-
+                System.out.println("new User: "+ user.toString());
                 msg.setSuccess(true);
                 String jsonLogin = gson.toJson(msg);
 
                 names.add(msg.getName());
                 session.sendMessage(new TextMessage(jsonLogin));
 
-                msg.setType("newMember");
-                msg.setMembers(names);
-                sendMessage(session, msg, gson, true);
+                updateChatMembers(session, msg, gson);
                 break;
             case "offer":
                 sendMessage(session, msg, gson, false);
@@ -89,6 +86,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
             case "chatMessage":
                 sendMessage(session, msg, gson, false);
                 break;
+            case "back":
+                System.out.println("Back button pressed");
+                Iterator<User> iter = clientArray.iterator();
+                while(iter.hasNext()){
+                    if(iter.next().equals(session)){
+                        iter.remove();
+                    }
+                }
             default:
                 Message errorMessage = new Message("error", "Message type not found");
                 String jsonInString = gson.toJson(errorMessage);
@@ -134,5 +139,27 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    public void updateChatMembers(WebSocketSession session, Message msg, Gson gson) throws IOException{
+        Message newMemberMessage = new Message();
+        newMemberMessage.setType("newMember");
+        ArrayList<String> membersInRoom = new ArrayList<String>();
 
+        //collect the names of the people in the room
+        for (User u : clientArray) {
+            if (u.getRoom().equals(msg.getRoom())) {
+                membersInRoom.add(u.getName());
+            }
+        }
+
+        newMemberMessage.setMembers(membersInRoom);
+        String jsonInString = gson.toJson(newMemberMessage);
+        TextMessage jsonMessage = new TextMessage(jsonInString);
+
+        for (User u : clientArray) {
+            if (u.getRoom().equals(msg.getRoom())) {
+                System.out.println("new members sent to: " + u+ "with members: "+ newMemberMessage.getMembers());
+                u.getSession().sendMessage(jsonMessage);
+            }
+        }
+    }
 }

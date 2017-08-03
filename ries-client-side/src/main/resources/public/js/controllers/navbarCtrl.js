@@ -3,7 +3,12 @@
  */
 var app = angular.module("RIESApp");
 
-app.controller("navbarCtrl", function($scope, $state, $cookies, loginService, globalVarService){
+app.controller("navbarCtrl", function($scope, $state, $cookies, infoService){
+    infoService.getUserInfo(function(response){
+        $scope.userInfo = response.data;
+    }, function (error) {
+
+    });
 
     $scope.logout = function(){
         // loginService.employeeLogout(function(response){

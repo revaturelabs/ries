@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -17,6 +18,7 @@ import javax.servlet.Filter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.HttpMethod;
 import java.io.IOException;
 
 @Configuration
@@ -41,6 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
             .anyRequest()
             .authenticated()
+            .antMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**")
+            .permitAll()
             .and()
             .logout()
             .addLogoutHandler(logoutHandler)
@@ -49,4 +53,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf()
             .disable();
     }
+
 }

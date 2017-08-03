@@ -4,19 +4,35 @@
 /**
  * Created by Jhoan Osorno on 7/14/2017.
  */
+
 var app = angular.module("RIESApp");
 
-app.controller("guestCtrl", function ($scope, guestHostService) {
+app.controller("guestCtrl", function ($scope,$state, guestHostService,guestHostFactory) {
+
+    //
+    // $scope.craigSignIn = function () {
+    //     document.querySelector('#loginModal').style.display = "none";
+    //     $scope.myRoom = "Emily Higgins" + "Craig Hatch";
+    //     $scope.guestName = "Craig Hatch";
+    // };
+    // $scope.jhoanSignIn = function () {
+    //     document.querySelector('#loginModal').style.display = "none";
+    //     $scope.myRoom = "August Duet" + "Jhaon Osorno";
+    //     $scope.guestName = "Jhaon Osorno";
+    // };
+    $scope.accept = function(){
+        document.querySelector('#loginModal').style.display = "none";
+    };
 
 
-    $scope.craigSignIn = function () {
-        document.querySelector('#loginModal').style.display = "none";
-        $scope.myRoom = "Emily Higgins" + "Craig Hatch";
+    var guestInfo = guestHostFactory.getGuestInfo();
+    $scope.guestName = guestInfo.firstName +" "+guestInfo.lastName;
+    $scope.myRoom = "Test Trainer" + $scope.guestName;
+    console.log("$scope.myRoom",$scope.myRoom);
+    $scope.cancel = function () {
+        $state.go('guestLogin');
     };
-    $scope.jhoanSignIn = function () {
-        document.querySelector('#loginModal').style.display = "none";
-        $scope.myRoom = "August Duet" + "Jhaon Osorno";
-    };
+
 
 
     var usernameInput = document.querySelector('#usernameInput');
@@ -26,8 +42,6 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
     var chatArea = document.querySelector('#chatarea');
     var currentMembers = document.querySelector('#currentlyInChat');
-    var connections = [];
-    var allDataChannels = [];
     var obsConn;
     var hostConn;
     var obsChannel;
@@ -38,14 +52,9 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
     var outsideModal = document.getElementsByClassName("close")[0];
     $scope.myIpV4 = "no response yet...";
     $scope.message = "";
-    var connectedUser;
     $scope.isTesting = true;
     $scope.isRecording = true;
     var myStream;
-    //$scope.myRoom = guestHostService.getSessionInfo().room;
-
-
-    var guestInfo = guestHostService.getGuestInfo();
 
     //connecting to our signaling server
     var conn = guestHostService.setUpWebsocket(handleLogin, handleOffer, handleAnswer, handleCandidate, handleLeave, handleNewMember);
@@ -103,10 +112,9 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
         document.querySelector('#equipmentTest').style.display = 'none';
         send({
             type: "login",
-            name: guestInfo.firstName + guestInfo.lastName,
+            name:  $scope.guestName,
             room: $scope.myRoom
         });
-
     };
 
     //alias for sending JSON encoded messages
@@ -328,10 +336,12 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
 
 
     function handleNewMember(val) {
+        console.log("adding new members...");
         currentMembers.innerHTML = "Currently in chat..."
+        currentMembers.innerHTML += '<hr style="height:2px!important; background-color: darkslategray !important; border: solid 2px darkslategray !important;">'
         console.log("handlenemember", val);
         val.forEach(function (element) {
-            currentMembers.innerHTML += "<br />" + element + "<br />";
+            currentMembers.innerHTML += element + "<br />" ;
         }, this);
 
     };
@@ -343,18 +353,17 @@ app.controller("guestCtrl", function ($scope, guestHostService) {
         var val = {
             type: "chatMessage",
             message: msgInput.value,
-            name: guestInfo.firstName + guestInfo.lastName,
+            name: $scope.guestName,
             room: $scope.myRoom
         };
         chatArea.innerHTML += val.name + ": " + val.message + "<br />";
-
+        console.log("sent message", val);
+        msgInput.value = "";
         //sending a message to a connected peer
         //obsChannel.send(JSON.stringify(val));
         hostChannel.send(JSON.stringify(val));
-        console.log("sent message", val);
-        msgInput.value = "";
+
     });
 
 
 });
-

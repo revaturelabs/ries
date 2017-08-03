@@ -16,18 +16,18 @@ public class ClientController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String client(HttpSession session) {
         String id = session.getId();
-        return "redirect:" + redirectUrl + "?JSESSIONID=" + id;
+        return "redirect:" + redirectUrl + "session?JSESSIONID=" + id;
     }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String testRedirect(HttpSession session) {
         String id = session.getId();
-        return "redirect:http://localhost:3001/?JSESSIONID=" + id;
+        return "redirect:http://localhost:3001/session?JSESSIONID=" + id;
     }
 
     @RequestMapping(value = "/test/{port}", method = RequestMethod.GET)
     public String testRedirect(HttpSession session, @PathVariable Integer port) {
         String id = session.getId();
-        return "redirect:http://localhost:"+ port +"/?JSESSIONID=" + id;
+        return "redirect:http://localhost:"+ port +"/session?JSESSIONID=" + id;
     }
 }

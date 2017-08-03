@@ -9,17 +9,17 @@ app.service("guestHostService", function ($http, requisitionService) {
         return ["turn:numb.viagenie.ca:3478", "craighatch90@gmail.com", "pr0gs4d4yz"];
     };
     this.getWebsocketEndPoint = function () {
-        // return "ws://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:3001/socket"
-        return 'ws://localhost:3001/socket';
+        return "wss://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:443/socket"
+        // return 'ws://localhost:3001/socket';
     };
 
-    this.addGuest = function(guest, done, err){
+    this.addGuest = function (guest, done, err) {
         $http({
-            method:"POST",
-            url:"https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/auth/guest",
-            headers: {'Content-Type': 'application/JSON'},
-            data:guest
-        }).then(done,err);
+            method: "POST",
+            url: "https://ec2-13-59-237-239.us-east-2.compute.amazonaws.com/ries/auth/guest",
+            headers: {'Content-Type': 'text/plain'},
+            data: guest
+        }).then(done, err);
     };
 
     this.getAllRequisitions = function () {
@@ -40,42 +40,18 @@ app.service("guestHostService", function ($http, requisitionService) {
             reqGuest: "Jhaon Osorno",
             reqRecruiter: "Rachna Tyagi"
         };
+        req3 = {
+            reqId: 24,
+            createDate: "7/16/2017",
+            interviewDate: "7/27/2017",
+            reqHost: "Test Trainer",
+            reqGuest: "Hello World",
+            reqRecruiter: "Rachna Tyagi"
+        };
 
-        return [req1, req2];
+        return [req1, req2, req3];
         // return requisitionService.getAllRequisitions();
     };
-
-
-
-
-
-
-    this.getHostInfo = function () {
-        return {
-            firstName: "John",
-            lastName: "Host",
-            id: "1234"
-        };
-    };
-    this.getGuestInfo = function () {
-        return {
-            firstName: "Jane",
-            lastName: "Guest",
-            id: "1234"
-        }
-    };
-    this.getSessionInfo = function () {
-        return {
-            trainer: this.getHostInfo(),
-            guest: this.getGuestInfo(),
-            room: this.getGuestInfo().firstName + this.getGuestInfo().lastName +
-            this.getHostInfo().firstName + this.getHostInfo().lastName
-        }
-    };
-
-
-
-
 
 
     this.setUpWebsocket = function (handleLogin, handleOffer, handleAnswer, handleCandidate, handleLeave, handleNewMember) {
@@ -122,4 +98,24 @@ app.service("guestHostService", function ($http, requisitionService) {
     }
 
 
+    this.test = function(){
+        console.log("lasjdflkajsdfl;kajsdf");
+    }
+
 });
+
+app.factory("guestHostFactory", function () {
+    var guestInfo = {guestId: 1, firstName: "Bob", lastName: "Bobberson", email: "example@example.com", pin: 1}
+
+    return {
+        getGuestInfo: function () {
+            return guestInfo;
+        },
+        setGuestInfo: function (val) {
+            guestInfo = val;
+        }
+    }
+});
+
+
+
