@@ -7,6 +7,7 @@ app.service("guestHostService", function ($http, requisitionService) {
 
     this.numbCredentials = function () {
         return ["turn:numb.viagenie.ca:3478", "craighatch90@gmail.com", "pr0gs4d4yz"];
+        // return false;
     };
     this.getWebsocketEndPoint = function () {
         return "wss://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:443/socket"
@@ -50,7 +51,6 @@ app.service("guestHostService", function ($http, requisitionService) {
         };
 
         return [req1, req2, req3];
-        // return requisitionService.getAllRequisitions();
     };
 
 
@@ -67,7 +67,7 @@ app.service("guestHostService", function ($http, requisitionService) {
             switch (data.type) {
                 //initial login
                 case "login":
-                    handleLogin(data.success);
+                    handleLogin();
                     break;
                 //when somebody wants to call us
                 case "offer":
@@ -97,10 +97,6 @@ app.service("guestHostService", function ($http, requisitionService) {
         return conn;
     }
 
-
-    this.test = function(){
-        console.log("lasjdflkajsdfl;kajsdf");
-    }
 
 });
 

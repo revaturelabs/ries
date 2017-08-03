@@ -4,39 +4,54 @@
 var app = angular.module("RIESApp");
 
 app.controller("hostCtrl", function ($scope, $http, $state, signalingService, guestHostService,requisitionService) {
+    //there are four sections to this file: 1. selecting the interview; 2. managing the session; 3. managing all
+    // recordings (including initial test recordings); 4. saving the recording to the S3 bucket.
+
+    //close connections if we leave the page
+    window.addEventListener("beforeunload", function (event) {
+        handleLeave();
+    });
+
+
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
-    //Session selection, handle flow from selecting the room to enter
+    //SECTION 1: selecting the interview
+    //there is currently only one websocket in use.  Different rooms are merely the first and last name of the
+    //host and gust combined. This dictates who we can send messages to (in particular offers and candidate messages)
+
+    //getting requisitions
     $scope.myRequisistions = guestHostService.getAllRequisitions();
     console.log("$scope.myRequisistions",$scope.myRequisistions);
-    // requisitionService.getAllRequisitions().then(function(res) {
-    //     $scope.myRequisistions  = res;
-    //
-    //     for(var i = 0; i < $scope.requisitions.length; i++){
-    //         var trainerId = $scope.requisitions[i].reqHost;
-    //         var requisitionId = $scope.requisitions[i].reqRecruiter;
-    //         $scope.requisitions[i].reqHost = globalVarService.getTrainerById(trainerId);
-    //         $scope.requisitions[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
-    //         $scope.requisitionList = $scope.requisitions;
-    //     }
-    // });
+    requisitionService.getAllRequisitions().then(function(res) {
+        // $scope.myRequisistions  = res;
+        //
+        // for(var i = 0; i < $scope.requisitions.length; i++){
+        //     var trainerId = $scope.requisitions[i].reqHost;
+        //     var requisitionId = $scope.requisitions[i].reqRecruiter;
+        //     $scope.requisitions[i].reqHost = globalVarService.getTrainerById(trainerId);
+        //     $scope.requisitions[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
+        //     $scope.requisitionList = $scope.requisitions;
+        // }
 
+        console.log("all current reqs", res);
 
+    });
 
-
-    console.log("$scope.myRequisistions", $scope.myRequisistions);
     $scope.isSelecting = true;
     $scope.guestName = "guest";
     $scope.hostName = "host";
+
+    //set up name and room for the session
     $scope.selectSession = function (host, guest) {
         $scope.myRoom = host + guest;
-        console.log("$scope.myRoom",$scope.myRoom);
         $scope.guestName = guest;
         $scope.hostName = host;
         $scope.isSelecting = false;
         console.log("host: ", host, "guest: ", guest, "room: ", $scope.myRoom);
     };
+
+    //if host returns to complete a different interview, we reload the page and remove host from the room
     $scope.backtoSelection = function () {
         handleLeave();
         send({
@@ -45,25 +60,20 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         $state.reload();
     };
 
-    $scope.videotest = function () {
-        $scope.doneRecording = !$scope.doneRecording;
-    }
+
 
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
     // Session handling: handle communication between peers and with server (WebSocketHandler java class)
 
-
+    var myStream;
     var guestConn;
     var obsConn;
     var guestChannel;
     var obsChannel;
-
     var usernameInput = document.querySelector('#usernameInput');
     var callPage = document.querySelector('#callPage');
-
-    var hangUpBtn = document.querySelector('#hangUpBtn');
     var msgInput = document.querySelector('#msgInput');
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
     var recordBtn = document.querySelector('#recordBtn');
@@ -86,11 +96,10 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         var conn = guestHostService.setUpWebsocket(handleLogin, handleOffer, handleAnswer, handleCandidate, handleLeave, handleNewMember);
     }
 
-    window.addEventListener("beforeunload", function (event) {
-        handleLeave();
-    });
 
-    //alias for sending JSON encoded messages
+
+    //send messages to the server through the websocket.  we tag all messages with "host" to know who the message
+    //is from
     function send(message) {
         message.role = "host";
         conn.send(JSON.stringify(message));
@@ -110,53 +119,35 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     };
 
     //hang up
-    hangUpBtn.onclick = function () {
-        modalEndSess.style.display = "block";
-    };
-    var endSessionBtn = document.getElementById("endSessionBtn");
-    endSessionBtn.addEventListener("click", function () {
+    $scope.endSession = function(){
         console.log("trying to end session...");
-        // send({
-        //     type: "leave",
-        //     room: $scope.myRoom
-        // });
-
         handleLeave();
         modalEndSess.style.display = "none";
-    });
-
-    recordBtn.addEventListener("click", function (event) {
-        recordBtn.style.display = 'none';
-        endRecordBtn.style.display = 'block';
-        $scope.doneRecording = false;
-        //document.querySelector('#recordedVideoArea').display = 'none';
-        startRecording();
-
-    });
-    endRecordBtn.addEventListener("click", function (event) {
-
-        recordBtn.style.display = 'block';
-        endRecordBtn.style.display = 'none';
-        document.querySelector('#recordedVideoArea').style.display = 'block';
-        document.querySelector('#showRecording').style.display= 'block';
-        $scope.doneRecording = true;
-        console.log("$scope.doneRecording", $scope.doneRecording);
-        stopRecording();
-    });
-
-    var configuration = {
-        "iceServers": [
-            {
-                'urls': ['stun:stun.services.mozilla.com', 'stun:stun2.1.google.com:19302']
-            },
-            {
-                urls: guestHostService.numbCredentials()[0],
-                username: guestHostService.numbCredentials()[1],
-                credential: guestHostService.numbCredentials()[2]
-            }
-        ]
     };
-    var myStream;
+
+
+
+    var numbCredentials = guestHostService.numbCredentials();
+    var configuration;
+    if(numbCredentials){
+        configuration = {
+            "iceServers": [
+                {
+                    'urls': ['stun:stun.services.mozilla.com', 'stun:stun2.1.google.com:19302']
+                },
+                {
+                    urls: guestHostService.numbCredentials()[0],
+                    username: guestHostService.numbCredentials()[1],
+                    credential: guestHostService.numbCredentials()[2]
+                }
+            ]
+        };
+    }else{
+        alert("a STUN/TURN server needs to be added. A numb server was used previously, see http://numb.viagenie.ca/ for" +
+            "documentation")
+    }
+
+
 
     function handleLogin(success) {
         navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(function (stream) {
@@ -338,6 +329,23 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
 
     };
 
+    function handleNewMember(val) {
+        currentMembers.innerHTML = "Currently in chat..."
+        currentMembers.innerHTML += '<hr style="height:2px!important; background-color: darkslategray !important; border: solid 2px darkslategray !important;">'
+        console.log("handlenemember", val);
+        val.forEach(function (element) {
+            currentMembers.innerHTML += element + "<br />" ;
+        }, this);
+
+    };
+
+
+
+
+    $scope.hangUp = function () {
+        modalEndSess.style.display = "block";
+        handleLeave();
+    };
 
     function handleLeave() {
         if (obsConn) {
@@ -354,20 +362,11 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     };
 
 
-    function handleNewMember(val) {
-        currentMembers.innerHTML = "Currently in chat..."
-        currentMembers.innerHTML += '<hr style="height:2px!important; background-color: darkslategray !important; border: solid 2px darkslategray !important;">'
-        console.log("handlenemember", val);
-        val.forEach(function (element) {
-            currentMembers.innerHTML += element + "<br />" ;
-        }, this);
 
-    };
 
 
 //when user clicks the "send message" button
-    sendMsgBtn.addEventListener("click", function (event) {
-        // var val = msgInput.value;
+    $scope.sendMessage = function(){
         var val = {
             type: "chatMessage",
             message: msgInput.value,
@@ -379,15 +378,38 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         msgInput.value = "";
         // obsChannel.send(JSON.stringify(val));
         guestChannel.send(JSON.stringify(val));
-
-
-    });
-
+    };
 
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
     //Recordings: handle equipment testing, guest and host recordings during session
+
+
+
+    $scope.startRecordingSession = function(){
+        recordBtn.style.display = 'none';
+        endRecordBtn.style.display = 'block';
+        $scope.doneRecording = false;
+        //document.querySelector('#recordedVideoArea').display = 'none';
+        startRecording();
+    };
+
+    $scope.stopRecordingSession = function(){
+        recordBtn.style.display = 'block';
+        endRecordBtn.style.display = 'none';
+        document.querySelector('#recordedVideoArea').style.display = 'block';
+        document.querySelector('#showRecording').style.display= 'block';
+        $scope.doneRecording = true;
+        stopRecording();
+    };
+
+
+
+    $scope.showSaveArea = function () {
+        $scope.doneRecording = !$scope.doneRecording;
+    }
+
 
     var testEquipmentStream = {};
     var testChunk = [];

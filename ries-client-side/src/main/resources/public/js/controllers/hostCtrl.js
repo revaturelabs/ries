@@ -4,39 +4,64 @@
 var app = angular.module("RIESApp");
 
 app.controller("hostCtrl", function ($scope, $http, $state, signalingService, guestHostService,requisitionService) {
+    //there are four sections to this file: 1. selecting the interview; 2. managing the session; 3. managing all
+    // recordings (including initial test recordings); 4. saving the recording to the S3 bucket.
+    // After selecting a room to join, the host tests equipment and joins session.  The host can then call the guest
+    //after the guest has entered the room to initiate the session.  THe session can then be recorded and
+    // uploaded to the Amazon S3 bucket.
+    //This code implements WebRTC to establish direct peer to peer communication.  The Java Websocket facilitates the
+    //initial set up of the room, but chat, video, and audio are then directly sent between peers using the
+    //WebRTC technology.  At the time of writing, Chrome supports WebRTC only over https, so Firefox must be used
+
+
+
+
+
+    //close connections if we leave the page
+    window.addEventListener("beforeunload", function (event) {
+        handleLeave();
+    });
+
+
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
-    //Session selection, handle flow from selecting the room to enter
+    //SECTION 1: selecting the interview
+    //there is currently only one websocket in use.  Different rooms are merely the first and last name of the
+    //host and gust combined. This dictates who we can send messages to (in particular offers and candidate messages)
+
+    //getting requisitions
     $scope.myRequisistions = guestHostService.getAllRequisitions();
     console.log("$scope.myRequisistions",$scope.myRequisistions);
-    // requisitionService.getAllRequisitions().then(function(res) {
-    //     $scope.myRequisistions  = res;
-    //
-    //     for(var i = 0; i < $scope.requisitions.length; i++){
-    //         var trainerId = $scope.requisitions[i].reqHost;
-    //         var requisitionId = $scope.requisitions[i].reqRecruiter;
-    //         $scope.requisitions[i].reqHost = globalVarService.getTrainerById(trainerId);
-    //         $scope.requisitions[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
-    //         $scope.requisitionList = $scope.requisitions;
-    //     }
-    // });
+    requisitionService.getAllRequisitions().then(function(res) {
+        // $scope.myRequisistions  = res;
+        //
+        // for(var i = 0; i < $scope.requisitions.length; i++){
+        //     var trainerId = $scope.requisitions[i].reqHost;
+        //     var requisitionId = $scope.requisitions[i].reqRecruiter;
+        //     $scope.requisitions[i].reqHost = globalVarService.getTrainerById(trainerId);
+        //     $scope.requisitions[i].reqRecruiter = globalVarService.getRecruiterById(requisitionId);
+        //     $scope.requisitionList = $scope.requisitions;
+        // }
 
+        console.log("all current reqs", res);
 
+    });
 
-
-    console.log("$scope.myRequisistions", $scope.myRequisistions);
     $scope.isSelecting = true;
     $scope.guestName = "guest";
     $scope.hostName = "host";
+
+    //set up name and room for the session
     $scope.selectSession = function (host, guest) {
         $scope.myRoom = host + guest;
-        console.log("$scope.myRoom",$scope.myRoom);
         $scope.guestName = guest;
         $scope.hostName = host;
         $scope.isSelecting = false;
         console.log("host: ", host, "guest: ", guest, "room: ", $scope.myRoom);
     };
+
+    //if host returns to complete a different interview, we reload the page and remove host from the room
     $scope.backtoSelection = function () {
         handleLeave();
         send({
@@ -45,25 +70,20 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         $state.reload();
     };
 
-    $scope.videotest = function () {
-        $scope.doneRecording = !$scope.doneRecording;
-    }
+
 
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
     // Session handling: handle communication between peers and with server (WebSocketHandler java class)
 
-
+    var myStream;
     var guestConn;
     var obsConn;
     var guestChannel;
     var obsChannel;
-
     var usernameInput = document.querySelector('#usernameInput');
     var callPage = document.querySelector('#callPage');
-
-    var hangUpBtn = document.querySelector('#hangUpBtn');
     var msgInput = document.querySelector('#msgInput');
     var sendMsgBtn = document.querySelector('#sendMsgBtn');
     var recordBtn = document.querySelector('#recordBtn');
@@ -86,11 +106,12 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         var conn = guestHostService.setUpWebsocket(handleLogin, handleOffer, handleAnswer, handleCandidate, handleLeave, handleNewMember);
     }
 
-    window.addEventListener("beforeunload", function (event) {
-        handleLeave();
-    });
 
-    //alias for sending JSON encoded messages
+
+    //send messages to the server through the websocket.  we tag all messages with "host" to know who the message
+    //is from.
+    //Each incoming message will similarly have either "observer" or "guest" such that we know who the message
+    //is from
     function send(message) {
         message.role = "host";
         conn.send(JSON.stringify(message));
@@ -110,55 +131,46 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     };
 
     //hang up
-    hangUpBtn.onclick = function () {
-        modalEndSess.style.display = "block";
-    };
-    var endSessionBtn = document.getElementById("endSessionBtn");
-    endSessionBtn.addEventListener("click", function () {
+    $scope.endSession = function(){
         console.log("trying to end session...");
-        // send({
-        //     type: "leave",
-        //     room: $scope.myRoom
-        // });
-
         handleLeave();
         modalEndSess.style.display = "none";
-    });
-
-    recordBtn.addEventListener("click", function (event) {
-        recordBtn.style.display = 'none';
-        endRecordBtn.style.display = 'block';
-        $scope.doneRecording = false;
-        //document.querySelector('#recordedVideoArea').display = 'none';
-        startRecording();
-
-    });
-    endRecordBtn.addEventListener("click", function (event) {
-
-        recordBtn.style.display = 'block';
-        endRecordBtn.style.display = 'none';
-        document.querySelector('#recordedVideoArea').style.display = 'block';
-        document.querySelector('#showRecording').style.display= 'block';
-        $scope.doneRecording = true;
-        console.log("$scope.doneRecording", $scope.doneRecording);
-        stopRecording();
-    });
-
-    var configuration = {
-        "iceServers": [
-            {
-                'urls': ['stun:stun.services.mozilla.com', 'stun:stun2.1.google.com:19302']
-            },
-            {
-                urls: guestHostService.numbCredentials()[0],
-                username: guestHostService.numbCredentials()[1],
-                credential: guestHostService.numbCredentials()[2]
-            }
-        ]
     };
-    var myStream;
 
-    function handleLogin(success) {
+
+    $scope.hangUp = function () {
+        modalEndSess.style.display = "block";
+        handleLeave();
+    };
+
+
+
+
+
+    var numbCredentials = guestHostService.numbCredentials();
+    var configuration;
+    if(numbCredentials){
+        configuration = {
+            "iceServers": [
+                {
+                    'urls': ['stun:stun.services.mozilla.com', 'stun:stun2.1.google.com:19302']
+                },
+                {
+                    urls: guestHostService.numbCredentials()[0],
+                    username: guestHostService.numbCredentials()[1],
+                    credential: guestHostService.numbCredentials()[2]
+                }
+            ]
+        };
+    }else{
+        alert("a STUN/TURN server needs to be added to ensure connection to more users. A numb server was used previously, see http://numb.viagenie.ca/ for " +
+            "documentation")
+    }
+
+
+
+    function handleLogin() {
+        //Access the host audio and visual
         navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(function (stream) {
             myStream = stream;
             setUpMediaRecorderHost(stream);
@@ -167,6 +179,9 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
             lVideo.src = window.URL.createObjectURL(stream);
 
             var rtcPeerConnection = RTCPeerConnection || webkitRTCPeerConnection || mozRTCPeerConnection || msRTCPeerConnection;
+
+
+            //establish a connection for the guest, and send out stream to the guestchannel
             guestConn = new rtcPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
             guestConn.ondatachannel = connectionOnDataChannel;
             guestConn.addStream(stream);
@@ -178,25 +193,21 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
                 lVideo.muted = false;
                 setUpMediaRecorder(e.stream, myStream);
             });
-            // Setup ice handling
             guestConn.onicecandidate = guestOnIceCandidate;
-
             guestChannel = guestConn.createDataChannel("channel1", {reliable: true});
             guestChannel.onopen = dataChannelOpen;
             guestChannel.onerror = printError;
             guestChannel.onmessage = dataChannelMessage;
             guestChannel.onclose = dataChannelClose;
 
-
+            //establish a connection for the observer, and send out stream to the obschannel
             obsConn = new rtcPeerConnection(configuration, {optional: [{RtpDataChannels: true}]});
             obsConn.ondatachannel = connectionOnDataChannel;
             obsConn.addStream(stream);
             obsConn.addEventListener("addstream", function (e) {
-                console.log("adding streams, this one shouldnt happen", e);
+                //the obs must send us his stream to receive ours, but we will not do anything with it.
             });
-            // Setup ice handling
             obsConn.onicecandidate = obsOnIceCandidate;
-
             obsChannel = obsConn.createDataChannel("channel2", {reliable: true});
             obsChannel.onerror = printError;
             obsChannel.onmessage = dataChannelMessage;
@@ -210,6 +221,7 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         });
     };
 
+    //when we receive a chat message, update the chatArea with the name and message
     var connectionOnDataChannel = function (e) {
         receiveChannel = e.channel;
         console.log("new channel received: ", e.channel);
@@ -218,8 +230,9 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
             chatArea.innerHTML += obj.name + ": " + obj.message + "<br />";
         };
     };
+
+    //when we receive an IceCandidate, send our candidate
     var guestOnIceCandidate = function (event) {
-        console.log("ICE Candidate received: ", event);
         if (event.candidate) {
             send({
                 type: "candidate",
@@ -229,7 +242,6 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
             });
         }
     };
-
     var obsOnIceCandidate = function (event) {
         console.log("ICE Candidate received: ", event);
         if (event.candidate) {
@@ -242,9 +254,12 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         }
     };
 
+
     var printError = function (error) {
         console.log("Ooops...error:", error);
     };
+
+    //not sure we even need this part
     var dataChannelMessage = function (event) {
         console.log("dataChannelMessage: ", event);
         console.log("dataChannelMessage data: ", event.data);
@@ -257,17 +272,17 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         console.log("data channel is open");
     };
 
-
+    //open a connection with the guest by sending an offer.
+    //The guest must be in the session before the offer is made.
+    //then hide the call button and show the record button
     $scope.callGuest = function () {
         guestConn.createOffer(function (offer) {
-            console.log("sending an offer with guestConn");
             send({
                 type: "offer",
                 offer: JSON.stringify(offer),
                 room: $scope.myRoom,
                 sendTo: "guest"
             });
-            console.log("offer", offer);
             guestConn.setLocalDescription(offer);
             document.getElementById('recordBtn').style.display = "block";
             document.getElementById('callGuestBtn').style.display = "none";
@@ -280,7 +295,8 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
 
     };
 
-//when somebody sends us an offer
+    //In general, we should only expect to receive an offer from the observer, as the guest never makes an offer,
+    //but logic to handle an offer from either is supported
     function handleOffer(data) {
         if (data.role == "observer") {
             connectionHandleOffer(data, obsConn);
@@ -291,6 +307,7 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         }
     };
 
+    //when an offer comes in we send an answer using the correct connection.
     function connectionHandleOffer(data, connection) {
         var offer = JSON.parse(data.offer);
         connection.setRemoteDescription(new RTCSessionDescription(offer));
@@ -308,7 +325,7 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     }
 
 
-//when we got an answer from a remote user
+    //when we got an answer from a remote user
     function handleAnswer(data) {
         var answer = JSON.parse(data.answer);
         if (data.role == "observer") {
@@ -320,7 +337,7 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         }
     }
 
-//when we got an ice candidate from a remote user
+    //when we got an ice candidate from a remote user
     function handleCandidate(data) {
         var candidate = JSON.parse(data.candidate);
         if (data.role == "observer") {
@@ -338,7 +355,18 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
 
     };
 
+    //update the members in the chat room when someone new enters.
+    function handleNewMember(val) {
+        currentMembers.innerHTML = "Currently in chat..."
+        currentMembers.innerHTML += '<hr style="height:2px!important; background-color: darkslategray !important; border: solid 2px darkslategray !important;">'
+        console.log("handlenemember", val);
+        val.forEach(function (element) {
+            currentMembers.innerHTML += element + "<br />" ;
+        }, this);
 
+    };
+
+    //close connections when we want to exit the session.
     function handleLeave() {
         if (obsConn) {
             obsConn.close();
@@ -354,20 +382,9 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     };
 
 
-    function handleNewMember(val) {
-        currentMembers.innerHTML = "Currently in chat..."
-        currentMembers.innerHTML += '<hr style="height:2px!important; background-color: darkslategray !important; border: solid 2px darkslategray !important;">'
-        console.log("handlenemember", val);
-        val.forEach(function (element) {
-            currentMembers.innerHTML += element + "<br />" ;
-        }, this);
-
-    };
-
-
-//when user clicks the "send message" button
-    sendMsgBtn.addEventListener("click", function (event) {
-        // var val = msgInput.value;
+    //when user clicks the "send message" button.  As the observer currently does not work, we send messages only to the
+    //guest
+    $scope.sendMessage = function(){
         var val = {
             type: "chatMessage",
             message: msgInput.value,
@@ -379,15 +396,36 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         msgInput.value = "";
         // obsChannel.send(JSON.stringify(val));
         guestChannel.send(JSON.stringify(val));
-
-
-    });
-
+    };
 
     //____________________________________________________________________________________________________
     //____________________________________________________________________________________________________
     // ___________________________________________________________________________________________________
     //Recordings: handle equipment testing, guest and host recordings during session
+
+
+    $scope.startRecordingSession = function(){
+        recordBtn.style.display = 'none';
+        endRecordBtn.style.display = 'block';
+        $scope.doneRecording = false;
+        startRecording();
+    };
+
+    $scope.stopRecordingSession = function(){
+        recordBtn.style.display = 'block';
+        endRecordBtn.style.display = 'none';
+        document.querySelector('#recordedVideoArea').style.display = 'block';
+        document.querySelector('#showRecording').style.display= 'block';
+        $scope.doneRecording = true;
+        stopRecording();
+    };
+
+
+
+    $scope.showSaveArea = function () {
+        $scope.doneRecording = !$scope.doneRecording;
+    }
+
 
     var testEquipmentStream = {};
     var testChunk = [];
@@ -449,12 +487,7 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
         console.log("streamHost");
         console.log(streamHost);
         console.log(streamHost.getTracks());
-        // mediaRecorder = new MediaRecorder([streamGuest, streamHost.getTracks()[0]]);
         mediaRecorder = new MediaRecorder(streamGuest);
-        // mediaRecorder = new MediaRecorder([streamGuest.getTracks()[0],streamGuest.getTracks()[1],streamHost.getTracks()[0]]);
-
-
-        // mediaRecorder = new MediaRecorder(streamGuest);
         mediaRecorder.ondataavailable = function (e) {
             console.log("data is available");
             chunks.push(e.data);
@@ -496,17 +529,8 @@ app.controller("hostCtrl", function ($scope, $http, $state, signalingService, gu
     var startRecording = function () {
         mediaRecorder.start();
         mediaRecorderHost.start();
+    };
 
-    }
-    // var stopRecording = function () {
-    //     mediaRecorderHost.stop();
-    //
-    //     setTimeout(function () {
-    //         mediaRecorder.stop();
-    //
-    //     }, 5000);
-    //
-    // };
 
     var stopRecording = function () {
         mediaRecorderHost.stop();

@@ -9,21 +9,9 @@ var app = angular.module("RIESApp");
 
 app.controller("guestCtrl", function ($scope,$state, guestHostService,guestHostFactory) {
 
-    //
-    // $scope.craigSignIn = function () {
-    //     document.querySelector('#loginModal').style.display = "none";
-    //     $scope.myRoom = "Emily Higgins" + "Craig Hatch";
-    //     $scope.guestName = "Craig Hatch";
-    // };
-    // $scope.jhoanSignIn = function () {
-    //     document.querySelector('#loginModal').style.display = "none";
-    //     $scope.myRoom = "August Duet" + "Jhaon Osorno";
-    //     $scope.guestName = "Jhaon Osorno";
-    // };
     $scope.accept = function(){
         document.querySelector('#loginModal').style.display = "none";
     };
-
 
     var guestInfo = guestHostFactory.getGuestInfo();
     $scope.guestName = guestInfo.firstName +" "+guestInfo.lastName;

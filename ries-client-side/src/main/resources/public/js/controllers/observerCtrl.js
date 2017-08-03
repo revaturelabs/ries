@@ -129,7 +129,7 @@ app.controller("observerCtrl", function ($scope, guestHostService) {
     };
     var rtcPeerConnection = RTCPeerConnection || webkitRTCPeerConnection || mozRTCPeerConnection || msRTCPeerConnection;
 
-    function handleLogin(success) {
+    function handleLogin() {
         navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(function (stream) {
             var lVideo = document.querySelector("#local");
             var rVideo = document.querySelector("#remote");

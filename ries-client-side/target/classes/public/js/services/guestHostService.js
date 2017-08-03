@@ -6,7 +6,8 @@ var app = angular.module("RIESApp");
 app.service("guestHostService", function ($http, requisitionService) {
 
     this.numbCredentials = function () {
-        return ["turn:numb.viagenie.ca:3478", "craighatch90@gmail.com", "pr0gs4d4yz"];
+        // return ["turn:numb.viagenie.ca:3478", "craighatch90@gmail.com", "pr0gs4d4yz"];
+        return false;
     };
     this.getWebsocketEndPoint = function () {
         return "wss://ec2-13-58-14-134.us-east-2.compute.amazonaws.com:443/socket"

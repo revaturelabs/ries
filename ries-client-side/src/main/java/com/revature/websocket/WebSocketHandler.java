@@ -21,6 +21,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 //    private static Set<WebSocketSession> clients =
 //            Collections.synchronizedSet(new HashSet<WebSocketSession>());
 
+
     private static ArrayList<String> names = new ArrayList<String>();
 
     private static List<User> clientArray =
