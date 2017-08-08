@@ -70,4 +70,4 @@ security:
     allow:
       origin: https://localhost,${security.login-default-redirect-url},https://ec2-13-58-14-134.us-east-2.compute.amazonaws.com
       methods: GET,POST,PUT,DELETE
-      headers: Authentication, Content-Type
+      headers: Authentication,Content-Type

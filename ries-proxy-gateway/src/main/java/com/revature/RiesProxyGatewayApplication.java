@@ -10,23 +10,18 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
@@ -62,9 +57,9 @@ public class RiesProxyGatewayApplication {
 
 	@Bean
 	public CorsFilter corsFilter(
-			@Value("#{'${security.access-control.allow.origin}'.split(',')}") List<String> origins,
-			@Value("#{'${security.access-control.allow.methods}'.split(',')}") List<String> methods,
-			@Value("#{'${security.access-control.allow.headers}'.split(',')}") List<String> headers) {
+			@Value("#{'${security.access-control.allow.origin:*}'.split(',')}") List<String> origins,
+			@Value("#{'${security.access-control.allow.methods:*}'.split(',')}") List<String> methods,
+			@Value("#{'${security.access-control.allow.headers:*}'.split(',')}") List<String> headers) {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
@@ -74,5 +69,4 @@ public class RiesProxyGatewayApplication {
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}
-
 }
