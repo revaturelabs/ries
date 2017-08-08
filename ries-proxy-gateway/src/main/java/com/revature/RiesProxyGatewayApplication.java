@@ -63,7 +63,7 @@ public class RiesProxyGatewayApplication {
 		CorsConfiguration config = new CorsConfiguration();
 		config.checkHttpMethod(HttpMethod.OPTIONS);
 		config.setAllowCredentials(true);
-		config.setAllowedOrigins(Arrays.asList("https://localhost", "https://ec2-13-58-14-134.us-east-2.compute.amazonaws.com"));
+		config.setAllowedOrigins(Arrays.asList("https://localhost","https://ries.revaturelabs.com", "https://ec2-13-58-14-134.us-east-2.compute.amazonaws.com"));
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		config.setAllowedHeaders(Arrays.asList("Authentication", "Content-Type"));
 		source.registerCorsConfiguration("/**", config);
