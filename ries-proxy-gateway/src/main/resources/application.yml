@@ -65,3 +65,9 @@ security:
     resource:
       user-info-uri: ${salesforce.oauth2-url}/userinfo
   login-default-redirect-url: https://ries.revaturelabs.com
+
+  access-control:
+    allow:
+      origin: https://localhost,${security.login-default-redirect-url},https://ec2-13-58-14-134.us-east-2.compute.amazonaws.com
+      methods: GET,POST,PUT,DELETE
+      headers: Authentication, Content-Type

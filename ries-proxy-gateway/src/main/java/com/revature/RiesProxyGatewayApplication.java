@@ -1,6 +1,7 @@
 package com.revature;
 
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +27,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { JacksonAutoConfiguration.class })
@@ -58,14 +61,16 @@ public class RiesProxyGatewayApplication {
 	}
 
 	@Bean
-	public CorsFilter corsFilter() {
+	public CorsFilter corsFilter(
+			@Value("#{'${security.access-control.allow.origin}'.split(',')}") List<String> origins,
+			@Value("#{'${security.access-control.allow.methods}'.split(',')}") List<String> methods,
+			@Value("#{'${security.access-control.allow.headers}'.split(',')}") List<String> headers) {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
-		config.checkHttpMethod(HttpMethod.OPTIONS);
 		config.setAllowCredentials(true);
-		config.setAllowedOrigins(Arrays.asList("https://localhost","https://ries.revaturelabs.com", "https://ec2-13-58-14-134.us-east-2.compute.amazonaws.com"));
-		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-		config.setAllowedHeaders(Arrays.asList("Authentication", "Content-Type"));
+		config.setAllowedOrigins(origins);
+		config.setAllowedMethods(methods);
+		config.setAllowedHeaders(headers);
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}
