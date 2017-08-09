@@ -24,14 +24,12 @@ import java.io.IOException;
 @Configuration
 @EnableOAuth2Sso
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Value("${security.login-default-redirect-url}")
-    private String redirectUrl;
-    private final SalesForceAuthSuccessHandler successHandler;
+    @Value("#{'${security.anonymous-access-patterns}'.split(',')}")
+    private String[] anonymous;
     private final SalesForceLogoutHandler logoutHandler;
 
     @Autowired
-    public WebSecurityConfig(SalesForceAuthSuccessHandler successHandler, SalesForceLogoutHandler logoutHandler) {
-        this.successHandler = successHandler;
+    public WebSecurityConfig(SalesForceLogoutHandler logoutHandler) {
         this.logoutHandler = logoutHandler;
     }
 
@@ -39,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/**")
             .authorizeRequests()
-            .antMatchers("/ries/auth/guest/login", "/ries/signaling/**")
+            .antMatchers(anonymous)
             .permitAll()
             .anyRequest()
             .authenticated()

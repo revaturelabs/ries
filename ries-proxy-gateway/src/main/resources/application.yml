@@ -64,7 +64,9 @@ security:
       grant-type: authentication-code
     resource:
       user-info-uri: ${salesforce.oauth2-url}/userinfo
+
   login-default-redirect-url: https://ries.revaturelabs.com
+  anonymous-access-patterns: /ries/auth/guest/login,/ries/signaling/**
 
   access-control:
     allow:

@@ -51,3 +51,5 @@ security:
       user-info-uri: ${salesforce.oath2-url}/userinfo
   basic:
     enabled: false
+
+  anonymous-access-patterns: /guest/login

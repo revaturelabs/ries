@@ -3,7 +3,6 @@ package com.revature.controller;
 import com.google.gson.Gson;
 import com.revature.Force;
 import com.revature.model.Guest;
-import com.revature.model.RequisitionDTO;
 import com.revature.service.GuestService;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -81,15 +79,5 @@ public class AuthController {
         }
 
         return ResponseEntity.badRequest().build();
-    }
-
-    private class GuestRequisitionHolder {
-        private Guest guest;
-        private RequisitionDTO requisition;
-    }
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public OAuth2Authentication test(OAuth2Authentication auth) {
-        return auth;
     }
 }
