@@ -149,7 +149,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $http
     });
 
     $stateProvider.state('main', {
-       url: "/",
+        url: "/",
         views:{
            nav:{
                templateUrl: null
@@ -160,7 +160,19 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider, $http
         }
     });
 
+    $stateProvider.state('error', {
+        url: '/error',
+        views: {
+            nav: {
+                templateUrl: null
+            },
+            content: {
+                templateUrl: "html/error.html"
+            }
+        }
+    });
+
     $locationProvider.html5Mode(true);
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/error');
 });
 
