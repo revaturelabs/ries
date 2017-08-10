@@ -55,6 +55,19 @@ public class RiesProxyGatewayApplication {
 		return new OAuth2RestTemplate(resourceDetails, clientContext);
 	}
 
+	/**
+	 * This Cross Origin Resource Sharing (CORS) filter is required
+	 * to specify which requests are allowed from other domains.
+	 * The client side webapp is hosted on a separate EC2 so this
+	 * CorsFilter needs to be configured to allow the webapp's
+	 * domain name. The configuration variables have been moved to
+	 * the application.yml file. The variables are comma separated
+	 * and should contain no spaces around the comma.
+	 * @param origins A list of allowed origins. Default: *
+	 * @param methods A list of allowed methods. Default: *
+	 * @param headers A List of allowed headers: Default: *
+	 * @return Configured CorsFilter
+	 */
 	@Bean
 	public CorsFilter corsFilter(
 			@Value("#{'${security.access-control.allow.origin:*}'.split(',')}") List<String> origins,
